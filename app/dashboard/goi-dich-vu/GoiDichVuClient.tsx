@@ -3,16 +3,39 @@
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import type { OrderRow, Plan } from "@/types";
+import { formatPlanPriceDisplay } from "@/lib/plans/format-plan-price";
 import type { PlanPricesMap } from "@/lib/plans/get-plan-prices";
 import { formatVnd } from "@/lib/utils";
+import type { OrderRow, Plan } from "@/types";
 
-type Props = { cardId: string; currentPlan: Plan; orders: OrderRow[]; planPrices: PlanPricesMap };
+type Props = {
+  cardId: string;
+  currentPlan: Plan;
+  paidAt: string | null;
+  orders: OrderRow[];
+  planPrices: PlanPricesMap;
+};
 
-export function GoiDichVuClient({ cardId, currentPlan, orders: initial, planPrices }: Props) {
+const PLAN_ORDER: Plan[] = ["basic", "pro", "vip"];
+
+const PLAN_FEATURES: Record<Plan, string[]> = {
+  basic: ["1 thiệp", "Không giới hạn khách", "Mẫu Classic", "6 tháng công khai"],
+  pro: ["Mẫu Pro", "Album 40 ảnh", "Nhạc nền", "Hiệu ứng", "RSVP đầy đủ"],
+  vip: ["Full tính năng", "Ảnh tối đa", "Bỏ branding", "Thiệp cá nhân hoá"],
+};
+
+export function GoiDichVuClient({
+  cardId,
+  currentPlan,
+  paidAt,
+  orders: initial,
+  planPrices,
+}: Props) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [orders] = useState(initial);
+
+  const subscriptionActive = paidAt != null;
 
   useEffect(() => {
     if (searchParams.get("cancelled")) {
@@ -37,7 +60,7 @@ export function GoiDichVuClient({ cardId, currentPlan, orders: initial, planPric
       if (!res.ok) {
         toast.error(data.error ?? "Không đồng bộ được trạng thái thanh toán");
       } else if (data.fulfilled) {
-        toast.success("Thanh toán thành công — gói / tính năng đã được kích hoạt");
+        toast.success("Thanh toán thành công — gói đã được kích hoạt");
       } else {
         toast.message(
           "Đang chờ xác nhận thanh toán. Nếu đã chuyển khoản, thử tải lại trang sau vài giây.",
@@ -52,7 +75,12 @@ export function GoiDichVuClient({ cardId, currentPlan, orders: initial, planPric
     };
   }, [searchParams, router]);
 
-  const pay = async (plan: "pro" | "vip") => {
+  const pay = async (plan: Plan) => {
+    const tier = planPrices[plan];
+    if (tier.price <= 0) {
+      toast.message("Gói này đang miễn phí — liên hệ hỗ trợ để kích hoạt");
+      return;
+    }
     const res = await fetch("/api/create-payment", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -66,41 +94,73 @@ export function GoiDichVuClient({ cardId, currentPlan, orders: initial, planPric
     window.location.href = json.checkoutUrl;
   };
 
+  const showPaywall = searchParams.get("paywall") === "1" || !subscriptionActive;
+
   return (
     <div className="space-y-8">
       <div>
         <h1 className="text-2xl font-semibold">Gói dịch vụ</h1>
         <p className="mt-1 text-sm text-neutral-600">
-          Gói hiện tại: <strong className="text-mewedding-rose">{currentPlan.toUpperCase()}</strong>
+          {subscriptionActive ? (
+            <>
+              Gói hiện tại: <strong className="text-mewedding-rose">{currentPlan.toUpperCase()}</strong>
+            </>
+          ) : (
+            <>Chọn gói và thanh toán để bắt đầu sử dụng dashboard.</>
+          )}
         </p>
       </div>
+
+      {showPaywall && (
+        <div
+          role="alert"
+          className="rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-950"
+        >
+          <p className="font-semibold">Bạn chưa kích hoạt gói dịch vụ</p>
+          <p className="mt-1 text-amber-900/90">
+            Vui lòng chọn <strong>Basic</strong>, <strong>Pro</strong> hoặc <strong>VIP</strong> và hoàn tất
+            thanh toán. Bạn có thể nâng cấp thẳng Pro/VIP mà không cần mua Basic trước.
+          </p>
+        </div>
+      )}
+
       <div className="grid gap-4 md:grid-cols-3">
-        <PlanCard
-          name="Basic"
-          price="Miễn phí"
-          features={["1 thiệp", "Không giới hạn khách", "Mẫu Classic"]}
-          cta={currentPlan === "basic" ? "Gói hiện tại" : "—"}
-          disabled
-          onPay={() => {}}
-        />
-        <PlanCard
-          name="Pro"
-          price={formatVnd(planPrices.pro.price)}
-          features={["Mẫu Pro", "Album 40 ảnh", "Nhạc nền", "Hiệu ứng"]}
-          highlight
-          cta="Nâng cấp Pro"
-          disabled={currentPlan === "vip" || currentPlan === "pro"}
-          onPay={() => void pay("pro")}
-        />
-        <PlanCard
-          name="VIP"
-          price={formatVnd(planPrices.vip.price)}
-          features={["Full tính năng", "Ảnh không giới hạn", "Bỏ branding", "VIP guest"]}
-          cta="Nâng cấp VIP"
-          disabled={currentPlan === "vip"}
-          onPay={() => void pay("vip")}
-        />
+        {PLAN_ORDER.map((plan) => {
+          const tier = planPrices[plan];
+          const display = formatPlanPriceDisplay(tier);
+          const isCurrent = subscriptionActive && currentPlan === plan;
+          const rank = (p: Plan) => ({ basic: 0, pro: 1, vip: 2 })[p];
+          const isDowngrade =
+            subscriptionActive && rank(plan) < rank(currentPlan);
+          const isUpgrade =
+            subscriptionActive && rank(plan) > rank(currentPlan);
+
+          let cta = "Chọn gói";
+          if (isCurrent) cta = "Gói hiện tại";
+          else if (isDowngrade) cta = "—";
+          else if (isUpgrade) cta = plan === "pro" ? "Nâng cấp Pro" : "Nâng cấp VIP";
+          else if (plan === "basic") cta = "Mua gói Basic";
+
+          const disabled = isCurrent || isDowngrade || tier.price <= 0;
+
+          return (
+            <PlanCard
+              key={plan}
+              name={tier.name}
+              priceLabel={display.label}
+              listPrice={display.listPrice}
+              discountPercent={display.discountPercent}
+              features={PLAN_FEATURES[plan]}
+              highlight={plan === "pro"}
+              cta={cta}
+              disabled={disabled}
+              isCurrent={isCurrent}
+              onPay={() => void pay(plan)}
+            />
+          );
+        })}
       </div>
+
       <div>
         <h2 className="font-medium">Lịch sử thanh toán</h2>
         <ul className="mt-2 space-y-2 text-sm">
@@ -108,7 +168,7 @@ export function GoiDichVuClient({ cardId, currentPlan, orders: initial, planPric
             const isFeatures = o.order_type === "features";
             const label = isFeatures
               ? `Tính năng (${Array.isArray(o.feature_keys) ? o.feature_keys.length : 0})`
-              : o.plan.toUpperCase();
+              : (o.plan ?? "—").toUpperCase();
 
             return (
               <li key={o.id} className="flex justify-between rounded border bg-white px-3 py-2">
@@ -128,34 +188,55 @@ export function GoiDichVuClient({ cardId, currentPlan, orders: initial, planPric
 
 function PlanCard({
   name,
-  price,
+  priceLabel,
+  listPrice,
+  discountPercent,
   features,
   cta,
   onPay,
   disabled,
   highlight,
+  isCurrent,
 }: {
   name: string;
-  price: string;
+  priceLabel: string;
+  listPrice: number | null;
+  discountPercent: number | null;
   features: string[];
   cta: string;
   onPay: () => void;
   disabled?: boolean;
   highlight?: boolean;
+  isCurrent?: boolean;
 }) {
   return (
     <div
       className={`rounded-2xl border bg-white p-6 shadow-sm ${
         highlight ? "border-2 border-pink-400 ring-2 ring-pink-100" : "border-neutral-100"
-      }`}
+      } ${isCurrent ? "ring-2 ring-emerald-200" : ""}`}
     >
       {highlight && (
         <span className="mb-2 inline-block rounded-full bg-pink-100 px-2 py-0.5 text-xs font-semibold text-pink-700">
           Phổ biến nhất
         </span>
       )}
+      {isCurrent && (
+        <span className="mb-2 ml-2 inline-block rounded-full bg-emerald-100 px-2 py-0.5 text-xs font-semibold text-emerald-800">
+          Gói hiện tại
+        </span>
+      )}
       <h3 className="text-lg font-semibold">{name}</h3>
-      <p className="mt-2 text-2xl font-bold text-mewedding-rose">{price}</p>
+      <div className="mt-2 flex flex-wrap items-baseline gap-2">
+        {listPrice != null && (
+          <span className="text-lg text-neutral-400 line-through">{formatVnd(listPrice)}</span>
+        )}
+        {discountPercent != null && discountPercent > 0 && (
+          <span className="rounded-full bg-rose-50 px-2 py-0.5 text-xs font-bold text-rose-600">
+            −{discountPercent}%
+          </span>
+        )}
+        <span className="text-2xl font-bold text-mewedding-rose">{priceLabel}</span>
+      </div>
       <ul className="mt-4 space-y-2 text-sm text-neutral-700">
         {features.map((f) => (
           <li key={f}>✓ {f}</li>

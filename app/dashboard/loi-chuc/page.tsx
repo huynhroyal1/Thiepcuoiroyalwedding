@@ -16,7 +16,13 @@ export default async function LoiChucPage() {
   const planConfig = await getPlanConfig();
   const plan = ensured.data.plan ?? "basic";
   const entitlements = await getCardEntitlements(ensured.data.id);
-  const hasAutoApprove = hasEntitlement(entitlements, "auto_approve_wishes", plan, planConfig);
+  const hasAutoApprove = hasEntitlement(
+    entitlements,
+    "auto_approve_wishes",
+    plan,
+    planConfig,
+    ensured.data
+  );
 
   return <LoiChucClient wishes={wishes ?? []} plan={plan} showUpsell={!hasAutoApprove} />;
 }

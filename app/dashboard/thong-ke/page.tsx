@@ -18,7 +18,7 @@ export default async function ThongKePage() {
   const planConfig = await getPlanConfig();
   const entitlements = await getCardEntitlements(card.id);
   const plan = card.plan ?? "basic";
-  const hasStats = hasEntitlement(entitlements, "stats", plan, planConfig);
+  const hasStats = hasEntitlement(entitlements, "stats", plan, planConfig, card);
 
   const [{ count: guestCount }, { count: wishCount }, { count: approvedWishes }] = await Promise.all([
     supabase.from("guests").select("*", { count: "exact", head: true }).eq("card_id", card.id),

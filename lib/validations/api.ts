@@ -23,7 +23,7 @@ export const giftSchema = z.object({
 });
 
 export const createPaymentSchema = z.object({
-  plan: z.enum(["pro", "vip"]),
+  plan: z.enum(["basic", "pro", "vip"]),
   cardId: z.string().uuid(),
 });
 

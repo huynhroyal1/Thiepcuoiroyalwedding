@@ -108,3 +108,15 @@ body {
     transform: translateY(0);
   }
 }
+
+/* Safari mobile: Swiper slide + Next/Image fill need explicit flex width */
+.template-home-carousel .swiper-slide {
+  display: flex;
+  height: auto;
+  box-sizing: border-box;
+}
+
+.template-home-carousel .swiper-slide > div {
+  width: 100%;
+  min-width: 0;
+}

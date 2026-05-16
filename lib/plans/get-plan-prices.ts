@@ -1,26 +1,27 @@
-import type { PayablePlan } from "@/lib/payos";
 import { getPlanConfig } from "@/lib/plans/plan-config";
+import type { PlanConfigMap, PlanTierConfig } from "@/lib/plans/plan-config-shared";
+import type { Plan } from "@/types";
 
-export type PlanPriceInfo = {
-  name: string;
-  price: number;
-  description: string;
-};
+export type PlanPriceInfo = Pick<PlanTierConfig, "name" | "price" | "discount_percent" | "description">;
 
-export type PlanPricesMap = Record<PayablePlan, PlanPriceInfo>;
+export type PlanPricesMap = Record<Plan, PlanPriceInfo>;
+
+export function planConfigToPricesMap(config: PlanConfigMap): PlanPricesMap {
+  const tiers: Plan[] = ["basic", "pro", "vip"];
+  return Object.fromEntries(
+    tiers.map((tier) => [
+      tier,
+      {
+        name: config[tier].name,
+        price: config[tier].price,
+        discount_percent: config[tier].discount_percent,
+        description: config[tier].description,
+      },
+    ])
+  ) as PlanPricesMap;
+}
 
 export async function getPlanPrices(serviceRole = false): Promise<PlanPricesMap> {
   const config = await getPlanConfig(serviceRole);
-  return {
-    pro: {
-      name: config.pro.name,
-      price: config.pro.price,
-      description: config.pro.description,
-    },
-    vip: {
-      name: config.vip.name,
-      price: config.vip.price,
-      description: config.vip.description,
-    },
-  };
+  return planConfigToPricesMap(config);
 }

@@ -47,7 +47,7 @@ export default async function DashboardHomePage() {
   const plan = card?.plan ?? "basic";
   const planConfig = await getPlanConfig();
   const entitlements = card ? await getCardEntitlements(card.id) : [];
-  const hasStats = hasEntitlement(entitlements, "stats", plan, planConfig);
+  const hasStats = hasEntitlement(entitlements, "stats", plan, planConfig, card ?? undefined);
 
   if (!card) {
     return (

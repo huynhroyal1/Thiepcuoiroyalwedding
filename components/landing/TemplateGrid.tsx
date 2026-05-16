@@ -34,9 +34,9 @@ export function TemplateGrid({ templates }: Props) {
         const vipFrame = t.plan_required === "vip";
         const img = t.thumbnail_url ?? t.preview_url;
         return (
-          <motion.div
+            <motion.div
             key={t.id}
-            className={`group/card flex h-full flex-col overflow-hidden rounded-2xl bg-white shadow-sm motion-soft hover:-translate-y-1 hover:shadow-xl ${
+            className={`group/card flex h-full w-full min-w-0 flex-col overflow-hidden rounded-2xl bg-white shadow-sm motion-soft hover:-translate-y-1 hover:shadow-xl ${
               vipFrame ? "ring-2 ring-amber-400/70 ring-offset-2 ring-offset-white" : "border border-neutral-100 hover:border-mewedding-rose/25"
             }`}
             initial={reduce ? { y: 0 } : { y: 18 }}
@@ -48,9 +48,15 @@ export function TemplateGrid({ templates }: Props) {
               delay: reduce ? 0 : i * 0.05,
             }}
           >
-            <div className="relative aspect-[9/16] max-h-64 shrink-0 overflow-hidden bg-neutral-100">
+            <div className="relative aspect-[4/5] w-full shrink-0 overflow-hidden bg-neutral-100 sm:aspect-[9/16] sm:max-h-[22rem] lg:max-h-64">
               {img ? (
-                <Image src={img} alt={t.name} fill className="object-cover object-top" sizes="(max-width:1024px) 88vw, 320px" />
+                <Image
+                  src={img}
+                  alt={t.name}
+                  fill
+                  className="object-cover object-center sm:object-top"
+                  sizes="(max-width: 640px) 92vw, (max-width: 1024px) 46vw, 320px"
+                />
               ) : (
                 <div className="absolute inset-0 z-0 bg-gradient-to-b from-rose-100 via-rose-50 to-white transition-transform duration-500 ease-out group-hover/card:scale-110" />
               )}
@@ -125,8 +131,12 @@ export function TemplateGrid({ templates }: Props) {
           ))}
         </div>
 
-        <div className="relative mt-10 w-full min-w-0">
-          <CarouselThree autoMs={3000} slideKeys={filtered.map((t) => t.id)}>
+        <div className="relative mt-10 w-full min-w-0 overflow-hidden">
+          <CarouselThree
+            autoMs={3000}
+            slideKeys={filtered.map((t) => t.id)}
+            className="template-home-carousel"
+          >
             {cards}
           </CarouselThree>
         </div>

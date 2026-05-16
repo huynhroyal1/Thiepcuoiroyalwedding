@@ -50,8 +50,8 @@ export function CarouselThree({ children, slideKeys, autoMs = 3000, className = 
       }
     >
       {children.map((node, i) => (
-        <SwiperSlide key={slideKeys[i] ?? String(i)} className="!h-auto">
-          <div className="h-full">{node}</div>
+        <SwiperSlide key={slideKeys[i] ?? String(i)} className="!flex !h-auto">
+          <div className="flex h-full w-full min-w-0 flex-col">{node}</div>
         </SwiperSlide>
       ))}
     </Swiper>

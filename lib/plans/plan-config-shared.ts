@@ -20,6 +20,8 @@ export type PlanFeatureFlags = Record<PlanFeatureKey, boolean>;
 export type PlanTierConfig = {
   name: string;
   price: number;
+  /** 0–99: marketing strikethrough from computed list price */
+  discount_percent: number;
   description: string;
   max_cards: number;
   max_photos_album: number;
@@ -44,8 +46,9 @@ export const PLAN_FEATURE_LABELS: Record<PlanFeatureKey, string> = {
 export const DEFAULT_PLAN_CONFIG: PlanConfigMap = {
   basic: {
     name: "Basic",
-    price: 0,
-    description: "Gói miễn phí — thiệp cưới cơ bản",
+    price: 198_000,
+    discount_percent: 49,
+    description: "Gói Basic — thiệp cưới cơ bản",
     max_cards: 1,
     max_photos_album: 10,
     max_photos: 10,
@@ -64,6 +67,7 @@ export const DEFAULT_PLAN_CONFIG: PlanConfigMap = {
   pro: {
     name: PLANS.pro.name,
     price: PLANS.pro.price,
+    discount_percent: 49,
     description: PLANS.pro.description,
     max_cards: 2,
     max_photos_album: 40,
@@ -83,6 +87,7 @@ export const DEFAULT_PLAN_CONFIG: PlanConfigMap = {
   vip: {
     name: PLANS.vip.name,
     price: PLANS.vip.price,
+    discount_percent: 52,
     description: PLANS.vip.description,
     max_cards: 3,
     max_photos_album: 100,
@@ -129,9 +134,14 @@ export function parsePlanConfig(value: unknown): PlanConfigMap | null {
       }
     }
     const price = Number(p.price);
+    const discountRaw = Number(p.discount_percent);
+    const discount_percent = Number.isFinite(discountRaw)
+      ? Math.min(99, Math.max(0, Math.round(discountRaw)))
+      : DEFAULT_PLAN_CONFIG[tier].discount_percent;
     out[tier] = {
       name: String(p.name ?? DEFAULT_PLAN_CONFIG[tier].name),
       price: Number.isFinite(price) ? price : DEFAULT_PLAN_CONFIG[tier].price,
+      discount_percent,
       description: String(p.description ?? DEFAULT_PLAN_CONFIG[tier].description),
       max_cards: Math.max(1, Number(p.max_cards) || DEFAULT_PLAN_CONFIG[tier].max_cards),
       max_photos_album: Math.max(
@@ -151,23 +161,34 @@ export function parsePlanConfig(value: unknown): PlanConfigMap | null {
 
 export function mergeLegacyPlanPrices(
   config: PlanConfigMap,
-  planPrices: Record<PayablePlan, { name: string; price: number; description: string }>
+  planPrices: Partial<Record<PayablePlan, { name: string; price: number; description: string }>>
 ): PlanConfigMap {
-  return {
-    ...config,
-    pro: {
+  const next = { ...config };
+  if (planPrices.pro) {
+    next.pro = {
       ...config.pro,
       name: planPrices.pro.name,
       price: planPrices.pro.price,
       description: planPrices.pro.description,
-    },
-    vip: {
+    };
+  }
+  if (planPrices.vip) {
+    next.vip = {
       ...config.vip,
       name: planPrices.vip.name,
       price: planPrices.vip.price,
       description: planPrices.vip.description,
-    },
-  };
+    };
+  }
+  if (planPrices.basic) {
+    next.basic = {
+      ...config.basic,
+      name: planPrices.basic.name,
+      price: planPrices.basic.price,
+      description: planPrices.basic.description,
+    };
+  }
+  return next;
 }
 
 export function finalizePlanConfig(config: PlanConfigMap): PlanConfigMap {

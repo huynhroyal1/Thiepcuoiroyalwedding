@@ -20,6 +20,7 @@ export default async function GoiDichVuPage() {
       <GoiDichVuClient
         cardId={ensured.data.id}
         currentPlan={ensured.data.plan}
+        paidAt={ensured.data.paid_at}
         orders={orders ?? []}
         planPrices={planPrices}
       />

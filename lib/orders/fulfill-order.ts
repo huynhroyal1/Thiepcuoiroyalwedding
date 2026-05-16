@@ -86,13 +86,14 @@ export async function fulfillPaidOrder(
       .update({ status: "paid" })
       .eq("id", typed.video_order_id);
   } else {
-    const plan = typed.plan as "pro" | "vip";
-    if (plan === "pro" || plan === "vip") {
+    const plan = typed.plan as "basic" | "pro" | "vip";
+    if (plan === "basic" || plan === "pro" || plan === "vip") {
       await supabase
         .from("wedding_cards")
         .update({
           plan,
           paid_at: now,
+          status: "active",
           payment_order_id: paymentRef,
           remove_branding: plan === "vip",
         })

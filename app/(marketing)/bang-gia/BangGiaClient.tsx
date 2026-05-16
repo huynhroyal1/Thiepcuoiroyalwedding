@@ -5,16 +5,13 @@ import { useCallback, useState } from "react";
 import { Check, Crown, Sparkles, Star, Tag, X } from "lucide-react";
 import clsx from "clsx";
 import { faqMehappy } from "@/lib/data/mehappy-landing";
+import { formatPlanPriceDisplay } from "@/lib/plans/format-plan-price";
 import type { PlanPricesMap } from "@/lib/plans/get-plan-prices";
 import { formatVnd } from "@/lib/utils";
 import type { FaqItem } from "@/types";
 import { MarketingMobileNav } from "@/components/landing/MarketingMobileNav";
 import { PlanDetailModal } from "@/components/pricing/PlanDetailModal";
 import type { PlanKey } from "@/lib/data/pricing-plan-features";
-
-const LIST_BASIC = 198_000;
-const LIST_PRO = 375_000;
-const LIST_VIP = 599_000;
 
 const DESIGN_EXTRA = {
   basic: "+ 168.000đ khi yêu cầu thiết kế hộ",
@@ -81,8 +78,15 @@ export function BangGiaClient({ faqItems = faqMehappy, planPrices }: BangGiaProp
     setDetailOpen(true);
   }, []);
 
-  const proPrice = planPrices?.pro.price ?? 199_000;
-  const vipPrice = planPrices?.vip.price ?? 399_000;
+  const prices = planPrices ?? {
+    basic: { name: "Basic", price: 198_000, discount_percent: 49, description: "" },
+    pro: { name: "Pro", price: 199_000, discount_percent: 49, description: "" },
+    vip: { name: "VIP", price: 399_000, discount_percent: 52, description: "" },
+  };
+
+  const basicDisplay = formatPlanPriceDisplay(prices.basic);
+  const proDisplay = formatPlanPriceDisplay(prices.pro);
+  const vipDisplay = formatPlanPriceDisplay(prices.vip);
 
   const cards: Record<
     PlanKey,
@@ -102,11 +106,11 @@ export function BangGiaClient({ faqItems = faqMehappy, planPrices }: BangGiaProp
   > = {
     basic: {
       title: "BASIC",
-      badge: "Gói hiện tại",
-      badgeStyle: "bg-neutral-800 text-white",
-      discount: "-100%",
-      listPrice: LIST_BASIC,
-      priceLabel: "Free",
+      badge: undefined,
+      badgeStyle: undefined,
+      discount: basicDisplay.discountPercent != null ? `-${basicDisplay.discountPercent}%` : undefined,
+      listPrice: basicDisplay.listPrice,
+      priceLabel: basicDisplay.label,
       sub: DESIGN_EXTRA.basic,
       features: [
         "Trình thiết kế thiệp cơ bản",
@@ -126,9 +130,9 @@ export function BangGiaClient({ faqItems = faqMehappy, planPrices }: BangGiaProp
       title: "PRO",
       badge: "Phổ biến",
       badgeStyle: "bg-blue-600 text-white",
-      discount: "-49%",
-      listPrice: LIST_PRO,
-      priceLabel: formatVnd(proPrice),
+      discount: proDisplay.discountPercent != null ? `-${proDisplay.discountPercent}%` : undefined,
+      listPrice: proDisplay.listPrice,
+      priceLabel: proDisplay.label,
       sub: DESIGN_EXTRA.pro,
       features: [
         "Trình thiết kế thiệp nâng cao",
@@ -148,9 +152,9 @@ export function BangGiaClient({ faqItems = faqMehappy, planPrices }: BangGiaProp
       title: "VIP",
       badge: "Tốt nhất",
       badgeStyle: "bg-amber-500 text-white",
-      discount: "-52%",
-      listPrice: LIST_VIP,
-      priceLabel: formatVnd(vipPrice),
+      discount: vipDisplay.discountPercent != null ? `-${vipDisplay.discountPercent}%` : undefined,
+      listPrice: vipDisplay.listPrice,
+      priceLabel: vipDisplay.label,
       sub: DESIGN_EXTRA.vip,
       features: [
         "Trình thiết kế thiệp toàn diện",
@@ -310,7 +314,7 @@ export function BangGiaClient({ faqItems = faqMehappy, planPrices }: BangGiaProp
           <div className="text-center">
             <h2 className="text-2xl font-bold text-neutral-900 sm:text-3xl">Chọn gói phù hợp với nhu cầu</h2>
             <p className="mx-auto mt-2 max-w-lg text-sm text-neutral-600">
-              Bắt đầu miễn phí, nâng cấp linh hoạt khi cần thêm tính năng.
+              Chọn gói phù hợp và thanh toán an toàn qua PayOS.
             </p>
           </div>
 
@@ -403,18 +407,18 @@ export function BangGiaClient({ faqItems = faqMehappy, planPrices }: BangGiaProp
                   </th>
                   <th className="px-3 py-3 text-center font-semibold text-neutral-800">
                     Basic
-                    <div className="mt-1 text-xs font-normal text-neutral-500">{comparePlus ? PLUS_PACKAGE_PRICE.basic : "0đ"}</div>
+                    <div className="mt-1 text-xs font-normal text-neutral-500">{comparePlus ? PLUS_PACKAGE_PRICE.basic : basicDisplay.label}</div>
                   </th>
                   <th className="px-3 py-3 text-center font-semibold text-neutral-800">
                     Pro
                     <div className="mt-1 text-xs font-normal text-neutral-500">
-                      {comparePlus ? PLUS_PACKAGE_PRICE.pro : formatVnd(proPrice)}
+                      {comparePlus ? PLUS_PACKAGE_PRICE.pro : proDisplay.label}
                     </div>
                   </th>
                   <th className="px-3 py-3 text-center font-semibold text-neutral-800">
                     VIP
                     <div className="mt-1 text-xs font-normal text-neutral-500">
-                      {comparePlus ? PLUS_PACKAGE_PRICE.vip : formatVnd(vipPrice)}
+                      {comparePlus ? PLUS_PACKAGE_PRICE.vip : vipDisplay.label}
                     </div>
                   </th>
                 </tr>
@@ -519,7 +523,7 @@ export function BangGiaClient({ faqItems = faqMehappy, planPrices }: BangGiaProp
 
       <div className="border-t border-rose-100 py-8 text-center">
         <Link href="/register" className="text-sm font-semibold text-rose-600 hover:text-rose-700 hover:underline">
-          Tạo thiệp cưới miễn phí ngay →
+          Đăng ký và chọn gói ngay →
         </Link>
       </div>
 

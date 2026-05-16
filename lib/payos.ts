@@ -10,6 +10,11 @@ export function getPayOS(): PayOS {
 }
 
 export const PLANS = {
+  basic: {
+    name: "Gói Basic",
+    price: 198_000,
+    description: "Gói Basic",
+  },
   pro: {
     name: "Gói Pro",
     price: 199_000,

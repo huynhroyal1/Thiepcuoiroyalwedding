@@ -1,4 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server";
+import { isCardSubscriptionActive } from "@/lib/plans/is-card-subscription-active";
+import { getPlanConfigWithClient } from "@/lib/plans/plan-config";
 import { createMiddlewareSupabase } from "@/lib/supabase/middleware";
 
 export async function middleware(request: NextRequest) {
@@ -18,6 +20,29 @@ export async function middleware(request: NextRequest) {
       const login = new URL("/login", request.url);
       login.searchParams.set("next", pathname);
       return NextResponse.redirect(login);
+    }
+  }
+
+  if (
+    user &&
+    pathname.startsWith("/dashboard") &&
+    !pathname.startsWith("/dashboard/goi-dich-vu")
+  ) {
+    const [{ data: card }, planConfig] = await Promise.all([
+      supabase
+        .from("wedding_cards")
+        .select("paid_at, plan")
+        .eq("user_id", user.id)
+        .order("created_at", { ascending: true })
+        .limit(1)
+        .maybeSingle(),
+      getPlanConfigWithClient(supabase),
+    ]);
+
+    if (!isCardSubscriptionActive(card, planConfig)) {
+      const paywall = new URL("/dashboard/goi-dich-vu", request.url);
+      paywall.searchParams.set("paywall", "1");
+      return NextResponse.redirect(paywall);
     }
   }
 

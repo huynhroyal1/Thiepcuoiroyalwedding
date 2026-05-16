@@ -1,3 +1,4 @@
+import type { SupabaseClient } from "@supabase/supabase-js";
 import { PLANS } from "@/lib/payos";
 import { createServiceRoleClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
@@ -17,8 +18,7 @@ export {
   planHasFeature,
 } from "@/lib/plans/plan-config-shared";
 
-export async function getPlanConfig(serviceRole = false): Promise<PlanConfigMap> {
-  const supabase = serviceRole ? createServiceRoleClient() : await createClient();
+export async function getPlanConfigWithClient(supabase: SupabaseClient): Promise<PlanConfigMap> {
   const { data: configRow } = await supabase
     .from("website_settings")
     .select("value")
@@ -54,4 +54,9 @@ export async function getPlanConfig(serviceRole = false): Promise<PlanConfigMap>
   }
 
   return finalizePlanConfig(config);
+}
+
+export async function getPlanConfig(serviceRole = false): Promise<PlanConfigMap> {
+  const supabase = serviceRole ? createServiceRoleClient() : await createClient();
+  return getPlanConfigWithClient(supabase);
 }

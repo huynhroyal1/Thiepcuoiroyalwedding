@@ -38,6 +38,9 @@ export async function ensureWeddingCard(): Promise<{ data: WeddingCard | null; e
     .insert({
       user_id: user.id,
       slug,
+      plan: "basic",
+      status: "draft",
+      paid_at: null,
       bride_name: "Cô dâu",
       groom_name: "Chú rể",
       wedding_date: new Date().toISOString(),

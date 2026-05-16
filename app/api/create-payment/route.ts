@@ -29,6 +29,10 @@ export async function POST(request: Request) {
   const planPrices = await getPlanPrices();
   const planInfo = planPrices[planKey];
 
+  if (planInfo.price <= 0) {
+    return NextResponse.json({ error: "Gói này đang miễn phí — không cần thanh toán" }, { status: 400 });
+  }
+
   const { data: card, error: cardErr } = await supabase
     .from("wedding_cards")
     .select("id, user_id")
