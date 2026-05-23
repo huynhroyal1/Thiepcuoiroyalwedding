@@ -13,6 +13,8 @@ export type TemplateProps = {
   card: WeddingCard;
   photos: WeddingPhoto[];
   guest?: Guest | null;
+  /** Cache-bust Craft preview after editor save (?v=). */
+  renderVersion?: string | number | null;
 };
 
 const themes = {

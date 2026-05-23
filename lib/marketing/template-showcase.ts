@@ -1,12 +1,12 @@
 import type { TemplateRow } from "@/types";
 import type { TemplateShowcaseItem } from "@/lib/marketing/types";
+import { templatePreviewHref } from "@/lib/marketing/template-preview-url";
 
 const FALLBACK_IMAGE =
   "https://s3-hcm-r2.s3cloud.vn/thiepcuoi-mehappy/users/1928/67d91017-be4f-46d2-95e3-95283716d77d-full.webp";
 
 function livePreviewHref(t: TemplateRow): string {
-  if (t.preview_url?.startsWith("/thiep/")) return t.preview_url;
-  return "/kho-giao-dien";
+  return templatePreviewHref(t);
 }
 
 export function templateToShowcaseItem(t: TemplateRow, index: number): TemplateShowcaseItem {

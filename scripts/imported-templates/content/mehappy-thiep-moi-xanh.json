@@ -1,0 +1,1680 @@
+{
+  "ROOT": {
+    "type": {
+      "resolvedName": "RootCanvas"
+    },
+    "isCanvas": true,
+    "props": {},
+    "displayName": "Canvas",
+    "custom": {},
+    "hidden": false,
+    "nodes": [
+      "sec-cover",
+      "sec-save",
+      "sec-events",
+      "sec-gift",
+      "sec-album",
+      "sec-thanks",
+      "sec-footer"
+    ],
+    "linkedNodes": {},
+    "parent": null
+  },
+  "sec-cover": {
+    "type": {
+      "resolvedName": "SectionBlock"
+    },
+    "isCanvas": true,
+    "props": {
+      "height": 519,
+      "bgType": "image",
+      "bgUrl": "https://s3-hcm-r2.s3cloud.vn/thiepcuoi-mehappy/users/18098/f79eacc7-4e03-41c0-8481-38873029040d-full.webp",
+      "bgSize": "cover",
+      "bgPosition": "center center",
+      "bgRepeat": "no-repeat",
+      "elementId": "section-cover"
+    },
+    "displayName": "Section",
+    "custom": {},
+    "hidden": false,
+    "nodes": [],
+    "linkedNodes": {},
+    "parent": "ROOT"
+  },
+  "sec-save": {
+    "type": {
+      "resolvedName": "SectionBlock"
+    },
+    "isCanvas": true,
+    "props": {
+      "height": 1780,
+      "bgType": "image",
+      "bgUrl": "https://s3-hcm-r2.s3cloud.vn/thiepcuoi-mehappy/users/1928/d81a5976-c5a7-47bb-b43e-ea9e1e28f461-full.webp",
+      "bgSize": "contain",
+      "bgPosition": "center center",
+      "bgRepeat": "repeat",
+      "overlayType": "color",
+      "overlayColor": "#e8f5e9",
+      "overlayOpacity": 20,
+      "elementId": "section-save-date"
+    },
+    "displayName": "Section",
+    "custom": {},
+    "hidden": false,
+    "nodes": [
+      "s2-groom-name-l",
+      "s2-bride-name-r",
+      "s2-heart-1",
+      "s2-heart-2",
+      "s2-save-title",
+      "s2-for-wedding",
+      "s2-date-iso",
+      "s2-countdown",
+      "s2-nha-trai",
+      "s2-img-groom",
+      "s2-chu-re",
+      "s2-groom-name-big",
+      "s2-bo-groom",
+      "s2-me-groom",
+      "s2-dia-chi-groom",
+      "s2-nha-gai",
+      "s2-img-bride",
+      "s2-co-dau",
+      "s2-bride-name-big",
+      "s2-bo-bride",
+      "s2-me-bride",
+      "s2-dia-chi-bride",
+      "s2-event-time"
+    ],
+    "linkedNodes": {},
+    "parent": "ROOT"
+  },
+  "s2-groom-name-l": {
+    "type": {
+      "resolvedName": "TextBlock"
+    },
+    "isCanvas": false,
+    "props": {
+      "content": "Quang Thi",
+      "cardField": "groom_name",
+      "fontSize": 29,
+      "fontFamily": "'Great Vibes', cursive",
+      "color": "#1b4332",
+      "textAlign": "right",
+      "top": 14,
+      "left": 0,
+      "width": 210,
+      "elementId": "s2-groom-name-l",
+      "animationEntry": "fadeInUp",
+      "animationDuration": 1,
+      "animationLoop": false
+    },
+    "displayName": "Text",
+    "custom": {},
+    "hidden": false,
+    "nodes": [],
+    "linkedNodes": {},
+    "parent": "sec-save"
+  },
+  "s2-bride-name-r": {
+    "type": {
+      "resolvedName": "TextBlock"
+    },
+    "isCanvas": false,
+    "props": {
+      "content": "Mỹ Hạnh",
+      "cardField": "bride_name",
+      "fontSize": 29,
+      "fontFamily": "'Great Vibes', cursive",
+      "color": "#1b4332",
+      "top": 14,
+      "left": 215,
+      "width": 175,
+      "elementId": "s2-bride-name-r",
+      "animationEntry": "fadeInDown",
+      "animationDuration": 1,
+      "animationLoop": false
+    },
+    "displayName": "Text",
+    "custom": {},
+    "hidden": false,
+    "nodes": [],
+    "linkedNodes": {},
+    "parent": "sec-save"
+  },
+  "s2-heart-1": {
+    "type": {
+      "resolvedName": "IconBlock"
+    },
+    "isCanvas": false,
+    "props": {
+      "icon": "heart",
+      "top": 19,
+      "left": 173,
+      "width": 29,
+      "height": 29,
+      "color": "#1b4332",
+      "elementId": "s2-heart-1",
+      "animationEntry": "fadeInLeft",
+      "animationDuration": 1,
+      "animationLoop": false
+    },
+    "displayName": "Icon",
+    "custom": {},
+    "hidden": false,
+    "nodes": [],
+    "linkedNodes": {},
+    "parent": "sec-save"
+  },
+  "s2-heart-2": {
+    "type": {
+      "resolvedName": "IconBlock"
+    },
+    "isCanvas": false,
+    "props": {
+      "icon": "heart",
+      "top": 28,
+      "left": 181,
+      "width": 20,
+      "height": 20,
+      "color": "#1b4332",
+      "rotate": 30,
+      "elementId": "s2-heart-2",
+      "animationEntry": "fadeInRight",
+      "animationDuration": 1,
+      "animationLoop": false
+    },
+    "displayName": "Icon",
+    "custom": {},
+    "hidden": false,
+    "nodes": [],
+    "linkedNodes": {},
+    "parent": "sec-save"
+  },
+  "s2-save-title": {
+    "type": {
+      "resolvedName": "TextBlock"
+    },
+    "isCanvas": false,
+    "props": {
+      "content": "Save The Date",
+      "fontSize": 34,
+      "fontFamily": "'Great Vibes', cursive",
+      "textAlign": "center",
+      "top": 78,
+      "left": 4,
+      "width": 381,
+      "elementId": "s2-save-title",
+      "animationEntry": "fadeInUpBig",
+      "animationDuration": 1,
+      "animationLoop": false
+    },
+    "displayName": "Text",
+    "custom": {},
+    "hidden": false,
+    "nodes": [],
+    "linkedNodes": {},
+    "parent": "sec-save"
+  },
+  "s2-for-wedding": {
+    "type": {
+      "resolvedName": "TextBlock"
+    },
+    "isCanvas": false,
+    "props": {
+      "content": "For The Wedding Of",
+      "fontSize": 18,
+      "fontFamily": "'Source Sans Pro', sans-serif",
+      "textAlign": "center",
+      "top": 127,
+      "left": 39,
+      "width": 312,
+      "elementId": "s2-for-wedding",
+      "animationEntry": "fadeInDownBig",
+      "animationDuration": 1,
+      "animationLoop": false
+    },
+    "displayName": "Text",
+    "custom": {},
+    "hidden": false,
+    "nodes": [],
+    "linkedNodes": {},
+    "parent": "sec-save"
+  },
+  "s2-date-iso": {
+    "type": {
+      "resolvedName": "TextBlock"
+    },
+    "isCanvas": false,
+    "props": {
+      "content": "2026-05-16",
+      "cardField": "wedding_date",
+      "fontSize": 18,
+      "fontFamily": "'Source Sans Pro', sans-serif",
+      "textAlign": "center",
+      "top": 168,
+      "left": 40,
+      "width": 311,
+      "elementId": "s2-date-iso",
+      "animationEntry": "bounceIn",
+      "animationDuration": 1,
+      "animationLoop": false
+    },
+    "displayName": "Text",
+    "custom": {},
+    "hidden": false,
+    "nodes": [],
+    "linkedNodes": {},
+    "parent": "sec-save"
+  },
+  "s2-countdown": {
+    "type": {
+      "resolvedName": "CountdownBlock"
+    },
+    "isCanvas": false,
+    "props": {
+      "top": 206,
+      "left": 20,
+      "width": 351,
+      "primaryColor": "#2d6a4f",
+      "textColor": "#ffffff",
+      "labelColor": "#e8f5e9",
+      "digitFontSize": 29,
+      "elementId": "s2-countdown",
+      "animationEntry": "bounceInUp",
+      "animationDuration": 1,
+      "animationLoop": false
+    },
+    "displayName": "Đếm ngược",
+    "custom": {},
+    "hidden": false,
+    "nodes": [],
+    "linkedNodes": {},
+    "parent": "sec-save"
+  },
+  "s2-nha-trai": {
+    "type": {
+      "resolvedName": "TextBlock"
+    },
+    "isCanvas": false,
+    "props": {
+      "content": "Nhà Trai",
+      "fontSize": 34,
+      "fontFamily": "'Great Vibes', cursive",
+      "textAlign": "center",
+      "top": 347,
+      "left": 4,
+      "width": 381,
+      "elementId": "s2-nha-trai",
+      "animationEntry": "bounceInDown",
+      "animationDuration": 1,
+      "animationLoop": false
+    },
+    "displayName": "Text",
+    "custom": {},
+    "hidden": false,
+    "nodes": [],
+    "linkedNodes": {},
+    "parent": "sec-save"
+  },
+  "s2-img-groom": {
+    "type": {
+      "resolvedName": "ImageBlock"
+    },
+    "isCanvas": false,
+    "props": {
+      "src": "https://s3-hcm-r2.s3cloud.vn/thiepcuoi-mehappy/users/1928/6d4ff4c0-88c3-4e6a-90bd-d41eb7f0358f-full.webp",
+      "top": 404,
+      "left": 15,
+      "width": 361,
+      "height": 380,
+      "borderRadius": 10,
+      "borderStyle": "solid",
+      "borderWidth": 2,
+      "borderColor": "#2d6a4f",
+      "objectFit": "cover",
+      "elementId": "s2-img-groom",
+      "animationEntry": "zoomIn",
+      "animationDuration": 1,
+      "animationLoop": false
+    },
+    "displayName": "Hình ảnh",
+    "custom": {},
+    "hidden": false,
+    "nodes": [],
+    "linkedNodes": {},
+    "parent": "sec-save"
+  },
+  "s2-chu-re": {
+    "type": {
+      "resolvedName": "TextBlock"
+    },
+    "isCanvas": false,
+    "props": {
+      "content": "Chú Rể:",
+      "fontSize": 20,
+      "fontFamily": "Oswald, sans-serif",
+      "fontWeight": "bold",
+      "textAlign": "center",
+      "top": 792,
+      "left": 88,
+      "width": 215,
+      "elementId": "s2-chu-re",
+      "animationEntry": "zoomInUp",
+      "animationDuration": 1,
+      "animationLoop": false
+    },
+    "displayName": "Text",
+    "custom": {},
+    "hidden": false,
+    "nodes": [],
+    "linkedNodes": {},
+    "parent": "sec-save"
+  },
+  "s2-groom-name-big": {
+    "type": {
+      "resolvedName": "TextBlock"
+    },
+    "isCanvas": false,
+    "props": {
+      "content": "Quang Thi",
+      "cardField": "groom_name",
+      "fontSize": 29,
+      "fontFamily": "'Great Vibes', cursive",
+      "fontWeight": "bold",
+      "textAlign": "center",
+      "top": 827,
+      "left": 4,
+      "width": 381,
+      "elementId": "s2-groom-name-big",
+      "animationEntry": "slideInUp",
+      "animationDuration": 1,
+      "animationLoop": false
+    },
+    "displayName": "Text",
+    "custom": {},
+    "hidden": false,
+    "nodes": [],
+    "linkedNodes": {},
+    "parent": "sec-save"
+  },
+  "s2-bo-groom": {
+    "type": {
+      "resolvedName": "TextBlock"
+    },
+    "isCanvas": false,
+    "props": {
+      "content": "Bố: Nguyễn Xuân Dung",
+      "fontSize": 18,
+      "fontFamily": "'Source Sans Pro', sans-serif",
+      "textAlign": "center",
+      "top": 880,
+      "left": 6,
+      "width": 378,
+      "elementId": "s2-bo-groom",
+      "animationEntry": "slideInLeft",
+      "animationDuration": 1,
+      "animationLoop": false
+    },
+    "displayName": "Text",
+    "custom": {},
+    "hidden": false,
+    "nodes": [],
+    "linkedNodes": {},
+    "parent": "sec-save"
+  },
+  "s2-me-groom": {
+    "type": {
+      "resolvedName": "TextBlock"
+    },
+    "isCanvas": false,
+    "props": {
+      "content": "Mẹ: Nguyễn Thị Tuyết",
+      "fontSize": 18,
+      "fontFamily": "'Source Sans Pro', sans-serif",
+      "textAlign": "center",
+      "top": 907,
+      "left": 4,
+      "width": 380,
+      "elementId": "s2-me-groom",
+      "animationEntry": "slideInRight",
+      "animationDuration": 1,
+      "animationLoop": false
+    },
+    "displayName": "Text",
+    "custom": {},
+    "hidden": false,
+    "nodes": [],
+    "linkedNodes": {},
+    "parent": "sec-save"
+  },
+  "s2-dia-chi-groom": {
+    "type": {
+      "resolvedName": "TextBlock"
+    },
+    "isCanvas": false,
+    "props": {
+      "content": "<b>Địa Chỉ:</b>&nbsp;Xã Đông Phú<br/>Huyện Lục Nam, Tỉnh Bắc Giang",
+      "fontSize": 18,
+      "fontFamily": "'Source Sans Pro', sans-serif",
+      "textAlign": "center",
+      "top": 952,
+      "left": 4,
+      "width": 381,
+      "elementId": "s2-dia-chi-groom",
+      "animationEntry": "rotateIn",
+      "animationDuration": 1,
+      "animationLoop": false
+    },
+    "displayName": "Text",
+    "custom": {},
+    "hidden": false,
+    "nodes": [],
+    "linkedNodes": {},
+    "parent": "sec-save"
+  },
+  "s2-nha-gai": {
+    "type": {
+      "resolvedName": "TextBlock"
+    },
+    "isCanvas": false,
+    "props": {
+      "content": "Nhà Gái",
+      "fontSize": 34,
+      "fontFamily": "'Great Vibes', cursive",
+      "textAlign": "center",
+      "top": 1049,
+      "left": 4,
+      "width": 381,
+      "elementId": "s2-nha-gai",
+      "animationEntry": "flipInY",
+      "animationDuration": 1,
+      "animationLoop": false
+    },
+    "displayName": "Text",
+    "custom": {},
+    "hidden": false,
+    "nodes": [],
+    "linkedNodes": {},
+    "parent": "sec-save"
+  },
+  "s2-img-bride": {
+    "type": {
+      "resolvedName": "ImageBlock"
+    },
+    "isCanvas": false,
+    "props": {
+      "src": "https://s3-hcm-r2.s3cloud.vn/thiepcuoi-mehappy/users/1928/9db06fec-f2eb-4908-bdc0-cb7f60c0fa92-full.webp",
+      "top": 1109,
+      "left": 15,
+      "width": 361,
+      "height": 380,
+      "borderRadius": 10,
+      "borderStyle": "solid",
+      "borderWidth": 2,
+      "borderColor": "#2d6a4f",
+      "objectFit": "cover",
+      "elementId": "s2-img-bride",
+      "animationEntry": "lightSpeedInRight",
+      "animationDuration": 1,
+      "animationLoop": false
+    },
+    "displayName": "Hình ảnh",
+    "custom": {},
+    "hidden": false,
+    "nodes": [],
+    "linkedNodes": {},
+    "parent": "sec-save"
+  },
+  "s2-co-dau": {
+    "type": {
+      "resolvedName": "TextBlock"
+    },
+    "isCanvas": false,
+    "props": {
+      "content": "Cô Dâu",
+      "fontSize": 20,
+      "fontFamily": "Oswald, sans-serif",
+      "fontWeight": "bold",
+      "textAlign": "center",
+      "top": 1497,
+      "left": 7,
+      "width": 377,
+      "elementId": "s2-co-dau",
+      "animationEntry": "rollIn",
+      "animationDuration": 1,
+      "animationLoop": false
+    },
+    "displayName": "Text",
+    "custom": {},
+    "hidden": false,
+    "nodes": [],
+    "linkedNodes": {},
+    "parent": "sec-save"
+  },
+  "s2-bride-name-big": {
+    "type": {
+      "resolvedName": "TextBlock"
+    },
+    "isCanvas": false,
+    "props": {
+      "content": "Mỹ Hạnh",
+      "cardField": "bride_name",
+      "fontSize": 29,
+      "fontFamily": "'Great Vibes', cursive",
+      "fontWeight": "bold",
+      "textAlign": "center",
+      "top": 1534,
+      "left": 3,
+      "width": 381,
+      "elementId": "s2-bride-name-big",
+      "animationEntry": "jackInTheBox",
+      "animationDuration": 1,
+      "animationLoop": false
+    },
+    "displayName": "Text",
+    "custom": {},
+    "hidden": false,
+    "nodes": [],
+    "linkedNodes": {},
+    "parent": "sec-save"
+  },
+  "s2-bo-bride": {
+    "type": {
+      "resolvedName": "TextBlock"
+    },
+    "isCanvas": false,
+    "props": {
+      "content": "Bố: Nghiêm Tuấn Hợp",
+      "fontSize": 18,
+      "fontFamily": "'Source Sans Pro', sans-serif",
+      "textAlign": "center",
+      "top": 1585,
+      "left": 4,
+      "width": 381,
+      "elementId": "s2-bo-bride",
+      "animationEntry": "fadeInUp",
+      "animationDuration": 1,
+      "animationLoop": false
+    },
+    "displayName": "Text",
+    "custom": {},
+    "hidden": false,
+    "nodes": [],
+    "linkedNodes": {},
+    "parent": "sec-save"
+  },
+  "s2-me-bride": {
+    "type": {
+      "resolvedName": "TextBlock"
+    },
+    "isCanvas": false,
+    "props": {
+      "content": "Mẹ: Nguyễn Thị Loan",
+      "fontSize": 18,
+      "fontFamily": "'Source Sans Pro', sans-serif",
+      "textAlign": "center",
+      "top": 1612,
+      "left": 5,
+      "width": 381,
+      "elementId": "s2-me-bride",
+      "animationEntry": "fadeInDown",
+      "animationDuration": 1,
+      "animationLoop": false
+    },
+    "displayName": "Text",
+    "custom": {},
+    "hidden": false,
+    "nodes": [],
+    "linkedNodes": {},
+    "parent": "sec-save"
+  },
+  "s2-dia-chi-bride": {
+    "type": {
+      "resolvedName": "TextBlock"
+    },
+    "isCanvas": false,
+    "props": {
+      "content": "<b>Địa Chỉ:</b> Thôn Trong, Xã Đông Phú<br/>Huyện Lục Nam, Tỉnh Bắc Giang",
+      "fontSize": 18,
+      "fontFamily": "'Source Sans Pro', sans-serif",
+      "textAlign": "center",
+      "top": 1657,
+      "left": 7,
+      "width": 377,
+      "elementId": "s2-dia-chi-bride",
+      "animationEntry": "fadeInLeft",
+      "animationDuration": 1,
+      "animationLoop": false
+    },
+    "displayName": "Text",
+    "custom": {},
+    "hidden": false,
+    "nodes": [],
+    "linkedNodes": {},
+    "parent": "sec-save"
+  },
+  "s2-event-time": {
+    "type": {
+      "resolvedName": "TextBlock"
+    },
+    "isCanvas": false,
+    "props": {
+      "content": "16:00 Thứ Tư Ngày 30/11/2025",
+      "fontSize": 18,
+      "fontFamily": "'Source Sans Pro', sans-serif",
+      "textAlign": "center",
+      "top": 1680,
+      "left": 91,
+      "width": 274,
+      "elementId": "s2-event-time",
+      "animationEntry": "fadeInRight",
+      "animationDuration": 1,
+      "animationLoop": false
+    },
+    "displayName": "Text",
+    "custom": {},
+    "hidden": false,
+    "nodes": [],
+    "linkedNodes": {},
+    "parent": "sec-save"
+  },
+  "sec-events": {
+    "type": {
+      "resolvedName": "SectionBlock"
+    },
+    "isCanvas": true,
+    "props": {
+      "height": 827,
+      "bgType": "color",
+      "bgColor": "#ffffff",
+      "elementId": "section-events"
+    },
+    "displayName": "Section",
+    "custom": {},
+    "hidden": false,
+    "nodes": [
+      "s3-title",
+      "s3-groom-party",
+      "s3-thumb-groom",
+      "s3-bg-groom",
+      "s3-icon-cal-g",
+      "s3-icon-map-g",
+      "s3-venue-g-label",
+      "s3-venue-g",
+      "s3-btn-map-g",
+      "s3-bride-party",
+      "s3-thumb-bride",
+      "s3-bg-bride",
+      "s3-icon-cal-b",
+      "s3-icon-map-b",
+      "s3-time-b",
+      "s3-venue-b-label",
+      "s3-venue-b",
+      "s3-btn-map-b"
+    ],
+    "linkedNodes": {},
+    "parent": "ROOT"
+  },
+  "s3-title": {
+    "type": {
+      "resolvedName": "TextBlock"
+    },
+    "isCanvas": false,
+    "props": {
+      "content": "Sự Kiện Cưới",
+      "fontSize": 34,
+      "fontFamily": "'Great Vibes', cursive",
+      "textAlign": "center",
+      "top": 31,
+      "left": 0,
+      "width": 390,
+      "elementId": "s3-title",
+      "animationEntry": "fadeInUpBig",
+      "animationDuration": 1,
+      "animationLoop": false
+    },
+    "displayName": "Text",
+    "custom": {},
+    "hidden": false,
+    "nodes": [],
+    "linkedNodes": {},
+    "parent": "sec-events"
+  },
+  "s3-groom-party": {
+    "type": {
+      "resolvedName": "TextBlock"
+    },
+    "isCanvas": false,
+    "props": {
+      "content": "Tiệc Cưới Nhà Trai",
+      "fontSize": 20,
+      "fontFamily": "'Source Sans Pro', sans-serif",
+      "fontWeight": "bold",
+      "textDecoration": "underline",
+      "textAlign": "center",
+      "top": 189,
+      "left": 10,
+      "width": 194,
+      "elementId": "s3-groom-party",
+      "animationEntry": "fadeInDownBig",
+      "animationDuration": 1,
+      "animationLoop": false
+    },
+    "displayName": "Text",
+    "custom": {},
+    "hidden": false,
+    "nodes": [],
+    "linkedNodes": {},
+    "parent": "sec-events"
+  },
+  "s3-thumb-groom": {
+    "type": {
+      "resolvedName": "ImageBlock"
+    },
+    "isCanvas": false,
+    "props": {
+      "src": "https://s3-hcm-r2.s3cloud.vn/thiepcuoi-mehappy/users/1928/8b89a200-b361-451e-90bb-769fc120ae56-full.webp",
+      "top": 123,
+      "left": 204,
+      "width": 162,
+      "height": 115,
+      "borderRadius": 5,
+      "objectFit": "cover",
+      "elementId": "s3-thumb-groom",
+      "animationEntry": "bounceIn",
+      "animationDuration": 1,
+      "animationLoop": false
+    },
+    "displayName": "Hình ảnh",
+    "custom": {},
+    "hidden": false,
+    "nodes": [],
+    "linkedNodes": {},
+    "parent": "sec-events"
+  },
+  "s3-bg-groom": {
+    "type": {
+      "resolvedName": "ImageBlock"
+    },
+    "isCanvas": false,
+    "props": {
+      "src": "https://s3-hcm-r2.s3cloud.vn/thiepcuoi-mehappy/users/1928/2e7efe47-834f-4e87-bc36-901ea3b86810-full.webp",
+      "top": 180,
+      "left": 10,
+      "width": 371,
+      "height": 195,
+      "borderRadius": 5,
+      "objectFit": "cover",
+      "imageFilter": {
+        "filterOpacity": 50
+      },
+      "elementId": "s3-bg-groom",
+      "animationEntry": "bounceInUp",
+      "animationDuration": 1,
+      "animationLoop": false
+    },
+    "displayName": "Hình ảnh",
+    "custom": {},
+    "hidden": false,
+    "nodes": [],
+    "linkedNodes": {},
+    "parent": "sec-events"
+  },
+  "s3-icon-cal-g": {
+    "type": {
+      "resolvedName": "IconBlock"
+    },
+    "isCanvas": false,
+    "props": {
+      "customSvg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 448 512\" fill=\"#C24E4E\"><path d=\"M0 464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V192H0v272zm320-196c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v40c0 6.6-5.4 12-12 12h-40c-6.6 0-12-5.4-12-12v-40zm0 128c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v40c0 6.6-5.4 12-12 12h-40c-6.6 0-12-5.4-12-12v-40zM192 268c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v40c0 6.6-5.4 12-12 12h-40c-6.6 0-12-5.4-12-12v-40zm0 128c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v40c0 6.6-5.4 12-12 12h-40c-6.6 0-12-5.4-12-12v-40zM64 268c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v40c0 6.6-5.4 12-12 12H76c-6.6 0-12-5.4-12-12v-40zm0 128c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v40c0 6.6-5.4 12-12 12H76c-6.6 0-12-5.4-12-12v-40zM400 64h-48V16c0-8.8-7.2-16-16-16h-32c-8.8 0-16 7.2-16 16v48H160V16c0-8.8-7.2-16-16-16h-32c-8.8 0-16 7.2-16 16v48H48C21.5 64 0 85.5 0 112v48h448v-48c0-26.5-21.5-48-48-48z\"/></svg>",
+      "icon": "star",
+      "top": 243,
+      "left": 25,
+      "width": 29,
+      "height": 29,
+      "color": "#1b4332",
+      "elementId": "s3-icon-cal-g",
+      "animationEntry": "bounceInDown",
+      "animationDuration": 1,
+      "animationLoop": false
+    },
+    "displayName": "Icon",
+    "custom": {},
+    "hidden": false,
+    "nodes": [],
+    "linkedNodes": {},
+    "parent": "sec-events"
+  },
+  "s3-icon-map-g": {
+    "type": {
+      "resolvedName": "IconBlock"
+    },
+    "isCanvas": false,
+    "props": {
+      "customSvg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 384 512\" fill=\"#C24E4E\"><path d=\"M172.268 501.67C26.97 291.031 0 269.413 0 192 0 85.961 85.961 0 192 0s192 85.961 192 192c0 77.413-26.97 99.031-172.268 309.67-9.535 13.774-29.93 13.773-39.464 0zM192 272c44.183 0 80-35.817 80-80s-35.817-80-80-80-80 35.817-80 80 35.817 80 80 80z\"/></svg>",
+      "icon": "star",
+      "top": 295,
+      "left": 25,
+      "width": 29,
+      "height": 29,
+      "color": "#1b4332",
+      "elementId": "s3-icon-map-g",
+      "animationEntry": "zoomIn",
+      "animationDuration": 1,
+      "animationLoop": false
+    },
+    "displayName": "Icon",
+    "custom": {},
+    "hidden": false,
+    "nodes": [],
+    "linkedNodes": {},
+    "parent": "sec-events"
+  },
+  "s3-venue-g-label": {
+    "type": {
+      "resolvedName": "TextBlock"
+    },
+    "isCanvas": false,
+    "props": {
+      "content": "Tại: Tư Gia Nhà Trai:",
+      "fontSize": 16,
+      "fontFamily": "'Source Sans Pro', sans-serif",
+      "top": 291,
+      "left": 64,
+      "width": 207,
+      "elementId": "s3-venue-g-label",
+      "animationEntry": "zoomInUp",
+      "animationDuration": 1,
+      "animationLoop": false
+    },
+    "displayName": "Text",
+    "custom": {},
+    "hidden": false,
+    "nodes": [],
+    "linkedNodes": {},
+    "parent": "sec-events"
+  },
+  "s3-venue-g": {
+    "type": {
+      "resolvedName": "TextBlock"
+    },
+    "isCanvas": false,
+    "props": {
+      "content": "Thôn Trong, Xã Đông Phú, Bắc Giang",
+      "fontSize": 18,
+      "fontFamily": "'Source Sans Pro', sans-serif",
+      "top": 314,
+      "left": 64,
+      "width": 285,
+      "elementId": "s3-venue-g",
+      "animationEntry": "slideInUp",
+      "animationDuration": 1,
+      "animationLoop": false
+    },
+    "displayName": "Text",
+    "custom": {},
+    "hidden": false,
+    "nodes": [],
+    "linkedNodes": {},
+    "parent": "sec-events"
+  },
+  "s3-btn-map-g": {
+    "type": {
+      "resolvedName": "ButtonBlock"
+    },
+    "isCanvas": false,
+    "props": {
+      "label": "Xem chỉ đường từ google maps",
+      "url": "https://www.google.com/maps",
+      "bgColor": "#2d6a4f",
+      "textColor": "#333333",
+      "fontSize": 20,
+      "borderRadius": 4,
+      "top": 381,
+      "left": 38,
+      "width": 332,
+      "paddingY": 8,
+      "elementId": "s3-btn-map-g",
+      "animationEntry": "slideInLeft",
+      "animationDuration": 1,
+      "animationLoop": false
+    },
+    "displayName": "Nút bấm",
+    "custom": {},
+    "hidden": false,
+    "nodes": [],
+    "linkedNodes": {},
+    "parent": "sec-events"
+  },
+  "s3-bride-party": {
+    "type": {
+      "resolvedName": "TextBlock"
+    },
+    "isCanvas": false,
+    "props": {
+      "content": "Tiệc Cưới Nhà Gái",
+      "fontSize": 20,
+      "fontFamily": "'Source Sans Pro', sans-serif",
+      "fontWeight": "bold",
+      "textDecoration": "underline",
+      "textAlign": "center",
+      "top": 538,
+      "left": 10,
+      "width": 194,
+      "elementId": "s3-bride-party",
+      "animationEntry": "slideInRight",
+      "animationDuration": 1,
+      "animationLoop": false
+    },
+    "displayName": "Text",
+    "custom": {},
+    "hidden": false,
+    "nodes": [],
+    "linkedNodes": {},
+    "parent": "sec-events"
+  },
+  "s3-thumb-bride": {
+    "type": {
+      "resolvedName": "ImageBlock"
+    },
+    "isCanvas": false,
+    "props": {
+      "src": "https://s3-hcm-r2.s3cloud.vn/thiepcuoi-mehappy/users/1928/5fd5bbcb-b089-45e3-b79c-37c1b2f36727-full.webp",
+      "top": 473,
+      "left": 204,
+      "width": 162,
+      "height": 115,
+      "borderRadius": 5,
+      "objectFit": "cover",
+      "elementId": "s3-thumb-bride",
+      "animationEntry": "rotateIn",
+      "animationDuration": 1,
+      "animationLoop": false
+    },
+    "displayName": "Hình ảnh",
+    "custom": {},
+    "hidden": false,
+    "nodes": [],
+    "linkedNodes": {},
+    "parent": "sec-events"
+  },
+  "s3-bg-bride": {
+    "type": {
+      "resolvedName": "ImageBlock"
+    },
+    "isCanvas": false,
+    "props": {
+      "src": "https://s3-hcm-r2.s3cloud.vn/thiepcuoi-mehappy/users/1928/2e7efe47-834f-4e87-bc36-901ea3b86810-full.webp",
+      "top": 530,
+      "left": 10,
+      "width": 371,
+      "height": 195,
+      "borderRadius": 5,
+      "objectFit": "cover",
+      "imageFilter": {
+        "filterOpacity": 50
+      },
+      "elementId": "s3-bg-bride",
+      "animationEntry": "flipInY",
+      "animationDuration": 1,
+      "animationLoop": false
+    },
+    "displayName": "Hình ảnh",
+    "custom": {},
+    "hidden": false,
+    "nodes": [],
+    "linkedNodes": {},
+    "parent": "sec-events"
+  },
+  "s3-icon-cal-b": {
+    "type": {
+      "resolvedName": "IconBlock"
+    },
+    "isCanvas": false,
+    "props": {
+      "customSvg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 448 512\" fill=\"#C24E4E\"><path d=\"M0 464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V192H0v272zm320-196c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v40c0 6.6-5.4 12-12 12h-40c-6.6 0-12-5.4-12-12v-40zm0 128c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v40c0 6.6-5.4 12-12 12h-40c-6.6 0-12-5.4-12-12v-40zM192 268c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v40c0 6.6-5.4 12-12 12h-40c-6.6 0-12-5.4-12-12v-40zm0 128c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v40c0 6.6-5.4 12-12 12h-40c-6.6 0-12-5.4-12-12v-40zM64 268c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v40c0 6.6-5.4 12-12 12H76c-6.6 0-12-5.4-12-12v-40zm0 128c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v40c0 6.6-5.4 12-12 12H76c-6.6 0-12-5.4-12-12v-40zM400 64h-48V16c0-8.8-7.2-16-16-16h-32c-8.8 0-16 7.2-16 16v48H160V16c0-8.8-7.2-16-16-16h-32c-8.8 0-16 7.2-16 16v48H48C21.5 64 0 85.5 0 112v48h448v-48c0-26.5-21.5-48-48-48z\"/></svg>",
+      "icon": "star",
+      "top": 594,
+      "left": 25,
+      "width": 29,
+      "height": 29,
+      "color": "#1b4332",
+      "elementId": "s3-icon-cal-b",
+      "animationEntry": "lightSpeedInRight",
+      "animationDuration": 1,
+      "animationLoop": false
+    },
+    "displayName": "Icon",
+    "custom": {},
+    "hidden": false,
+    "nodes": [],
+    "linkedNodes": {},
+    "parent": "sec-events"
+  },
+  "s3-icon-map-b": {
+    "type": {
+      "resolvedName": "IconBlock"
+    },
+    "isCanvas": false,
+    "props": {
+      "customSvg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 384 512\" fill=\"#C24E4E\"><path d=\"M172.268 501.67C26.97 291.031 0 269.413 0 192 0 85.961 85.961 0 192 0s192 85.961 192 192c0 77.413-26.97 99.031-172.268 309.67-9.535 13.774-29.93 13.773-39.464 0zM192 272c44.183 0 80-35.817 80-80s-35.817-80-80-80-80 35.817-80 80 35.817 80 80 80z\"/></svg>",
+      "icon": "star",
+      "top": 645,
+      "left": 25,
+      "width": 29,
+      "height": 29,
+      "color": "#1b4332",
+      "elementId": "s3-icon-map-b",
+      "animationEntry": "rollIn",
+      "animationDuration": 1,
+      "animationLoop": false
+    },
+    "displayName": "Icon",
+    "custom": {},
+    "hidden": false,
+    "nodes": [],
+    "linkedNodes": {},
+    "parent": "sec-events"
+  },
+  "s3-time-b": {
+    "type": {
+      "resolvedName": "TextBlock"
+    },
+    "isCanvas": false,
+    "props": {
+      "content": "16:00 Thứ Tư Ngày 30/11/2025",
+      "fontSize": 18,
+      "fontFamily": "'Source Sans Pro', sans-serif",
+      "top": 597,
+      "left": 67,
+      "width": 297,
+      "elementId": "s3-time-b",
+      "animationEntry": "jackInTheBox",
+      "animationDuration": 1,
+      "animationLoop": false
+    },
+    "displayName": "Text",
+    "custom": {},
+    "hidden": false,
+    "nodes": [],
+    "linkedNodes": {},
+    "parent": "sec-events"
+  },
+  "s3-venue-b-label": {
+    "type": {
+      "resolvedName": "TextBlock"
+    },
+    "isCanvas": false,
+    "props": {
+      "content": "Tại: Tư Gia Nhà Gái:",
+      "fontSize": 16,
+      "fontFamily": "'Source Sans Pro', sans-serif",
+      "top": 641,
+      "left": 67,
+      "width": 194,
+      "elementId": "s3-venue-b-label",
+      "animationEntry": "fadeInUp",
+      "animationDuration": 1,
+      "animationLoop": false
+    },
+    "displayName": "Text",
+    "custom": {},
+    "hidden": false,
+    "nodes": [],
+    "linkedNodes": {},
+    "parent": "sec-events"
+  },
+  "s3-venue-b": {
+    "type": {
+      "resolvedName": "TextBlock"
+    },
+    "isCanvas": false,
+    "props": {
+      "content": "Thôn Trong, Xã Đông Phú, Bắc Giang",
+      "fontSize": 18,
+      "fontFamily": "'Source Sans Pro', sans-serif",
+      "top": 664,
+      "left": 67,
+      "width": 301,
+      "elementId": "s3-venue-b",
+      "animationEntry": "fadeInDown",
+      "animationDuration": 1,
+      "animationLoop": false
+    },
+    "displayName": "Text",
+    "custom": {},
+    "hidden": false,
+    "nodes": [],
+    "linkedNodes": {},
+    "parent": "sec-events"
+  },
+  "s3-btn-map-b": {
+    "type": {
+      "resolvedName": "ButtonBlock"
+    },
+    "isCanvas": false,
+    "props": {
+      "label": "Xem chỉ đường từ google maps",
+      "url": "https://www.google.com/maps",
+      "bgColor": "#2d6a4f",
+      "textColor": "#333333",
+      "fontSize": 20,
+      "borderRadius": 4,
+      "top": 731,
+      "left": 41,
+      "width": 332,
+      "paddingY": 8,
+      "elementId": "s3-btn-map-b",
+      "animationEntry": "fadeInLeft",
+      "animationDuration": 1,
+      "animationLoop": false
+    },
+    "displayName": "Nút bấm",
+    "custom": {},
+    "hidden": false,
+    "nodes": [],
+    "linkedNodes": {},
+    "parent": "sec-events"
+  },
+  "sec-gift": {
+    "type": {
+      "resolvedName": "SectionBlock"
+    },
+    "isCanvas": true,
+    "props": {
+      "height": 400,
+      "bgType": "image",
+      "bgUrl": "https://s3-hcm-r2.s3cloud.vn/thiepcuoi-mehappy/users/18098/f79eacc7-4e03-41c0-8481-38873029040d-full.webp",
+      "bgSize": "cover",
+      "bgPosition": "center center",
+      "overlayType": "color",
+      "overlayColor": "#000000",
+      "overlayOpacity": 70,
+      "elementId": "section-gift"
+    },
+    "displayName": "Section",
+    "custom": {},
+    "hidden": false,
+    "nodes": [
+      "s4-title",
+      "s4-subtitle",
+      "s4-gift-box"
+    ],
+    "linkedNodes": {},
+    "parent": "ROOT"
+  },
+  "s4-title": {
+    "type": {
+      "resolvedName": "TextBlock"
+    },
+    "isCanvas": false,
+    "props": {
+      "content": "Hộp Mừng Cưới",
+      "fontSize": 34,
+      "fontFamily": "'Great Vibes', cursive",
+      "color": "#ffffff",
+      "textAlign": "center",
+      "top": 77,
+      "left": 0,
+      "width": 390,
+      "elementId": "s4-title",
+      "animationEntry": "fadeInRight",
+      "animationDuration": 1,
+      "animationLoop": false
+    },
+    "displayName": "Text",
+    "custom": {},
+    "hidden": false,
+    "nodes": [],
+    "linkedNodes": {},
+    "parent": "sec-gift"
+  },
+  "s4-subtitle": {
+    "type": {
+      "resolvedName": "TextBlock"
+    },
+    "isCanvas": false,
+    "props": {
+      "content": "Cám ơn tất cả các tình cảm mà mọi người đã dành cho 2 vợ chồng ạ ♥",
+      "fontSize": 16,
+      "fontFamily": "'Source Sans Pro', sans-serif",
+      "color": "#ffffff",
+      "textAlign": "center",
+      "top": 140,
+      "left": 34,
+      "width": 306,
+      "elementId": "s4-subtitle",
+      "animationEntry": "fadeInUpBig",
+      "animationDuration": 1,
+      "animationLoop": false
+    },
+    "displayName": "Text",
+    "custom": {},
+    "hidden": false,
+    "nodes": [],
+    "linkedNodes": {},
+    "parent": "sec-gift"
+  },
+  "s4-gift-box": {
+    "type": {
+      "resolvedName": "GiftBoxBlock"
+    },
+    "isCanvas": false,
+    "props": {
+      "top": 219,
+      "left": 127,
+      "width": 117,
+      "height": 90,
+      "bgColor": "rgba(97,97,97,0.85)",
+      "titleColor": "#ffffff",
+      "textColor": "#eeeeee",
+      "titleText": "",
+      "subtitleText": "",
+      "showQr": true,
+      "elementId": "s4-gift-box",
+      "animationEntry": "fadeInDownBig",
+      "animationDuration": 1,
+      "animationLoop": false
+    },
+    "displayName": "Hộp mừng cưới",
+    "custom": {},
+    "hidden": false,
+    "nodes": [],
+    "linkedNodes": {},
+    "parent": "sec-gift"
+  },
+  "sec-album": {
+    "type": {
+      "resolvedName": "SectionBlock"
+    },
+    "isCanvas": true,
+    "props": {
+      "height": 950,
+      "bgType": "color",
+      "bgColor": "#ffffff",
+      "elementId": "section-album"
+    },
+    "displayName": "Section",
+    "custom": {},
+    "hidden": false,
+    "nodes": [
+      "s5-title",
+      "s5-img-0",
+      "s5-img-1",
+      "s5-img-2",
+      "s5-img-3",
+      "s5-img-4",
+      "s5-img-5",
+      "s5-img-6",
+      "s5-img-7"
+    ],
+    "linkedNodes": {},
+    "parent": "ROOT"
+  },
+  "s5-title": {
+    "type": {
+      "resolvedName": "TextBlock"
+    },
+    "isCanvas": false,
+    "props": {
+      "content": "Album Ảnh Cưới",
+      "fontSize": 34,
+      "fontFamily": "'Great Vibes', cursive",
+      "textAlign": "center",
+      "top": 26,
+      "left": 1,
+      "width": 389,
+      "elementId": "s5-title",
+      "animationEntry": "bounceIn",
+      "animationDuration": 1,
+      "animationLoop": false
+    },
+    "displayName": "Text",
+    "custom": {},
+    "hidden": false,
+    "nodes": [],
+    "linkedNodes": {},
+    "parent": "sec-album"
+  },
+  "s5-img-0": {
+    "type": {
+      "resolvedName": "ImageBlock"
+    },
+    "isCanvas": false,
+    "props": {
+      "src": "https://s3-hcm-r2.s3cloud.vn/thiepcuoi-mehappy/users/1928/661a39aa-5f9f-467f-b506-442ca5331ff2-full.webp",
+      "top": 99,
+      "left": 12,
+      "width": 176,
+      "height": 195,
+      "objectFit": "cover",
+      "elementId": "s5-img-0",
+      "animationEntry": "bounceInUp",
+      "animationDuration": 1,
+      "animationLoop": false
+    },
+    "displayName": "Hình ảnh",
+    "custom": {},
+    "hidden": false,
+    "nodes": [],
+    "linkedNodes": {},
+    "parent": "sec-album"
+  },
+  "s5-img-1": {
+    "type": {
+      "resolvedName": "ImageBlock"
+    },
+    "isCanvas": false,
+    "props": {
+      "src": "https://s3-hcm-r2.s3cloud.vn/thiepcuoi-mehappy/users/1928/3c01ee1c-dfe6-4b3d-a1c8-a8a1e142af51-full.webp",
+      "top": 100,
+      "left": 200,
+      "width": 176,
+      "height": 195,
+      "objectFit": "cover",
+      "elementId": "s5-img-1",
+      "animationEntry": "bounceInDown",
+      "animationDuration": 1,
+      "animationLoop": false
+    },
+    "displayName": "Hình ảnh",
+    "custom": {},
+    "hidden": false,
+    "nodes": [],
+    "linkedNodes": {},
+    "parent": "sec-album"
+  },
+  "s5-img-2": {
+    "type": {
+      "resolvedName": "ImageBlock"
+    },
+    "isCanvas": false,
+    "props": {
+      "src": "https://s3-hcm-r2.s3cloud.vn/thiepcuoi-mehappy/users/1928/67d91017-be4f-46d2-95e3-95283716d77d-full.webp",
+      "top": 311,
+      "left": 12,
+      "width": 176,
+      "height": 195,
+      "objectFit": "cover",
+      "elementId": "s5-img-2",
+      "animationEntry": "zoomIn",
+      "animationDuration": 1,
+      "animationLoop": false
+    },
+    "displayName": "Hình ảnh",
+    "custom": {},
+    "hidden": false,
+    "nodes": [],
+    "linkedNodes": {},
+    "parent": "sec-album"
+  },
+  "s5-img-3": {
+    "type": {
+      "resolvedName": "ImageBlock"
+    },
+    "isCanvas": false,
+    "props": {
+      "src": "https://s3-hcm-r2.s3cloud.vn/thiepcuoi-mehappy/users/1928/9db06fec-f2eb-4908-bdc0-cb7f60c0fa92-full.webp",
+      "top": 311,
+      "left": 200,
+      "width": 176,
+      "height": 195,
+      "objectFit": "cover",
+      "elementId": "s5-img-3",
+      "animationEntry": "zoomInUp",
+      "animationDuration": 1,
+      "animationLoop": false
+    },
+    "displayName": "Hình ảnh",
+    "custom": {},
+    "hidden": false,
+    "nodes": [],
+    "linkedNodes": {},
+    "parent": "sec-album"
+  },
+  "s5-img-4": {
+    "type": {
+      "resolvedName": "ImageBlock"
+    },
+    "isCanvas": false,
+    "props": {
+      "src": "https://s3-hcm-r2.s3cloud.vn/thiepcuoi-mehappy/users/1928/67c6493a-622c-47a9-b5c4-5a9bec6b4df7-full.webp",
+      "top": 522,
+      "left": 12,
+      "width": 176,
+      "height": 195,
+      "objectFit": "cover",
+      "elementId": "s5-img-4",
+      "animationEntry": "slideInUp",
+      "animationDuration": 1,
+      "animationLoop": false
+    },
+    "displayName": "Hình ảnh",
+    "custom": {},
+    "hidden": false,
+    "nodes": [],
+    "linkedNodes": {},
+    "parent": "sec-album"
+  },
+  "s5-img-5": {
+    "type": {
+      "resolvedName": "ImageBlock"
+    },
+    "isCanvas": false,
+    "props": {
+      "src": "https://s3-hcm-r2.s3cloud.vn/thiepcuoi-mehappy/users/1928/214c90a8-7c69-4660-9e9c-4930b5125d0a-full.webp",
+      "top": 522,
+      "left": 200,
+      "width": 176,
+      "height": 195,
+      "objectFit": "cover",
+      "elementId": "s5-img-5",
+      "animationEntry": "slideInLeft",
+      "animationDuration": 1,
+      "animationLoop": false
+    },
+    "displayName": "Hình ảnh",
+    "custom": {},
+    "hidden": false,
+    "nodes": [],
+    "linkedNodes": {},
+    "parent": "sec-album"
+  },
+  "s5-img-6": {
+    "type": {
+      "resolvedName": "ImageBlock"
+    },
+    "isCanvas": false,
+    "props": {
+      "src": "https://s3-hcm-r2.s3cloud.vn/thiepcuoi-mehappy/users/1928/5fd5bbcb-b089-45e3-b79c-37c1b2f36727-full.webp",
+      "top": 732,
+      "left": 12,
+      "width": 176,
+      "height": 195,
+      "objectFit": "cover",
+      "elementId": "s5-img-6",
+      "animationEntry": "slideInRight",
+      "animationDuration": 1,
+      "animationLoop": false
+    },
+    "displayName": "Hình ảnh",
+    "custom": {},
+    "hidden": false,
+    "nodes": [],
+    "linkedNodes": {},
+    "parent": "sec-album"
+  },
+  "s5-img-7": {
+    "type": {
+      "resolvedName": "ImageBlock"
+    },
+    "isCanvas": false,
+    "props": {
+      "src": "https://s3-hcm-r2.s3cloud.vn/thiepcuoi-mehappy/users/1928/ec75d3cc-145e-41d3-b02c-4055a8c62599-full.webp",
+      "top": 732,
+      "left": 200,
+      "width": 176,
+      "height": 195,
+      "objectFit": "cover",
+      "elementId": "s5-img-7",
+      "animationEntry": "rotateIn",
+      "animationDuration": 1,
+      "animationLoop": false
+    },
+    "displayName": "Hình ảnh",
+    "custom": {},
+    "hidden": false,
+    "nodes": [],
+    "linkedNodes": {},
+    "parent": "sec-album"
+  },
+  "sec-thanks": {
+    "type": {
+      "resolvedName": "SectionBlock"
+    },
+    "isCanvas": true,
+    "props": {
+      "height": 414,
+      "bgType": "image",
+      "bgUrl": "https://s3-hcm-r2.s3cloud.vn/thiepcuoi-mehappy/users/18098/f79eacc7-4e03-41c0-8481-38873029040d-full.webp",
+      "bgSize": "cover",
+      "overlayType": "color",
+      "overlayColor": "#000000",
+      "overlayOpacity": 60,
+      "elementId": "section-thanks"
+    },
+    "displayName": "Section",
+    "custom": {},
+    "hidden": false,
+    "nodes": [
+      "s6-thanks",
+      "s6-quote"
+    ],
+    "linkedNodes": {},
+    "parent": "ROOT"
+  },
+  "s6-thanks": {
+    "type": {
+      "resolvedName": "TextBlock"
+    },
+    "isCanvas": false,
+    "props": {
+      "content": "Thank You",
+      "fontSize": 59,
+      "fontFamily": "'Great Vibes', cursive",
+      "color": "#ffffff",
+      "textAlign": "center",
+      "top": 103,
+      "left": 0,
+      "width": 390,
+      "elementId": "s6-thanks",
+      "animationEntry": "flipInY",
+      "animationDuration": 1,
+      "animationLoop": false
+    },
+    "displayName": "Text",
+    "custom": {},
+    "hidden": false,
+    "nodes": [],
+    "linkedNodes": {},
+    "parent": "sec-thanks"
+  },
+  "s6-quote": {
+    "type": {
+      "resolvedName": "TextBlock"
+    },
+    "isCanvas": false,
+    "props": {
+      "content": "“Chân thành cảm ơn gia đình, bạn bè và tất cả những ai đã cùng tụi mình viết nên một ngày đáng nhớ. Sự hiện diện và yêu thương của mọi người là món quà quý giá nhất.”",
+      "fontSize": 16,
+      "fontFamily": "'Source Sans Pro', sans-serif",
+      "color": "#ffffff",
+      "textAlign": "center",
+      "top": 193,
+      "left": 34,
+      "width": 323,
+      "elementId": "s6-quote",
+      "animationEntry": "lightSpeedInRight",
+      "animationDuration": 1,
+      "animationLoop": false
+    },
+    "displayName": "Text",
+    "custom": {},
+    "hidden": false,
+    "nodes": [],
+    "linkedNodes": {},
+    "parent": "sec-thanks"
+  },
+  "sec-footer": {
+    "type": {
+      "resolvedName": "SectionBlock"
+    },
+    "isCanvas": true,
+    "props": {
+      "height": 88,
+      "bgType": "color",
+      "bgColor": "#ffffff",
+      "elementId": "section-footer"
+    },
+    "displayName": "Section",
+    "custom": {},
+    "hidden": false,
+    "nodes": [
+      "s7-brand",
+      "s7-powered"
+    ],
+    "linkedNodes": {},
+    "parent": "ROOT"
+  },
+  "s7-brand": {
+    "type": {
+      "resolvedName": "TextBlock"
+    },
+    "isCanvas": false,
+    "props": {
+      "content": "Royal Wedding | Nền tảng tạo Thiệp cưới Online",
+      "fontSize": 18,
+      "fontFamily": "Quicksand, sans-serif",
+      "textAlign": "center",
+      "top": 8,
+      "left": 12,
+      "width": 357,
+      "elementId": "s7-brand",
+      "animationEntry": "rollIn",
+      "animationDuration": 1,
+      "animationLoop": false
+    },
+    "displayName": "Text",
+    "custom": {},
+    "hidden": false,
+    "nodes": [],
+    "linkedNodes": {},
+    "parent": "sec-footer"
+  },
+  "s7-powered": {
+    "type": {
+      "resolvedName": "TextBlock"
+    },
+    "isCanvas": false,
+    "props": {
+      "content": "Powered by Royal Wedding",
+      "fontSize": 14,
+      "fontFamily": "Quicksand, sans-serif",
+      "textAlign": "center",
+      "top": 62,
+      "left": 12,
+      "width": 357,
+      "elementId": "s7-powered",
+      "animationEntry": "jackInTheBox",
+      "animationDuration": 1,
+      "animationLoop": false
+    },
+    "displayName": "Text",
+    "custom": {},
+    "hidden": false,
+    "nodes": [],
+    "linkedNodes": {},
+    "parent": "sec-footer"
+  }
+}

@@ -24,8 +24,13 @@ export function InvitationRenderer(props: TemplateProps) {
     // MeHappy-format raw HTML card
     body = <InvitationHTMLViewer html={(cj as Record<string, unknown>).html as string} />;
   } else if (isCraftContentJson(cj)) {
-    // Craft.js node tree
-    body = <CraftJsViewer card={props.card} contentJson={cj} />;
+    body = (
+      <CraftJsViewer
+        card={props.card}
+        contentJson={cj}
+        renderVersion={props.renderVersion}
+      />
+    );
   } else {
     // Legacy template
     const Template = TEMPLATES[props.card.template_id as keyof typeof TEMPLATES] ?? ClassicWhite;

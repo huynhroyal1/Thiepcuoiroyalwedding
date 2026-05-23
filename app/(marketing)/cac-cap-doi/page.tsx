@@ -3,6 +3,8 @@ import { getFaqItems } from "@/lib/data/faq-items";
 import { getPublicShowcaseCards } from "@/lib/marketing/get-public-showcase-cards";
 import { CacCapDoiClient } from "./CacCapDoiClient";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Khám phá thiệp cưới tuyệt đẹp từ cộng đồng Royal Wedding",
   description:

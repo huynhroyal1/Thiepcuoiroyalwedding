@@ -1,3 +1,4 @@
+import { unstable_noStore as noStore } from "next/cache";
 import { createPublicSupabase } from "@/lib/supabase/public";
 import { createClient } from "@/lib/supabase/server";
 import type { WeddingCard } from "@/types";
@@ -16,6 +17,8 @@ export type InvitationCardResult = {
 export async function fetchInvitationCard(
   slug: string,
 ): Promise<InvitationCardResult | null> {
+  noStore();
+
   const supabase = await createClient();
   const {
     data: { user },

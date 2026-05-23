@@ -51,6 +51,7 @@ export interface WeddingCard {
   remove_branding: boolean;
   custom_domain: string | null;
   view_count: number;
+  show_in_showcase: boolean;
   content_json: Record<string, unknown> | null;
   created_at: string;
   updated_at: string;
@@ -119,6 +120,7 @@ export interface TemplateRow {
   sort_order: number;
   content_json?: Record<string, unknown> | null;
   created_at: string;
+  updated_at?: string | null;
 }
 
 export interface OrderRow {

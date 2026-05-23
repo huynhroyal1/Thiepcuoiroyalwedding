@@ -203,7 +203,11 @@ export function CacCapDoiClient({ couples, faqItems = faqMehappy }: Props) {
         </div>
 
         {total === 0 && (
-          <p className="py-16 text-center text-sm text-neutral-500">Không tìm thấy thiệp phù hợp.</p>
+          <p className="py-16 text-center text-sm text-neutral-500">
+            {q.trim()
+              ? "Không tìm thấy thiệp phù hợp."
+              : "Chưa có thiệp cưới nào được chia sẻ trên trang cộng đồng. Các cặp đôi có thể bật tùy chọn này trong Cài đặt thiệp sau khi công khai thiệp."}
+          </p>
         )}
 
         {pageCount > 1 && (

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { unstable_noStore as noStore } from "next/cache";
 import { format } from "date-fns";
 import { InvitationRenderer } from "@/components/invitation/InvitationRenderer";
 import { InvitationPreviewBanner } from "@/components/invitation/InvitationPreviewBanner";
@@ -11,8 +12,12 @@ import {
 import type { WeddingCard } from "@/types";
 
 export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
-type Props = { params: { slug: string } };
+type Props = {
+  params: { slug: string };
+  searchParams: { v?: string };
+};
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const result = await fetchInvitationCard(params.slug);
@@ -37,7 +42,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default async function PublicInvitationPage({ params }: Props) {
+export default async function PublicInvitationPage({ params, searchParams }: Props) {
+  noStore();
+
   const result = await fetchInvitationCard(params.slug);
   if (!result) {
     notFound();
@@ -45,6 +52,7 @@ export default async function PublicInvitationPage({ params }: Props) {
 
   const { card, isOwnerPreview } = result;
   const photos = await fetchInvitationPhotos(card.id);
+  const renderVersion = searchParams.v ?? card.updated_at;
 
   return (
     <>
@@ -54,6 +62,7 @@ export default async function PublicInvitationPage({ params }: Props) {
         card={card as WeddingCard}
         photos={photos}
         guest={null}
+        renderVersion={renderVersion}
       />
     </>
   );

@@ -10,6 +10,7 @@ import type { TemplateRow } from "@/types";
 import { faqMehappy } from "@/lib/data/mehappy-landing";
 import { MarketingMobileNav } from "@/components/landing/MarketingMobileNav";
 import type { FaqItem } from "@/types";
+import { canOpenTemplateLivePreview, templatePreviewHref } from "@/lib/marketing/template-preview-url";
 
 type Props = { templates: TemplateRow[]; faqItems?: FaqItem[] };
 
@@ -51,9 +52,9 @@ function normalize(s: string) {
     .replace(/[\u0300-\u036f]/g, "");
 }
 
-/** preview_url trỏ thiệp thật (/thiep/slug) */
-function isLiveInvitationPreview(url: string | null | undefined) {
-  return !!url && url.startsWith("/thiep/");
+/** preview_url trỏ thiệp live (/thiep/...) hoặc mẫu có content_json */
+function isLiveInvitationPreview(t: TemplateRow) {
+  return canOpenTemplateLivePreview(t);
 }
 
 export function KhoGiaoDienClient({ templates, faqItems = faqMehappy }: Props) {
@@ -329,9 +330,9 @@ export function KhoGiaoDienClient({ templates, faqItems = faqMehappy }: Props) {
                     ))}
                   </div>
                   <div className="mt-auto flex gap-2 pt-1">
-                    {isLiveInvitationPreview(t.preview_url) ? (
+                    {isLiveInvitationPreview(t) ? (
                       <Link
-                        href={t.preview_url!}
+                        href={templatePreviewHref(t)}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="flex-1 rounded-xl border border-neutral-200 py-2.5 text-center text-sm font-semibold text-neutral-800 transition hover:bg-neutral-50"

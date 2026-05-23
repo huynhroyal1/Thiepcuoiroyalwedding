@@ -2,6 +2,7 @@
 
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { migrateContentJson } from "@/lib/editor/migrateContentJson";
+import { contentJsonRevision } from "@/lib/editor/contentJsonRevision";
 import { Editor, Frame } from "@craftjs/core";
 import { editorResolver } from "@/components/editor/resolver";
 import { EditorCardProvider } from "@/components/editor/EditorContext";
@@ -47,6 +48,8 @@ function isElementInScrollView(el: HTMLElement, root: HTMLElement | null): boole
 interface CraftJsViewerProps {
   card: WeddingCard;
   contentJson: Record<string, unknown>;
+  /** Bust Craft Frame cache after save (?v= from preview URL). */
+  renderVersion?: string | number | null;
 }
 
 /**
@@ -56,13 +59,16 @@ interface CraftJsViewerProps {
  * - Event listeners (click/hover) are attached based on `data-events` attributes.
  * - Fits parent frame (max 390px, 100% on narrow phones).
  */
-export function CraftJsViewer({ card, contentJson }: CraftJsViewerProps) {
+export function CraftJsViewer({ card, contentJson, renderVersion }: CraftJsViewerProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [lightboxSrc, setLightboxSrc] = useState<string | null>(null);
-  const frameKey = `${card.id}-${card.updated_at ?? ""}`;
+  const revision = useMemo(
+    () => contentJsonRevision(contentJson, card.updated_at, renderVersion),
+    [contentJson, card.updated_at, renderVersion]
+  );
   const frameData = useMemo(
     () => JSON.stringify(migrateContentJson(contentJson)),
-    [contentJson]
+    [revision, contentJson]
   );
 
   useEffect(() => {
@@ -158,7 +164,7 @@ export function CraftJsViewer({ card, contentJson }: CraftJsViewerProps) {
       animObserver.disconnect();
       cleanupFns.forEach((fn) => fn());
     };
-  }, [contentJson]);
+  }, [revision]);
 
   return (
     <EditorCardProvider card={card}>
@@ -169,7 +175,7 @@ export function CraftJsViewer({ card, contentJson }: CraftJsViewerProps) {
           style={{ overflowX: "clip" }}
         >
           <Editor resolver={editorResolver} enabled={false}>
-            <Frame key={frameKey} data={frameData} />
+            <Frame key={revision} data={frameData} />
           </Editor>
         </div>
       </InvitationCraftScale>

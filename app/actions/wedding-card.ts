@@ -261,6 +261,16 @@ export async function updateWeddingCard(
   revalidatePath("/dashboard/thiet-lap");
   const slug = invitationSlug ?? (finalPatch.slug as string | undefined) ?? (patch.slug as string | undefined);
   if (slug) revalidatePath(`/thiep/${slug}`);
+  if (
+    "status" in patch ||
+    "show_in_showcase" in patch ||
+    "cover_image_url" in patch ||
+    "bride_name" in patch ||
+    "groom_name" in patch
+  ) {
+    revalidatePath("/cac-cap-doi");
+    revalidatePath("/");
+  }
   return { error: null };
 }
 

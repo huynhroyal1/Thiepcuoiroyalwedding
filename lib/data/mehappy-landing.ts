@@ -273,7 +273,7 @@ export const couplesShowcase: CoupleShowcaseItem[] = [
     id: "hoang-nhi",
     image:
       "https://s3-hcm-r2.s3cloud.vn/thiepcuoi-mehappy/users/14968/60cac1f7-f385-48ec-bc4d-86e91daefd69-seo.webp",
-    title: "Việt Hoàng & Yến Nhi",
+    title: "Việt Hoàng & Yến Nhi Test",
     date: "14/05/2026",
     meta: "Mẫu: Giao diện Romany - Gói VIP",
     invitationUrl: "https://mehappy.vn",

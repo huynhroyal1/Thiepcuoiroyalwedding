@@ -216,6 +216,9 @@ export default function CaiDatThiepClient({
   const [statusValue, setStatusValue] = useState<CardStatus>(
     initialCard?.status ?? "draft"
   );
+  const [showInShowcase, setShowInShowcase] = useState(
+    initialCard?.show_in_showcase ?? false
+  );
   const [statusSaving, setStatusSaving] = useState(false);
   const [statusMsg, setStatusMsg] = useState("");
 
@@ -223,12 +226,27 @@ export default function CaiDatThiepClient({
     if (!card) return;
     setStatusSaving(true);
     setStatusMsg("");
-    const { error } = await updateWeddingCard(card.id, { status: statusValue });
+    const patch: Record<string, unknown> = { status: statusValue };
+    if (statusValue === "active") {
+      patch.show_in_showcase = showInShowcase;
+    } else {
+      patch.show_in_showcase = false;
+    }
+    const { error } = await updateWeddingCard(card.id, patch);
     setStatusSaving(false);
     if (error) {
       setStatusMsg(`Lỗi: ${error}`);
     } else {
-      setCard((prev) => (prev ? { ...prev, status: statusValue } : prev));
+      setCard((prev) =>
+        prev
+          ? {
+              ...prev,
+              status: statusValue,
+              show_in_showcase: statusValue === "active" ? showInShowcase : false,
+            }
+          : prev
+      );
+      if (statusValue !== "active") setShowInShowcase(false);
       setStatusMsg("Đã lưu chế độ hiển thị!");
     }
   };
@@ -481,6 +499,46 @@ export default function CaiDatThiepClient({
               </div>
             </label>
           ))}
+          {statusValue === "active" && (
+            <label className="flex cursor-pointer items-start gap-3 rounded-xl border border-indigo-200 bg-indigo-50/60 p-4">
+              <input
+                type="checkbox"
+                checked={showInShowcase}
+                onChange={(e) => setShowInShowcase(e.target.checked)}
+                className="mt-0.5 accent-indigo-600"
+              />
+              <div>
+                <p className="text-sm font-semibold text-indigo-900">
+                  Hiển thị trên trang Các cặp đôi
+                </p>
+                <p className="text-xs text-indigo-700/80">
+                  Thiệp thật của bạn sẽ xuất hiện trong thư viện cộng đồng tại{" "}
+                  <span className="font-medium">/cac-cap-doi</span>. Chỉ bật khi bạn muốn chia sẻ
+                  công khai với mọi người.
+                </p>
+                {!card.paid_at && (
+                  <p className="mt-1 text-xs text-amber-700">
+                    Cần kích hoạt gói dịch vụ trước khi thiệp được hiển thị trên trang cộng đồng.
+                  </p>
+                )}
+                {card.paid_at && !canOpenVisualEditor(card.content_json) && (
+                  <p className="mt-1 text-xs text-amber-700">
+                    Thiệp cần có nội dung Craft (chọn mẫu và chỉnh sửa) trước khi hiển thị trên trang
+                    cộng đồng.
+                  </p>
+                )}
+                {card.groom_name === "Chú rể" && card.bride_name === "Cô dâu" && (
+                  <p className="mt-1 text-xs text-neutral-500">
+                    Gợi ý: cập nhật tên thật trong{" "}
+                    <Link href={`/dashboard/${card.id}/thiet-lap`} className="font-medium text-indigo-700 underline">
+                      Thiết lập
+                    </Link>{" "}
+                    để thiệp hiển thị đẹp hơn trên trang cộng đồng.
+                  </p>
+                )}
+              </div>
+            </label>
+          )}
           <div className="flex items-center gap-3 pt-1">
             <button
               type="button"

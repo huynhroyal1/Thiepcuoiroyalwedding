@@ -26,21 +26,33 @@ async function requireAdmin() {
 export async function saveTemplateContentJson(
   templateId: string,
   contentJson: Record<string, unknown>
-): Promise<{ error: string | null }> {
+): Promise<{ error: string | null; savedAt?: string }> {
   const { supabase, error: authErr } = await requireAdmin();
   if (authErr) return { error: authErr };
 
   const prepared = prepareContentForSave(contentJson);
+  const savedAt = new Date().toISOString();
 
-  const { error } = await supabase
+  let { error } = await supabase
     .from("templates")
-    .update({ content_json: prepared })
+    .update({ content_json: prepared, updated_at: savedAt })
     .eq("id", templateId);
+
+  if (error?.message?.includes("updated_at")) {
+    ({ error } = await supabase
+      .from("templates")
+      .update({ content_json: prepared })
+      .eq("id", templateId));
+  }
 
   if (error) return { error: error.message };
   revalidatePath(`/admin/templates`);
   revalidatePath(`/admin/templates/${templateId}/editor`);
-  return { error: null };
+  revalidatePath("/kho-giao-dien");
+  revalidatePath("/");
+  revalidatePath(`/thiep/mau/${templateId}`);
+  revalidatePath(`/thiep/mau/${templateId}`, "layout");
+  return { error: null, savedAt };
 }
 
 export async function createTemplate(data: {

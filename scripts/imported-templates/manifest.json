@@ -1,0 +1,202 @@
+{
+  "$schema": "./manifest.schema.json",
+  "source": "mehappy",
+  "note": "Thêm mẫu mới vào templates[]; đặt Craft JSON tại content/{content_file}. Chạy: npm run seed:templates",
+  "templates": [
+    {
+      "id": "mehappy-radiant",
+      "name": "Giao Diện Radiant",
+      "description": "Mẫu thiệp rạng rỡ — tông tươi sáng, phù hợp gói Basic.",
+      "thumbnail_url": "https://s3-hcm-r2.s3cloud.vn/thiepcuoi-mehappy/users/1927/77f8d2a8-393e-4ba5-b83d-aefc4a144652-full.webp",
+      "preview_url": "https://mehappy.vn",
+      "plan_required": "basic",
+      "style_tags": [
+        "Thiệp hiện đại",
+        "Tươi sáng"
+      ],
+      "sort_order": 110,
+      "is_active": true,
+      "content_file": "mehappy-radiant.json"
+    },
+    {
+      "id": "mehappy-hb02",
+      "name": "Giao diện HB02",
+      "description": "Giao diện tươi sáng mát mẻ, dễ chịu cho người xem.",
+      "thumbnail_url": "https://s3-hcm-r2.s3cloud.vn/thiepcuoi-mehappy/users/1928/67d91017-be4f-46d2-95e3-95283716d77d-full.webp",
+      "preview_url": "https://mehappy.vn",
+      "plan_required": "basic",
+      "style_tags": [
+        "Thiệp đơn giản",
+        "Tươi sáng"
+      ],
+      "sort_order": 111,
+      "is_active": true,
+      "content_file": "mehappy-hb02.json"
+    },
+    {
+      "id": "mehappy-romantic-vip",
+      "name": "Giao diện Romantic",
+      "description": "Lãng mạn, nhẹ nhàng — gói VIP.",
+      "thumbnail_url": "https://s3-hcm-r2.s3cloud.vn/thiepcuoi-mehappy/admin/assets/dd4934bb-7099-4f13-bb51-9d343864cf0e-full.webp",
+      "preview_url": "https://mehappy.vn",
+      "plan_required": "vip",
+      "style_tags": [
+        "Thiệp Sang Trọng",
+        "Lãng mạn"
+      ],
+      "sort_order": 120,
+      "is_active": true,
+      "content_file": "mehappy-romantic-vip.json"
+    },
+    {
+      "id": "mehappy-classy-vogue",
+      "name": "Classy Vogue Gold",
+      "description": "Mẫu vàng nâu sang trọng — phong bì, thư mời, countdown, album, timeline, mừng cưới — chỉnh kéo-thả Craft.js (7 section đầy đủ).",
+      "thumbnail_url": "https://s3-hcm-r2.s3cloud.vn/thiepcuoi-mehappy/admin/assets/21760bb5-201c-4481-8860-37cb61224a28.webp",
+      "preview_url": null,
+      "plan_required": "vip",
+      "style_tags": [
+        "Craft kéo-thả",
+        "Sang trọng"
+      ],
+      "sort_order": 105,
+      "is_active": true,
+      "content_file": "mehappy-classy-vogue.json"
+    },
+    {
+      "id": "mehappy-thiep-moi-xanh",
+      "name": "Thiệp Mời Cưới Xanh",
+      "description": "Tông xanh lá cổ điển — Thiệp Mời, thư mời, lịch, countdown, album, mừng cưới — chỉnh kéo-thả Craft.js (7 section đầy đủ).",
+      "thumbnail_url": "https://s3-hcm-r2.s3cloud.vn/thiepcuoi-mehappy/users/18098/f79eacc7-4e03-41c0-8481-38873029040d-full.webp",
+      "preview_url": null,
+      "plan_required": "pro",
+      "style_tags": [
+        "Craft kéo-thả",
+        "Sang trọng"
+      ],
+      "sort_order": 106,
+      "is_active": true,
+      "content_file": "mehappy-thiep-moi-xanh.json"
+    },
+    {
+      "id": "mehappy-save-the-date-hong",
+      "name": "Save The Date Hồng",
+      "description": "Tông hồng pastel — Save the date, cặp đôi, câu chuyện tình yêu, lễ vu quy & thành hôn, album — chỉnh kéo-thả Craft.js (7 section đầy đủ).",
+      "thumbnail_url": "https://s3-hcm-r2.s3cloud.vn/thiepcuoi-mehappy/users/18113/eadcc193-b66b-4534-b3cf-3e6f1037d365-full.webp",
+      "preview_url": null,
+      "plan_required": "pro",
+      "style_tags": [
+        "Craft kéo-thả",
+        "Sang trọng"
+      ],
+      "sort_order": 107,
+      "is_active": true,
+      "content_file": "mehappy-save-the-date-hong.json"
+    },
+    {
+      "id": "mehappy-viceroy-classic",
+      "name": "Thiệp Viceroy Classic",
+      "description": "Font UTM Viceroy — thân mời, cặp đôi, album swiper, lịch & countdown, timeline, 3 sự kiện, mừng cưới — chỉnh kéo-thả Craft.js (7 section đầy đủ).",
+      "thumbnail_url": "https://s3-hcm-r2.s3cloud.vn/thiepcuoi-mehappy/admin/assets/0ec39296-ae16-47ec-88ee-becb010e0a57.webp",
+      "preview_url": null,
+      "plan_required": "pro",
+      "style_tags": [
+        "Craft kéo-thả",
+        "Sang trọng"
+      ],
+      "sort_order": 108,
+      "is_active": true,
+      "content_file": "mehappy-viceroy-classic.json"
+    },
+    {
+      "id": "mehappy-classy-vogue-envelope",
+      "name": "Classy Vogue Phong Bì",
+      "description": "Font FC Classy Vogue — mở phong bì, thư mời, countdown, câu chuyện tình yêu, save the date — chỉnh kéo-thả Craft.js (7 section đầy đủ).",
+      "thumbnail_url": "https://s3-hcm-r2.s3cloud.vn/thiepcuoi-mehappy/admin/assets/21760bb5-201c-4481-8860-37cb61224a28.webp",
+      "preview_url": null,
+      "plan_required": "vip",
+      "style_tags": [
+        "Craft kéo-thả",
+        "Sang trọng"
+      ],
+      "sort_order": 109,
+      "is_active": true,
+      "content_file": "mehappy-classy-vogue-envelope.json"
+    },
+    {
+      "id": "mehappy-save-date-arch",
+      "name": "Save The Date Arch",
+      "description": "Khung ảnh vòm — save the date, cặp đôi, love story, album, 3 sự kiện, countdown, lời chúc & RSVP — chỉnh kéo-thả Craft.js (7 section đầy đủ).",
+      "thumbnail_url": "https://s3-hcm-r2.s3cloud.vn/thiepcuoi-mehappy/users/17191/84e7edad-d6dc-41fe-9bed-7f74560d52cb-full.webp",
+      "preview_url": null,
+      "plan_required": "pro",
+      "style_tags": [
+        "Craft kéo-thả",
+        "Sang trọng"
+      ],
+      "sort_order": 110,
+      "is_active": true,
+      "content_file": "mehappy-save-date-arch.json"
+    },
+    {
+      "id": "mehappy-floral-wedding",
+      "name": "Thiệp Floral Wedding",
+      "description": "Tông floral pastel — cover cặp đôi, chuyện chúng mình, nhà trai/gái, album mosaic, lịch cưới 2 nhà, 4 sự kiện, hộp mừng cưới & lời ngỏ — chỉnh kéo-thả Craft.js (7 section đầy đủ).",
+      "thumbnail_url": "https://s3-hcm-r2.s3cloud.vn/thiepcuoi-mehappy/users/12440/ecf78bbd-7689-4b41-bc20-4026a26795a0-full.webp",
+      "preview_url": null,
+      "plan_required": "pro",
+      "style_tags": [
+        "Craft kéo-thả",
+        "Sang trọng"
+      ],
+      "sort_order": 112,
+      "is_active": true,
+      "content_file": "mehappy-floral-wedding.json"
+    },
+    {
+      "id": "mehappy-teal-wedding",
+      "name": "Thiệp Teal Wedding",
+      "description": "Tông teal xanh — cover cặp đôi, nhà trai/gái, thư mời, tiệc 2 nhà + countdown, vu quy & thành hôn, lịch, địa điểm, album — chỉnh kéo-thả Craft.js (7 section đầy đủ).",
+      "thumbnail_url": "https://s3-hcm-r2.s3cloud.vn/thiepcuoi-mehappy/users/1929/c68548c8-de10-448b-b7e6-a45fc09c2058-full.webp",
+      "preview_url": null,
+      "plan_required": "pro",
+      "style_tags": [
+        "Craft kéo-thả",
+        "Sang trọng"
+      ],
+      "sort_order": 113,
+      "is_active": true,
+      "content_file": "mehappy-teal-wedding.json"
+    },
+    {
+      "id": "mehappy-save-date-rose",
+      "name": "Save The Date Rose",
+      "description": "Tông hồng đỏ Great Vibes — cover ảnh, save the date + countdown, nhà trai/gái, 2 tiệc cưới, hộp mừng cưới, album & thank you — chỉnh kéo-thả Craft.js (7 section đầy đủ).",
+      "thumbnail_url": "https://s3-hcm-r2.s3cloud.vn/thiepcuoi-mehappy/users/17191/6d2a089b-fec0-4de7-a643-a6eec6a9d3f1-full.webp",
+      "preview_url": null,
+      "plan_required": "pro",
+      "style_tags": [
+        "Craft kéo-thả",
+        "Sang trọng"
+      ],
+      "sort_order": 114,
+      "is_active": true,
+      "content_file": "mehappy-save-date-rose.json"
+    },
+    {
+      "id": "mehappy-viceroy-elegant",
+      "name": "Thiệp Viceroy Elegant",
+      "description": "Font UTM Viceroy — thân mời, cặp đôi, album swiper, lịch & countdown, timeline, 4 sự kiện, chúc phúc, lời ngỏ & thank you — chỉnh kéo-thả Craft.js (7 section đầy đủ).",
+      "thumbnail_url": "https://s3-hcm-r2.s3cloud.vn/thiepcuoi-mehappy/users/12440/1ca5f957-d28e-4c1c-bf34-0b169875431c-full.webp",
+      "preview_url": null,
+      "plan_required": "pro",
+      "style_tags": [
+        "Craft kéo-thả",
+        "Sang trọng"
+      ],
+      "sort_order": 115,
+      "is_active": true,
+      "content_file": "mehappy-viceroy-elegant.json"
+    }
+  ]
+}
