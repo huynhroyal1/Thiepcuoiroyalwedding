@@ -45,6 +45,14 @@ export interface TextBlockProps extends SharedProps {
   top?: number;
   left?: number;
   width?: number;
+  height?: number;
+  backgroundColor?: string;
+  borderStyle?: "none" | "solid" | "dashed" | "dotted" | "double" | "groove" | "ridge";
+  borderWidth?: number;
+  borderColor?: string;
+  borderRadius?: number;
+  paddingX?: number;
+  paddingY?: number;
 }
 
 function plainTextFromHtml(html: string): string {
@@ -83,6 +91,14 @@ export function TextBlock({
   top = 0,
   left = 0,
   width = 300,
+  height,
+  backgroundColor = "transparent",
+  borderStyle = "none",
+  borderWidth = 0,
+  borderColor = "transparent",
+  borderRadius = 0,
+  paddingX = 8,
+  paddingY = 2,
   ...sharedProps
 }: TextBlockProps) {
   const {
@@ -154,9 +170,11 @@ export function TextBlock({
     position: "absolute",
     top,
     ...blockLayout(isViewer, left, width),
+    height,
     fontSize,
     fontFamily,
     color: colorType === "solid" ? color : undefined,
+    backgroundColor,
     textAlign,
     fontWeight,
     fontStyle,
@@ -170,10 +188,12 @@ export function TextBlock({
     cursor: isEditing ? "text" : selected ? "move" : "default",
     wordBreak: "break-word",
     overflowWrap: "anywhere",
-    whiteSpace: "normal",
+    whiteSpace: "pre-wrap",
     overflow: "hidden",
     boxSizing: "border-box",
-    padding: "2px 8px",
+    border: borderStyle !== "none" ? `${borderWidth}px ${borderStyle} ${borderColor}` : "none",
+    borderRadius,
+    padding: `${paddingY}px ${paddingX}px`,
     ...gradientStyle,
     ...buildSharedStyle(sharedProps),
   };
@@ -275,6 +295,14 @@ TextBlock.craft = {
     top: 0,
     left: 0,
     width: 300,
+    height: undefined,
+    backgroundColor: "transparent",
+    borderStyle: "none",
+    borderWidth: 0,
+    borderColor: "transparent",
+    borderRadius: 0,
+    paddingX: 8,
+    paddingY: 2,
     ...SHARED_DEFAULTS,
   },
   rules: {

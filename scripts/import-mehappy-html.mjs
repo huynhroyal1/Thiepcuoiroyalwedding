@@ -10,6 +10,7 @@ import { dirname, join, resolve } from "path";
 import { fileURLToPath } from "url";
 import { createClient } from "@supabase/supabase-js";
 import { cleanMehappyHtml, mehappyHtmlToContentJson } from "./imported-templates/clean-mehappy-html.mjs";
+import { mehappyHtmlToCraftContentJson } from "../lib/editor/mehappy-html-to-craft.mjs";
 import { upsertImportedTemplates } from "./seed-imported-templates.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -29,6 +30,7 @@ function parseArgs(argv) {
     sortOrder: 200,
     seed: false,
     dryRun: false,
+    craft: true,
   };
   for (const arg of argv) {
     if (arg.startsWith("--id=")) out.id = arg.slice(5).trim();
@@ -41,6 +43,8 @@ function parseArgs(argv) {
     if (arg.startsWith("--sort-order=")) out.sortOrder = Number(arg.slice(13));
     if (arg === "--seed") out.seed = true;
     if (arg === "--dry-run") out.dryRun = true;
+    if (arg === "--raw-html") out.craft = false;
+    if (arg === "--craft") out.craft = true;
   }
   return out;
 }
@@ -84,7 +88,9 @@ async function main() {
 
   const rawHtml = readFileSync(htmlPath, "utf8");
   const cleaned = cleanMehappyHtml(rawHtml);
-  const contentJson = mehappyHtmlToContentJson(rawHtml);
+  const contentJson = args.craft
+    ? mehappyHtmlToCraftContentJson(cleaned)
+    : mehappyHtmlToContentJson(rawHtml);
 
   const htmlOut = join(CONTENT_DIR, `${args.id}.html`);
   const jsonOut = join(CONTENT_DIR, `${args.id}.json`);
@@ -100,14 +106,16 @@ async function main() {
     name: args.name ?? guessNameFromHtml(cleaned) ?? args.id,
     description:
       args.description ??
-      "Mẫu import từ MeHappy (HTML) — hiển thị qua InvitationHTMLViewer.",
+      (args.craft
+        ? "Mẫu import từ MeHappy — chuyển Craft.js kéo-thả, giữ layout & text gốc."
+        : "Mẫu import từ MeHappy (HTML) — hiển thị qua InvitationHTMLViewer."),
     thumbnail_url: args.thumbnail ?? guessThumbnail(cleaned),
     preview_url: args.previewUrl ?? null,
     plan_required: args.plan,
     style_tags: ["Import MeHappy", "Sang trọng"],
     sort_order: args.sortOrder,
     is_active: true,
-    content_type: "raw-html",
+    content_type: args.craft ? "craft" : "raw-html",
     content_file: `${args.id}.json`,
   };
 
@@ -120,7 +128,10 @@ async function main() {
   console.log(`\n=== Import MeHappy HTML: ${args.id} ===`);
   console.log(`  File nguồn: ${htmlPath}`);
   console.log(`  HTML đã lưu: content/${args.id}.html (${Math.round(cleaned.length / 1024)} KB)`);
-  console.log(`  content_json: content/${args.id}.json (raw-html)`);
+  const nodeCount = args.craft ? Object.keys(contentJson).length : 1;
+  console.log(
+    `  content_json: content/${args.id}.json (${args.craft ? `craft, ${nodeCount} nodes` : "raw-html"})`
+  );
   console.log(`  Manifest: ${entry.name} — gói ${entry.plan_required}`);
 
   if (args.dryRun) {

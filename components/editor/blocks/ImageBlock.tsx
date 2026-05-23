@@ -33,6 +33,10 @@ export interface ImageBlockProps extends SharedProps {
   // Per-image filter (applied to <img> element only)
   imageFilter?: FilterProps;
   imageBlendMode?: string;
+  imageTransform?: string;
+  imageTransformOrigin?: string;
+  overlayColor?: string;
+  overlayOpacity?: number;
 }
 
 export function ImageBlock({
@@ -52,6 +56,10 @@ export function ImageBlock({
   imageFadeDirection = "bottom",
   imageFilter,
   imageBlendMode = "normal",
+  imageTransform = "",
+  imageTransformOrigin = "center center",
+  overlayColor = "#000000",
+  overlayOpacity = 0,
   ...sharedProps
 }: ImageBlockProps) {
   const { id, selected } = useNode((state) => ({
@@ -101,6 +109,8 @@ export function ImageBlock({
     display: "block",
     filter: imageFilter ? buildFilterString(imageFilter) : undefined,
     mixBlendMode: imageBlendMode as CSSProperties["mixBlendMode"],
+    transform: imageTransform || undefined,
+    transformOrigin: imageTransformOrigin,
   };
 
   return (
@@ -125,6 +135,17 @@ export function ImageBlock({
                 position: "absolute",
                 inset: 0,
                 background: fadeGradient[imageFadeDirection],
+                pointerEvents: "none",
+              }}
+            />
+          )}
+          {overlayOpacity > 0 && (
+            <div
+              style={{
+                position: "absolute",
+                inset: 0,
+                backgroundColor: overlayColor,
+                opacity: overlayOpacity / 100,
                 pointerEvents: "none",
               }}
             />
@@ -169,6 +190,10 @@ ImageBlock.craft = {
     imageFadeDirection: "bottom",
     imageFilter: undefined,
     imageBlendMode: "normal",
+    imageTransform: "",
+    imageTransformOrigin: "center center",
+    overlayColor: "#000000",
+    overlayOpacity: 0,
     ...SHARED_DEFAULTS,
   },
   rules: {

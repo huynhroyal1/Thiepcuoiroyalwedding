@@ -60,6 +60,7 @@ export interface SharedProps
   zIndex?: number;
   animationEntry?: string;
   animationDuration?: number;
+  animationDelay?: number;
   animationLoop?: boolean;
   hoverEffect?: "none" | "scale-up" | "scale-down" | "glow" | "shake" | "rotate";
   stickyEnabled?: boolean;
@@ -99,6 +100,7 @@ export const SHARED_DEFAULTS: SharedProps = {
   zIndex: 0,
   animationEntry: "",
   animationDuration: 1,
+  animationDelay: 0,
   animationLoop: false,
   hoverEffect: "none",
   stickyEnabled: false,
@@ -185,6 +187,7 @@ export function buildAnimationAttrs(props: SharedProps): Record<string, string |
   return {
     "data-anim-entry": props.animationEntry,
     "data-anim-dur": String(props.animationDuration ?? 1),
+    "data-anim-delay": props.animationDelay ? String(props.animationDelay) : undefined,
     "data-anim-loop": props.animationLoop ? "true" : undefined,
   };
 }

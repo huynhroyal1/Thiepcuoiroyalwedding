@@ -3,6 +3,9 @@ import { getFaqItems } from "@/lib/data/faq-items";
 import { getMarketingTemplates } from "@/lib/marketing/get-marketing-templates";
 import { KhoGiaoDienClient } from "./KhoGiaoDienClient";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 type Props = { searchParams: Promise<{ template?: string }> };
 
 export default async function KhoGiaoDienPage({ searchParams }: Props) {

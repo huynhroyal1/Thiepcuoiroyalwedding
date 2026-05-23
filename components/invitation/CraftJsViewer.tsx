@@ -19,29 +19,30 @@ function revealInvitationAnimation(el: HTMLElement) {
   el.classList.remove("invitation-anim-pending");
   if (el.classList.contains("invitation-anim-shown")) return;
   const dur = parseFloat(el.dataset.animDur ?? "1");
+  const delay = parseFloat(el.dataset.animDelay ?? "0");
   const loop = el.dataset.animLoop === "true";
   el.classList.add("invitation-anim-shown", "animate__animated", `animate__${animEntry}`);
   el.style.animationDuration = `${dur}s`;
   el.style.setProperty("--animate-duration", `${dur}s`);
+  if (delay > 0) {
+    el.style.animationDelay = `${delay}s`;
+    el.style.setProperty("--animate-delay", `${delay}s`);
+  }
   if (loop) el.classList.add("animate__infinite");
 }
 
-function revealPendingAnimations(container: HTMLElement) {
+function revealVisibleAnimations(container: HTMLElement) {
   container.querySelectorAll<HTMLElement>("[data-anim-entry]").forEach((el) => {
     if (el.classList.contains("invitation-anim-shown")) {
       el.classList.remove("invitation-anim-pending");
       return;
     }
-    revealInvitationAnimation(el);
+    if (isElementInScrollView(el)) revealInvitationAnimation(el);
   });
 }
 
-function isElementInScrollView(el: HTMLElement, root: HTMLElement | null): boolean {
+function isElementInScrollView(el: HTMLElement): boolean {
   const rect = el.getBoundingClientRect();
-  if (root) {
-    const rootRect = root.getBoundingClientRect();
-    return rect.bottom > rootRect.top && rect.top < rootRect.bottom;
-  }
   return rect.bottom > 0 && rect.top < window.innerHeight;
 }
 
@@ -68,7 +69,7 @@ export function CraftJsViewer({ card, contentJson, renderVersion }: CraftJsViewe
   );
   const frameData = useMemo(
     () => JSON.stringify(migrateContentJson(contentJson)),
-    [revision, contentJson]
+    [contentJson]
   );
 
   useEffect(() => {
@@ -90,23 +91,20 @@ export function CraftJsViewer({ card, contentJson, renderVersion }: CraftJsViewe
       { threshold: 0.15 }
     );
 
-    const scrollRoot = container.closest(".invitation-shell__frame") as HTMLElement | null;
-
     const animElements = container.querySelectorAll<HTMLElement>("[data-anim-entry]");
     animElements.forEach((el) => {
       if (!el.classList.contains("invitation-anim-shown")) {
         el.classList.add("invitation-anim-pending");
       }
-      if (isElementInScrollView(el, scrollRoot)) {
+      if (isElementInScrollView(el)) {
         revealInvitationAnimation(el);
         animObserver.unobserve(el);
       } else {
         animObserver.observe(el);
       }
     });
-    // Fail-safe: if IntersectionObserver misses any block (nested Craft DOM,
-    // clipped frame, or browser timing), never leave invitation content hidden.
-    fallbackTimer = setTimeout(() => revealPendingAnimations(container), 900);
+    // Fail-safe: if IntersectionObserver misses initial viewport timing, reveal only visible blocks.
+    fallbackTimer = setTimeout(() => revealVisibleAnimations(container), 900);
 
     // ── 2. Apply hover effects from data-hover-effect attribute ───────────────
     const hoverElements = container.querySelectorAll("[data-hover-effect]");

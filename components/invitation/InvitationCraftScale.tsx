@@ -54,7 +54,6 @@ export function InvitationCraftScale({ children }: { children: ReactNode }) {
           ref={innerRef}
           style={{
             width: PUBLISHED_CANVAS_WIDTH,
-            maxWidth: "100%",
             marginLeft: "auto",
             marginRight: "auto",
             transform: scale < 1 ? `scale(${scale})` : undefined,

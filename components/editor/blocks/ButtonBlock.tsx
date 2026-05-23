@@ -26,6 +26,12 @@ export interface ButtonBlockProps extends SharedProps {
   top?: number;
   left?: number;
   width?: number;
+  height?: number;
+  fontFamily?: string;
+  fontWeight?: "normal" | "bold" | "600";
+  borderStyle?: "none" | "solid" | "dashed" | "dotted" | "double" | "groove" | "ridge";
+  borderWidth?: number;
+  borderColor?: string;
 }
 
 export function ButtonBlock({
@@ -40,6 +46,12 @@ export function ButtonBlock({
   top = 0,
   left = 0,
   width = 260,
+  height,
+  fontFamily = "inherit",
+  fontWeight = "normal",
+  borderStyle = "none",
+  borderWidth = 0,
+  borderColor = "transparent",
   ...sharedProps
 }: ButtonBlockProps) {
   const { id, selected } = useNode((state) => ({
@@ -58,6 +70,7 @@ export function ButtonBlock({
     position: "absolute",
     top,
     ...blockLayout(isViewer, left, width),
+    height,
     outline: selected ? "2px solid #6366f1" : "none",
     cursor: selected ? "move" : "default",
     display: "flex",
@@ -74,12 +87,15 @@ export function ButtonBlock({
     backgroundColor: bgColor,
     color: textColor,
     fontSize,
+    fontWeight,
     borderRadius,
     padding: `${paddingY}px ${paddingX}px`,
-    border: "none",
+    border: borderStyle !== "none" ? `${borderWidth}px ${borderStyle} ${borderColor}` : "none",
     cursor: "pointer",
-    fontFamily: "inherit",
+    fontFamily,
     textDecoration: "none",
+    height: height ? "100%" : undefined,
+    boxSizing: "border-box",
   };
 
   return (
@@ -121,6 +137,12 @@ ButtonBlock.craft = {
     top: 0,
     left: 0,
     width: 260,
+    height: undefined,
+    fontFamily: "inherit",
+    fontWeight: "normal",
+    borderStyle: "none",
+    borderWidth: 0,
+    borderColor: "transparent",
     ...SHARED_DEFAULTS,
   },
   rules: {

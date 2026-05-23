@@ -16,8 +16,6 @@
     "seed:premium-template": "node scripts/generate-premium-preset.mjs && node --env-file=.env.local scripts/seed-premium-template.mjs",
     "seed:templates": "node --env-file=.env.local scripts/seed-imported-templates.mjs",
     "import:mehappy-html": "node --env-file=.env.local scripts/import-mehappy-html.mjs",
-    "generate:mehappy-craft": "node scripts/generate-mehappy-craft-templates.mjs",
-    "reseed:mehappy-craft": "node --env-file=.env.local scripts/reseed-mehappy-craft.mjs",
     "validate:premium-preset": "node scripts/validate-premium-preset.mjs"
   },
   "dependencies": {
@@ -61,6 +59,7 @@
     "autoprefixer": "^10.4.21",
     "eslint": "^8",
     "eslint-config-next": "14.2.35",
+    "node-html-parser": "^7.1.0",
     "postcss": "^8",
     "rimraf": "^5.0.10",
     "tailwindcss": "^3.4.1",

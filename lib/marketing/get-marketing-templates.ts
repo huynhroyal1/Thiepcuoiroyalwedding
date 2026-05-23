@@ -1,9 +1,9 @@
-import { STATIC_TEMPLATES } from "@/lib/data/marketing-templates";
-import { mergeMarketingTemplates } from "@/lib/data/merge-marketing-templates";
+import { unstable_noStore as noStore } from "next/cache";
 import { createPublicSupabase } from "@/lib/supabase/public";
 import type { TemplateRow } from "@/types";
 
 export async function getMarketingTemplates(): Promise<TemplateRow[]> {
+  noStore();
   try {
     const supabase = createPublicSupabase();
     const { data, error } = await supabase
@@ -13,8 +13,8 @@ export async function getMarketingTemplates(): Promise<TemplateRow[]> {
       .order("sort_order", { ascending: false });
 
     if (error) throw error;
-    return mergeMarketingTemplates((data ?? []) as TemplateRow[], STATIC_TEMPLATES);
+    return (data ?? []) as TemplateRow[];
   } catch {
-    return mergeMarketingTemplates([], STATIC_TEMPLATES);
+    return [];
   }
 }

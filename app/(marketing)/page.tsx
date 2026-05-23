@@ -4,6 +4,9 @@ import { getMarketingTemplates } from "@/lib/marketing/get-marketing-templates";
 import { getPublicShowcaseCards } from "@/lib/marketing/get-public-showcase-cards";
 import { templateToShowcaseItem } from "@/lib/marketing/template-showcase";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 export default async function MarketingHomePage() {
   const [templates, couples, faqItems] = await Promise.all([
     getMarketingTemplates(),

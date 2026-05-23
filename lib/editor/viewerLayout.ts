@@ -23,10 +23,10 @@ export function editorBlockLayout(
   width: number,
   canvasWidth = PUBLISHED_CANVAS_WIDTH,
 ): Pick<CSSProperties, "left" | "width" | "maxWidth"> {
+  void canvasWidth;
   return {
     left,
-    width: editorWidthCss(width, left, canvasWidth),
-    maxWidth: "100%",
+    width,
   };
 }
 
