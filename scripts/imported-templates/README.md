@@ -2,9 +2,19 @@
 
 Chỉ cập nhật bảng **`templates`** — không đụng user, thiệp khách, cài đặt site.
 
+## Lấy HTML từ URL MeHappy (trang Next.js)
+
+Trang `https://mehappy.vn/view/template/{id}` render bằng JS — copy HTML thường thiếu `#content-wrapper`. Dùng Playwright:
+
+```bash
+npx playwright install chromium
+npm run scrape:mehappy -- 44
+# → scripts/imported-templates/inbox/mehappy-template-44.raw.html
+```
+
 ## Cách nhanh — HTML MeHappy → Craft kéo-thả (mặc định)
 
-Gửi HTML copy từ MeHappy; script **tự chuyển** sang Craft.js (giữ text, vị trí, font, ảnh, icon, `anim-hidden` → fadeInUp):
+Gửi HTML copy từ MeHappy (hoặc file sau `scrape:mehappy`); script **tự chuyển** sang Craft.js (giữ text, vị trí, font, ảnh, icon, `anim-hidden` → fadeInUp):
 
 ```bash
 # Lưu HTML vào inbox/mehappy-xxx.raw.html rồi:

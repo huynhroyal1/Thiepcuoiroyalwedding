@@ -267,7 +267,7 @@ export function DashboardChrome({
             className="flex min-w-0 flex-1 items-center gap-2 md:flex-none"
           >
             <Image
-              src={`${MEHAPPY_ASSET}/images/logo-trong.png`}
+              src="/images/logo-royal.png"
               alt="Royal Wedding"
               width={40}
               height={40}

@@ -162,6 +162,166 @@
       "is_active": true,
       "content_type": "craft",
       "content_file": "mehappy-van-tien-thao-dung.json"
+    },
+    {
+      "id": "mehappy-romany-vip",
+      "name": "Giao diện Romany - Gói VIP",
+      "description": "Mẫu VIP Romany import từ MeHappy template #44 — kéo-thả chỉnh text, ảnh, ngày giờ.",
+      "thumbnail_url": "https://s3-hcm-r2.s3cloud.vn/thiepcuoi-mehappy/users/1927/3a638fbf-5f9e-49f0-b30e-a4ca7833291e-full.webp",
+      "preview_url": null,
+      "plan_required": "vip",
+      "style_tags": [
+        "Import MeHappy",
+        "Sang trọng"
+      ],
+      "sort_order": 105,
+      "is_active": true,
+      "content_type": "craft",
+      "content_file": "mehappy-romany-vip.json"
+    },
+    {
+      "id": "mehappy-noble-vip",
+      "name": "Giao diện thiệp cưới Noble - Gói VIP",
+      "description": "Mẫu VIP Noble import từ MeHappy template #31 — kéo-thả chỉnh text, ảnh, ngày giờ.",
+      "thumbnail_url": "https://s3-hcm-r2.s3cloud.vn/thiepcuoi-mehappy/admin/assets/10ac3c5d-5e12-4975-b39e-72f83502675e-full.webp",
+      "preview_url": null,
+      "plan_required": "vip",
+      "style_tags": [
+        "Import MeHappy",
+        "Sang trọng"
+      ],
+      "sort_order": 106,
+      "is_active": true,
+      "content_type": "craft",
+      "content_file": "mehappy-noble-vip.json"
+    },
+    {
+      "id": "mehappy-bustle-pro",
+      "name": "Giao diện Bustle - Gói PRO",
+      "description": "Mẫu PRO Bustle import từ MeHappy template #72 — kéo-thả chỉnh text, ảnh, ngày giờ.",
+      "thumbnail_url": "https://s3-hcm-r2.s3cloud.vn/thiepcuoi-mehappy/admin/assets/4ee7ef79-810c-4e84-a8df-834b687393da.webp",
+      "preview_url": null,
+      "plan_required": "pro",
+      "style_tags": [
+        "Import MeHappy",
+        "Sang trọng"
+      ],
+      "sort_order": 107,
+      "is_active": true,
+      "content_type": "craft",
+      "content_file": "mehappy-bustle-pro.json"
+    },
+    {
+      "id": "mehappy-boho-floral-green",
+      "name": "Giao diện Boho Floral Green",
+      "description": "Mẫu import từ MeHappy (HTML) — hiển thị qua InvitationHTMLViewer.",
+      "thumbnail_url": null,
+      "preview_url": null,
+      "plan_required": "pro",
+      "style_tags": [
+        "Import MeHappy",
+        "Sang trọng"
+      ],
+      "sort_order": 108,
+      "is_active": true,
+      "content_type": "raw-html",
+      "content_file": "mehappy-boho-floral-green.json"
+    },
+    {
+      "id": "mehappy-td03-pro",
+      "name": "Giao Diện TD03 - Gói PRO",
+      "description": "Mẫu PRO TD03 import từ MeHappy template #22 — kéo-thả chỉnh text, ảnh, ngày giờ.",
+      "thumbnail_url": "https://s3-hcm-r2.s3cloud.vn/thiepcuoi-mehappy/admin/assets/1f6c5e35-9840-4d23-9f1a-5364d7f974ca.webp",
+      "preview_url": null,
+      "plan_required": "pro",
+      "style_tags": [
+        "Import MeHappy",
+        "Sang trọng"
+      ],
+      "sort_order": 109,
+      "is_active": true,
+      "content_type": "craft",
+      "content_file": "mehappy-td03-pro.json"
+    },
+    {
+      "id": "mehappy-romantic-vip",
+      "name": "Giao diện Romantic - Gói VIP",
+      "description": "Mẫu import từ MeHappy template #131 — kéo-thả chỉnh text, ảnh, ngày giờ.",
+      "thumbnail_url": "https://s3-hcm-r2.s3cloud.vn/thiepcuoi-mehappy/admin/assets/6744ed53-e5ec-4c48-b258-5a84541d4982-medium.webp",
+      "preview_url": null,
+      "plan_required": "vip",
+      "style_tags": [
+        "Import MeHappy",
+        "Sang trọng"
+      ],
+      "sort_order": 110,
+      "is_active": true,
+      "content_type": "craft",
+      "content_file": "mehappy-romantic-vip.json"
+    },
+    {
+      "id": "mehappy-en01-vip",
+      "name": "Giao diện thiệp cưới EN01 - Gói VIP",
+      "description": "Mẫu import từ MeHappy template #79 — kéo-thả chỉnh text, ảnh, ngày giờ.",
+      "thumbnail_url": "https://s3-hcm-r2.s3cloud.vn/thiepcuoi-mehappy/users/1929/517773d6-1412-4637-a5ce-a51c697f28e8-full.webp",
+      "preview_url": null,
+      "plan_required": "vip",
+      "style_tags": [
+        "Import MeHappy",
+        "Sang trọng"
+      ],
+      "sort_order": 111,
+      "is_active": true,
+      "content_type": "craft",
+      "content_file": "mehappy-en01-vip.json"
+    },
+    {
+      "id": "mehappy-da05-vip",
+      "name": "Giao diện thiệp cưới DA05 - Gói VIP",
+      "description": "Mẫu import từ MeHappy template #24 — kéo-thả chỉnh text, ảnh, ngày giờ.",
+      "thumbnail_url": "https://s3-hcm-r2.s3cloud.vn/thiepcuoi-mehappy/admin/assets/925dcd73-ba01-4918-85a6-9d1417011383.webp",
+      "preview_url": null,
+      "plan_required": "vip",
+      "style_tags": [
+        "Import MeHappy",
+        "Sang trọng"
+      ],
+      "sort_order": 112,
+      "is_active": true,
+      "content_type": "craft",
+      "content_file": "mehappy-da05-vip.json"
+    },
+    {
+      "id": "mehappy-at01-pro",
+      "name": "Giao diện AT01 - Gói PRO",
+      "description": "Mẫu import từ MeHappy template #6 — kéo-thả chỉnh text, ảnh, ngày giờ.",
+      "thumbnail_url": "https://s3-hcm-r2.s3cloud.vn/thiepcuoi-mehappy/admin/assets/4225f5f8-932a-4c8a-99b5-d00d61308c8a.webp",
+      "preview_url": null,
+      "plan_required": "pro",
+      "style_tags": [
+        "Import MeHappy",
+        "Sang trọng"
+      ],
+      "sort_order": 113,
+      "is_active": true,
+      "content_type": "craft",
+      "content_file": "mehappy-at01-pro.json"
+    },
+    {
+      "id": "mehappy-brightly-basic",
+      "name": "Giao diện Brightly - Gói Basic",
+      "description": "Mẫu import từ MeHappy template #16 — kéo-thả chỉnh text, ảnh, ngày giờ.",
+      "thumbnail_url": "https://s3-hcm-r2.s3cloud.vn/thiepcuoi-mehappy/admin/assets/bc464547-3708-493b-9ac4-709dc2efecdc.webp",
+      "preview_url": null,
+      "plan_required": "basic",
+      "style_tags": [
+        "Import MeHappy",
+        "Sang trọng"
+      ],
+      "sort_order": 114,
+      "is_active": true,
+      "content_type": "craft",
+      "content_file": "mehappy-brightly-basic.json"
     }
   ]
 }

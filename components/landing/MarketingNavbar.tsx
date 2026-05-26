@@ -81,7 +81,7 @@ export function MarketingNavbar() {
       <div className="relative mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3">
         <Link href="/" className="motion-soft flex shrink-0 items-center gap-2 rounded-lg py-0.5 hover:bg-rose-50/80">
           <Image
-            src={`${MEHAPPY_ASSET}/images/logo-trong.png`}
+            src="/images/logo-royal.png"
             alt="Royal Wedding"
             width={120}
             height={48}

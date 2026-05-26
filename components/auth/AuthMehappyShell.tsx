@@ -142,7 +142,7 @@ export function AuthMehappyShell({
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3">
           <Link href="/" className="flex shrink-0 items-center gap-2">
             <Image
-              src={`${MEHAPPY_ASSET}/images/logo-trong.png`}
+              src="/images/logo-royal.png"
               alt="Royal Wedding"
               width={120}
               height={48}
@@ -198,7 +198,7 @@ export function AuthMehappyShell({
       <header className="relative z-10 flex items-center justify-between gap-2 border-b border-white/30 bg-white/50 px-4 py-3 backdrop-blur-md md:hidden">
         <Link href="/" className="flex min-w-0 shrink items-center gap-2">
           <Image
-            src={`${MEHAPPY_ASSET}/images/logo-trong.png`}
+            src="/images/logo-royal.png"
             alt="Royal Wedding"
             width={96}
             height={40}

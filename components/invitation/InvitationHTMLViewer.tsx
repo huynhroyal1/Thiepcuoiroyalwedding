@@ -9,6 +9,35 @@ interface Props {
   html: string;
 }
 
+const TAILWIND_CDN_ID = "royal-wedding-tailwind-cdn";
+const DAISYUI_CDN_ID = "royal-wedding-daisyui-cdn";
+
+function htmlNeedsTailwindCdn(html: string) {
+  return (
+    /data-testid="boho-floral-green-template"/.test(html) ||
+    /class="demo-page"/.test(html) ||
+    /\bmodal-box\b/.test(html)
+  );
+}
+
+function ensureTailwindCdn() {
+  if (typeof document === "undefined") return;
+  if (!document.getElementById(TAILWIND_CDN_ID)) {
+    const script = document.createElement("script");
+    script.id = TAILWIND_CDN_ID;
+    script.src = "https://cdn.tailwindcss.com";
+    script.async = true;
+    document.head.appendChild(script);
+  }
+  if (!document.getElementById(DAISYUI_CDN_ID)) {
+    const link = document.createElement("link");
+    link.id = DAISYUI_CDN_ID;
+    link.rel = "stylesheet";
+    link.href = "https://cdn.jsdelivr.net/npm/daisyui@4.12.14/dist/full.min.css";
+    document.head.appendChild(link);
+  }
+}
+
 /**
  * Renders raw HTML wedding card (MeHappy-format sections).
  * - Adds IntersectionObserver for `anim-hidden` class → fadeInUp on scroll
@@ -18,6 +47,11 @@ interface Props {
 export function InvitationHTMLViewer({ html }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [lightboxSrc, setLightboxSrc] = useState<string | null>(null);
+  const needsTailwind = htmlNeedsTailwindCdn(html);
+
+  useEffect(() => {
+    if (needsTailwind) ensureTailwindCdn();
+  }, [needsTailwind]);
 
   useEffect(() => {
     const container = containerRef.current;

@@ -16,6 +16,7 @@
     "seed:premium-template": "node scripts/generate-premium-preset.mjs && node --env-file=.env.local scripts/seed-premium-template.mjs",
     "seed:templates": "node --env-file=.env.local scripts/seed-imported-templates.mjs",
     "import:mehappy-html": "node --env-file=.env.local scripts/import-mehappy-html.mjs",
+    "scrape:mehappy": "node scripts/scrape-mehappy-template.mjs",
     "validate:premium-preset": "node scripts/validate-premium-preset.mjs"
   },
   "dependencies": {
