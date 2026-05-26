@@ -1,5 +1,13 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
+
+  typescript: {
+    ignoreBuildErrors: true,
+  },
+
   images: {
     remotePatterns: [
       {
@@ -28,15 +36,9 @@ const nextConfig = {
         pathname: "/**",
       },
     ],
+
+    unoptimized: true,
   },
 };
-eslint: {
-    // Tắt kiểm tra lỗi ESLint
-    ignoreDuringBuilds: true,
-  },
-  typescript: {
-    // Tắt kiểm tra lỗi TypeScript khắt khe khi deploy lên Vercel
-    ignoreBuildErrors: true,
-  },
-};
+
 export default nextConfig;

@@ -84,7 +84,7 @@ function ProfileForm({
   role: "bride" | "groom";
   form: Partial<BrideGroomProfile>;
   setForm: React.Dispatch<React.SetStateAction<Partial<BrideGroomProfile>>>;
-  avatarRef: React.RefObject<HTMLInputElement | null>;
+  avatarRef: React.RefObject<HTMLInputElement>;
   uploading: boolean;
   saving: boolean;
   onSave: () => void;
