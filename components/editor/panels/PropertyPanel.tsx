@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { useEditor } from "@craftjs/core";
+import { useEditor, Element } from "@craftjs/core";
 import { FilterPanel } from "./shared/FilterPanel";
 import { TransformPanel } from "./shared/TransformPanel";
 import { BoxShadowPanel } from "./shared/BoxShadowPanel";
@@ -9,6 +9,8 @@ import { AnimationPanel } from "./shared/AnimationPanel";
 import { EventsPanel } from "./shared/EventsPanel";
 import { ToolbarActions } from "./shared/ToolbarActions";
 import { ImageUrlInput } from "./shared/ImageUrlInput";
+import { ImageBlock } from "../blocks/ImageBlock";
+import { generateElementId } from "../utils/elementId";
 import { useEditorCard } from "../EditorContext";
 
 // ─── Utility input components ─────────────────────────────────────────────────
@@ -422,8 +424,84 @@ function TextPanel({ props, setProp }: { props: Record<string, unknown>; setProp
   );
 }
 
-function ImagePanel({ props, setProp }: { props: Record<string, unknown>; setProp: (fn: (p: Record<string, unknown>) => void) => void }) {
+function ImagePanel({ props, setProp, selectedId }: { props: Record<string, unknown>; setProp: (fn: (p: Record<string, unknown>) => void) => void; selectedId: string }) {
   const imageFade = (props.imageFade as boolean) ?? false;
+  const { actions, query } = useEditor();
+
+  const CLIP_KEY = "mehappy_copied_frame";
+
+  const copyFrame = async () => {
+    try {
+      const node = query.node(selectedId).get();
+      const pdata = node?.data?.props as Record<string, unknown> | undefined;
+      if (!pdata) return;
+      const json = JSON.stringify(pdata);
+      try {
+        await navigator.clipboard.writeText(json);
+      } catch {
+        /* ignore */
+      }
+      try {
+        localStorage.setItem(CLIP_KEY, json);
+      } catch {
+        /* ignore */
+      }
+      // small UI feedback could be added
+    } catch (e) {
+      /* ignore */
+    }
+  };
+
+  const readClipboardOrStorage = async (): Promise<Record<string, unknown> | null> => {
+    try {
+      let text = "";
+      try {
+        text = await navigator.clipboard.readText();
+      } catch {
+        text = "";
+      }
+      if (!text) {
+        try {
+          text = localStorage.getItem(CLIP_KEY) ?? "";
+        } catch {
+          text = "";
+        }
+      }
+      if (!text) return null;
+      return JSON.parse(text) as Record<string, unknown>;
+    } catch {
+      return null;
+    }
+  };
+
+  const pasteIntoSelection = async () => {
+    const data = await readClipboardOrStorage();
+    if (!data) return;
+    // don't overwrite elementId to keep current element identity
+    delete (data as any).elementId;
+    setProp((p) => {
+      Object.assign(p, data);
+    });
+  };
+
+  const pasteAsNew = async () => {
+    const data = await readClipboardOrStorage();
+    if (!data) return;
+    try {
+      const parentId = query.node(selectedId).get().data.parent ?? "ROOT";
+      const siblings = query.node(parentId).get().data.nodes ?? [];
+      const idx = siblings.indexOf(selectedId);
+      const tree = query
+        .parseReactElement(
+          <Element is={ImageBlock} {...(data as any)} elementId={generateElementId()} />
+        )
+        .toNodeTree();
+      actions.addNodeTree(tree, parentId, idx >= 0 ? idx + 1 : undefined);
+    } catch (e) {
+      // ignore failures
+    }
+  };
+
   return (
     <div className="space-y-1">
       <Row label="Ảnh">
@@ -443,7 +521,7 @@ function ImagePanel({ props, setProp }: { props: Record<string, unknown>; setPro
           options={[
             { value: "cover", label: "Vừa khít (Cover)" },
             { value: "contain", label: "Vừa khung (Contain)" },
-            { value: "fill", label: "Lấp đầy (Fill)" },
+            { value: "fill", label: "Lấp đầy (không giữ tỷ lệ)" },
             { value: "none", label: "Không xử lý" },
             { value: "scale-down", label: "Thu nhỏ" },
           ]}
@@ -488,6 +566,36 @@ function ImagePanel({ props, setProp }: { props: Record<string, unknown>; setPro
           />
         </Row>
       )}
+
+      <div className="text-[10px] uppercase tracking-wide text-gray-400 pt-2 pb-0.5">Vị trí ảnh</div>
+      <Row label="Vị trí ảnh X (%)"><NumberInput value={(props.imagePosX as number) ?? 50} onChange={(v) => setProp((p) => { p.imagePosX = v; })} min={0} max={100} /></Row>
+      <Row label="Vị trí ảnh Y (%)"><NumberInput value={(props.imagePosY as number) ?? 50} onChange={(v) => setProp((p) => { p.imagePosY = v; })} min={0} max={100} /></Row>
+      <div className="flex items-center gap-2 pt-1">
+        <button onClick={() => setProp((p) => { p.imagePosX = 50; p.imagePosY = 50; })} className="px-3 py-1 text-sm rounded-md border border-gray-200 bg-white">Center image</button>
+        <div className="text-xs text-gray-400">Kéo thanh % để điều chỉnh vị trí khuôn mặt</div>
+      </div>
+
+      <div className="flex items-center gap-2 pt-2">
+        <button onClick={copyFrame} className="px-3 py-1 text-sm rounded-md border border-gray-200 bg-white">Copy khung</button>
+        <button onClick={pasteIntoSelection} className="px-3 py-1 text-sm rounded-md border border-gray-200 bg-white">Paste vào phần tử</button>
+        <button onClick={pasteAsNew} className="px-3 py-1 text-sm rounded-md border border-gray-200 bg-white">Paste thành bản sao</button>
+        <div className="text-xs text-gray-400">Sao chép/ dán khung ảnh (clipboard/localStorage)</div>
+      </div>
+
+      <div className="text-[10px] uppercase tracking-wide text-gray-400 pt-3 pb-0.5">Phóng & Zoom</div>
+      <SliderRow
+        label="Phóng to ảnh"
+        value={(props.imageScale as number) ?? 1}
+        min={0.5}
+        max={3}
+        onChange={(v) => setProp((p) => { p.imageScale = v; })}
+      />
+      <div className="flex items-center gap-2">
+        <button onClick={() => setProp((p) => { p.imageScale = Math.max(0.5, (props.imageScale as number ?? 1) - 0.1); })} className="px-2 py-1 text-sm rounded-md border border-gray-200 bg-white">-</button>
+        <button onClick={() => setProp((p) => { p.imageScale = Math.min(3, (props.imageScale as number ?? 1) + 0.1); })} className="px-2 py-1 text-sm rounded-md border border-gray-200 bg-white">+</button>
+        <button onClick={() => setProp((p) => { p.imageScale = 1; })} className="px-3 py-1 text-sm rounded-md border border-gray-200 bg-white">Reset</button>
+        <div className="text-xs text-gray-400">Zoom ảnh mà không thay đổi khung</div>
+      </div>
 
       <div className="text-[10px] uppercase tracking-wide text-gray-400 pt-2 pb-0.5">Bộ lọc ảnh</div>
       <Row label="Hoà trộn">
@@ -763,7 +871,7 @@ export function PropertyPanel({ embedded = false }: { embedded?: boolean }) {
     switch (name) {
       case "Section": return <SectionPanel props={props} setProp={setProp} />;
       case "Text": return <TextPanel props={props} setProp={setProp} />;
-      case "Hình ảnh": return <ImagePanel props={props} setProp={setProp} />;
+      case "Hình ảnh": return <ImagePanel props={props} setProp={setProp} selectedId={selected.id} />;
       case "Đếm ngược": return <CountdownPanel props={props} setProp={setProp} />;
       case "Đường kẻ": return <DividerPanel props={props} setProp={setProp} />;
       case "Nút bấm": return <ButtonPanel props={props} setProp={setProp} />;

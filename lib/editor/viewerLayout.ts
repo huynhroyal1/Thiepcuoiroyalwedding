@@ -36,6 +36,7 @@ export function blockLayout(
   left: number,
   width: number,
 ): Pick<CSSProperties, "left" | "width" | "maxWidth"> {
+  if (_isViewer) return publishedBlockLayout(left, width);
   return editorBlockLayout(left, width);
 }
 

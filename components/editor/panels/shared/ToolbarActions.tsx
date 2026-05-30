@@ -1,11 +1,12 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { useEditor } from "@craftjs/core";
+import { useEditor, Element } from "@craftjs/core";
 import { generateElementId } from "../../utils/elementId";
 import type { SharedProps } from "../../utils/styleHelpers";
 import { useEditorUI } from "../../EditorUIContext";
 import { canDeleteNode, safeDeleteNode } from "@/lib/editor/safeDeleteNode";
+import { ImageBlock } from "../../blocks/ImageBlock";
 
 const STYLE_STORAGE_KEY = "craft-copied-style";
 
@@ -18,9 +19,13 @@ export function ToolbarActions({ selectedId, compact = false }: ToolbarActionsPr
   const { actions, query } = useEditor();
   const { openSaveTemplate } = useEditorUI();
   const [hasCopiedStyle, setHasCopiedStyle] = useState(false);
+  const [hasCopiedFrame, setHasCopiedFrame] = useState(false);
+
+  const FRAME_STORAGE_KEY = "mehappy_copied_image_frame";
 
   useEffect(() => {
     setHasCopiedStyle(!!sessionStorage.getItem(STYLE_STORAGE_KEY));
+    setHasCopiedFrame(!!localStorage.getItem(FRAME_STORAGE_KEY));
   }, []);
 
   const node = query.node(selectedId).get();
@@ -110,6 +115,88 @@ export function ToolbarActions({ selectedId, compact = false }: ToolbarActionsPr
     } catch { /* ignore */ }
   };
 
+  const readCopiedFrame = async (): Promise<Record<string, unknown> | null> => {
+    try {
+      let text = "";
+      try {
+        text = await navigator.clipboard.readText();
+      } catch {
+        text = "";
+      }
+      if (!text) {
+        text = localStorage.getItem(FRAME_STORAGE_KEY) ?? "";
+      }
+      if (!text) return null;
+      return JSON.parse(text) as Record<string, unknown>;
+    } catch {
+      return null;
+    }
+  };
+
+  const handleCopyFrame = async () => {
+    try {
+      const props = node?.data.props as Record<string, unknown> | undefined;
+      if (!props || (node?.data.displayName as string | undefined) !== "Hình ảnh") return;
+      const frame = { ...props };
+      delete frame.elementId;
+      const json = JSON.stringify(frame);
+      try {
+        await navigator.clipboard.writeText(json);
+      } catch {
+        // ignore permission issues
+      }
+      try {
+        localStorage.setItem(FRAME_STORAGE_KEY, json);
+      } catch {
+        // ignore storage issues
+      }
+      setHasCopiedFrame(true);
+    } catch {
+      // ignore
+    }
+  };
+
+  const handlePasteFrame = async () => {
+    const frame = await readCopiedFrame();
+    if (!frame) return;
+    const pasteProps = { ...frame };
+    delete pasteProps.elementId;
+    if (pasteProps.objectFit === "fill") {
+      pasteProps.objectFit = "cover";
+    }
+
+    const selectedNode = query.node(selectedId).get();
+    const resolvedName = (() => {
+      const type = selectedNode?.data?.type;
+      if (type && typeof type === "object" && "resolvedName" in type) {
+        return (type as { resolvedName?: string }).resolvedName;
+      }
+      if (typeof type === "function") return type.name;
+      return selectedNode?.data?.name as string | undefined;
+    })();
+    const isContainer = resolvedName === "RootCanvas" || resolvedName === "SectionBlock" || selectedNode?.data.displayName === "Section" || selectedNode?.data.displayName === "Canvas";
+
+    try {
+      const tree = query
+        .parseReactElement(
+          <Element is={ImageBlock} {...pasteProps} elementId={generateElementId()} />
+        )
+        .toNodeTree();
+
+      if (isContainer) {
+        actions.addNodeTree(tree, selectedId);
+      } else if (parentId) {
+        const siblings = (query.node(parentId).get().data.nodes ?? []) as string[];
+        const idx = siblings.indexOf(selectedId);
+        actions.addNodeTree(tree, parentId, idx >= 0 ? idx + 1 : undefined);
+      } else {
+        actions.addNodeTree(tree, "ROOT");
+      }
+    } catch {
+      // ignore invalid paste target
+    }
+  };
+
   const isHidden = !!(node?.data.props as Record<string, unknown>)?.hidden;
   const isLocked = !!(node?.data.props as Record<string, unknown>)?.locked;
   const currentZ = ((node?.data.props as Record<string, unknown>)?.zIndex as number) ?? 0;
@@ -190,6 +277,29 @@ export function ToolbarActions({ selectedId, compact = false }: ToolbarActionsPr
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
         </svg>
       </button>
+
+      <button
+        onClick={handleCopyFrame}
+        title="Copy khung ảnh"
+        className="p-1.5 rounded text-gray-500 hover:bg-gray-100 text-xs transition-colors"
+      >
+        <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V5a2 2 0 012-2h8a2 2 0 012 2v8a2 2 0 01-2 2h-2M8 7H5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3" />
+        </svg>
+      </button>
+
+      {hasCopiedFrame && (
+        <button
+          onClick={handlePasteFrame}
+          title="Paste khung ảnh"
+          className="p-1.5 rounded text-gray-500 hover:bg-gray-100 text-xs transition-colors"
+        >
+          <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V5a2 2 0 012-2h8a2 2 0 012 2v8a2 2 0 01-2 2h-2M8 7H5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3" />
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 13l3 3 5-5" />
+          </svg>
+        </button>
+      )}
 
       <button
         onClick={handleCopyStyle}

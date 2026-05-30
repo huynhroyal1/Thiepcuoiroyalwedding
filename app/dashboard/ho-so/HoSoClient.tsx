@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { updateWeddingCard } from "@/app/actions/wedding-card";
 import { createClient } from "@/lib/supabase/client";
+import { compressImage, formatFileSize } from "@/lib/utils/compress-image";
 import { toast } from "sonner";
 import type { BrideGroomProfile } from "@/types";
 
@@ -237,20 +238,41 @@ export default function HoSoClient({ card, profiles: initialProfiles }: Props) {
 
   const uploadAvatar = async (file: File, role: "bride" | "groom") => {
     setUploading(true);
-    const ext = file.name.split(".").pop();
-    const path = `avatars/${card.id}/${role}.${ext}`;
-    const { error } = await supabase.storage.from("wedding-assets").upload(path, file, {
-      upsert: true,
-      contentType: file.type,
-    });
-    if (error) {
-      toast.error("Lỗi tải ảnh: " + error.message);
+    try {
+      // Nén avatar
+      let processedFile = file;
+      try {
+        const originalSize = formatFileSize(file.size);
+        processedFile = await compressImage(file, {
+          maxWidth: 800,
+          maxHeight: 800,
+          quality: 90,
+        });
+        const compressedSize = formatFileSize(processedFile.size);
+        console.log(`Avatar nén: ${originalSize} → ${compressedSize}`);
+      } catch (err) {
+        console.warn("Không thể nén avatar, sử dụng ảnh gốc:", err);
+      }
+
+      const ext = processedFile.type === "image/webp" ? "webp" : (file.name.split(".").pop());
+      const path = `avatars/${card.id}/${role}.${ext}`;
+      const { error } = await supabase.storage.from("wedding-assets").upload(path, processedFile, {
+        upsert: true,
+        contentType: processedFile.type,
+      });
+      if (error) {
+        toast.error("Lỗi tải ảnh: " + error.message);
+        setUploading(false);
+        return null;
+      }
+      const { data } = supabase.storage.from("wedding-assets").getPublicUrl(path);
+      setUploading(false);
+      return data.publicUrl;
+    } catch (err) {
+      toast.error("Lỗi: " + (err instanceof Error ? err.message : "Không xác định"));
       setUploading(false);
       return null;
     }
-    const { data } = supabase.storage.from("wedding-assets").getPublicUrl(path);
-    setUploading(false);
-    return data.publicUrl;
   };
 
   const saveProfile = async (role: "bride" | "groom") => {

@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import { updateWeddingCard, applyTemplateToCard } from "@/app/actions/wedding-card";
 import { canOpenVisualEditor, getContentJsonKind } from "@/lib/editor/contentJsonKind";
 import { createClient } from "@/lib/supabase/client";
+import { compressImage, formatFileSize } from "@/lib/utils/compress-image";
 import type { WeddingCard, CardStatus, TemplateRow } from "@/types";
 
 type Props = {
@@ -188,28 +189,47 @@ export default function CaiDatThiepClient({
     if (!card) return;
     setCoverUploading(true);
     setCoverMsg("");
-    const ext = file.name.split(".").pop() ?? "jpg";
-    const path = `covers/${card.id}.${ext}`;
-    const { error: upErr } = await supabase.storage
-      .from("wedding-photos")
-      .upload(path, file, { upsert: true });
-    if (upErr) {
-      setCoverMsg(`Lỗi upload: ${upErr.message}`);
+    
+    try {
+      // Nén ảnh bìa
+      let processedFile = file;
+      try {
+        const originalSize = formatFileSize(file.size);
+        processedFile = await compressImage(file, {
+          maxWidth: 1920,
+          maxHeight: 1080,
+          quality: 85,
+        });
+        const compressedSize = formatFileSize(processedFile.size);
+        console.log(`Ảnh bìa nén: ${originalSize} → ${compressedSize}`);
+      } catch (err) {
+        console.warn("Không thể nén ảnh bìa, sử dụng ảnh gốc:", err);
+      }
+
+      const ext = processedFile.type === "image/webp" ? "webp" : (file.name.split(".").pop() ?? "jpg");
+      const path = `covers/${card.id}.${ext}`;
+      const { error: upErr } = await supabase.storage
+        .from("wedding-photos")
+        .upload(path, processedFile, { upsert: true });
+      if (upErr) {
+        setCoverMsg(`Lỗi upload: ${upErr.message}`);
+        setCoverUploading(false);
+        return;
+      }
+      const { data: urlData } = supabase.storage
+        .from("wedding-photos")
+        .getPublicUrl(path);
+      const publicUrl = urlData.publicUrl;
+      const { error: updateErr } = await updateWeddingCard(card.id, { cover_image_url: publicUrl });
+      if (updateErr) {
+        setCoverMsg(`Lỗi cập nhật: ${updateErr}`);
+      } else {
+        setCard((prev) => (prev ? { ...prev, cover_image_url: publicUrl } : prev));
+        setCoverMsg("Đã cập nhật ảnh bìa!");
+      }
+    } finally {
       setCoverUploading(false);
-      return;
     }
-    const { data: urlData } = supabase.storage
-      .from("wedding-photos")
-      .getPublicUrl(path);
-    const publicUrl = urlData.publicUrl;
-    const { error: updateErr } = await updateWeddingCard(card.id, { cover_image_url: publicUrl });
-    if (updateErr) {
-      setCoverMsg(`Lỗi cập nhật: ${updateErr}`);
-    } else {
-      setCard((prev) => (prev ? { ...prev, cover_image_url: publicUrl } : prev));
-      setCoverMsg("Đã cập nhật ảnh bìa!");
-    }
-    setCoverUploading(false);
   };
 
   // ── Display status ───────────────────────────────────────────────────────

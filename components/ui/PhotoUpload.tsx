@@ -4,6 +4,7 @@ import { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { createClient } from "@/lib/supabase/client";
 import { toast } from "sonner";
+import { compressImage, formatFileSize } from "@/lib/utils/compress-image";
 import type { Plan } from "@/types";
 
 const LIMIT: Record<Plan, number> = {
@@ -50,9 +51,28 @@ export function PhotoUpload({
       try {
         for (const file of files.slice(0, maxFiles)) {
           if (currentCount >= limit) break;
-          const ext = file.name.split(".").pop() ?? "bin";
+          
+          // Nén ảnh nếu là file ảnh
+          let processedFile = file;
+          if (file.type.startsWith("image/")) {
+            try {
+              const originalSize = formatFileSize(file.size);
+              processedFile = await compressImage(file, {
+                maxWidth: 2560,
+                maxHeight: 1920,
+                quality: 88,
+              });
+              const compressedSize = formatFileSize(processedFile.size);
+              console.log(`Ảnh nén: ${originalSize} → ${compressedSize}`);
+            } catch (err) {
+              console.warn("Không thể nén ảnh, sử dụng ảnh gốc:", err);
+              // Tiếp tục với ảnh gốc nếu nén lỗi
+            }
+          }
+          
+          const ext = processedFile.type === "image/webp" ? "webp" : (file.name.split(".").pop() ?? "bin");
           const path = `${cardId}/${crypto.randomUUID()}.${ext}`;
-          const { error: upErr } = await supabase.storage.from(bucket).upload(path, file, {
+          const { error: upErr } = await supabase.storage.from(bucket).upload(path, processedFile, {
             cacheControl: "3600",
             upsert: false,
           });

@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { useConfirm } from "@/components/ui/ConfirmProvider";
 import { addWeddingPhoto, deleteWeddingPhoto, updateWeddingPhotoCaption } from "@/app/actions/wedding-card";
 import { createClient } from "@/lib/supabase/client";
+import { compressImage, formatFileSize } from "@/lib/utils/compress-image";
 import type { Plan, WeddingPhoto } from "@/types";
 
 interface Props {
@@ -57,13 +58,29 @@ export default function PhotobookClient({
       const uploaded: WeddingPhoto[] = [];
       for (let i = 0; i < toUpload.length; i++) {
         const file = toUpload[i];
-        const ext = file.name.split(".").pop() ?? "jpg";
+        
+        // Nén ảnh photobook
+        let processedFile = file;
+        try {
+          const originalSize = formatFileSize(file.size);
+          processedFile = await compressImage(file, {
+            maxWidth: 1920,
+            maxHeight: 1080,
+            quality: 80,
+          });
+          const compressedSize = formatFileSize(processedFile.size);
+          console.log(`Photobook nén: ${originalSize} → ${compressedSize}`);
+        } catch (err) {
+          console.warn("Không thể nén ảnh, sử dụng ảnh gốc:", err);
+        }
+
+        const ext = processedFile.type === "image/webp" ? "webp" : (file.name.split(".").pop() ?? "jpg");
         const filename = `${Date.now()}_${Math.random().toString(36).slice(2)}.${ext}`;
         const storagePath = `${cardId}/${filename}`;
 
         const { error: storageError } = await supabase.storage
           .from("wedding-photos")
-          .upload(storagePath, file);
+          .upload(storagePath, processedFile);
 
         if (storageError) {
           toast.error(`Lỗi tải ảnh: ${storageError.message}`);

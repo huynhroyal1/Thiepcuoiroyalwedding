@@ -1,6 +1,6 @@
 "use client";
 
-import React, { CSSProperties } from "react";
+import React, { CSSProperties, useEffect, useState } from "react";
 import { useNode } from "@craftjs/core";
 import { useBlockConnect } from "../hooks/useBlockConnect";
 import { blockLayout } from "@/lib/editor/viewerLayout";
@@ -35,6 +35,9 @@ export interface ImageBlockProps extends SharedProps {
   imageBlendMode?: string;
   imageTransform?: string;
   imageTransformOrigin?: string;
+  imagePosX?: number; // 0-100 percent
+  imagePosY?: number; // 0-100 percent
+  imageScale?: number; // scale multiplier (1 = 100%)
   overlayColor?: string;
   overlayOpacity?: number;
 }
@@ -58,6 +61,9 @@ export function ImageBlock({
   imageBlendMode = "normal",
   imageTransform = "",
   imageTransformOrigin = "center center",
+  imagePosX = 50,
+  imagePosY = 50,
+  imageScale = 1,
   overlayColor = "#000000",
   overlayOpacity = 0,
   ...sharedProps
@@ -69,6 +75,14 @@ export function ImageBlock({
   const connectRef = useBlockConnect();
   const domId = sharedProps.elementId || undefined;
   const isViewer = useCraftViewerMode();
+
+  const [isNarrow, setIsNarrow] = useState(false);
+  useEffect(() => {
+    const check = () => setIsNarrow(typeof window !== "undefined" ? window.innerWidth <= 420 : false);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
 
   const animAttrs = buildAnimationAttrs(sharedProps);
   const extraAttrs = buildExtraAttrs(sharedProps);
@@ -101,16 +115,19 @@ export function ImageBlock({
     ...buildSharedStyle(sharedProps),
   };
 
+  const effectiveObjectFit = isViewer && isNarrow ? "contain" : objectFit;
+
   const imgStyle: CSSProperties = {
     width: "100%",
     height: "100%",
     maxWidth: "100%",
-    objectFit,
+    objectFit: effectiveObjectFit,
+    objectPosition: `${imagePosX}% ${imagePosY}%`,
     display: "block",
     filter: imageFilter ? buildFilterString(imageFilter) : undefined,
     mixBlendMode: imageBlendMode as CSSProperties["mixBlendMode"],
-    transform: imageTransform || undefined,
-    transformOrigin: imageTransformOrigin,
+    transform: [imageTransform, `scale(${imageScale})`].filter(Boolean).join(" ") || undefined,
+    transformOrigin: `${imagePosX}% ${imagePosY}%`,
   };
 
   return (
@@ -192,6 +209,9 @@ ImageBlock.craft = {
     imageBlendMode: "normal",
     imageTransform: "",
     imageTransformOrigin: "center center",
+    imagePosX: 50,
+    imagePosY: 50,
+    imageScale: 1,
     overlayColor: "#000000",
     overlayOpacity: 0,
     ...SHARED_DEFAULTS,

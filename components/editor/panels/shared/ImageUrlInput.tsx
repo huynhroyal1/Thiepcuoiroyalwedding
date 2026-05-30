@@ -5,6 +5,7 @@ import { Loader2, Upload } from "lucide-react";
 import { toast } from "sonner";
 import { createClient } from "@/lib/supabase/client";
 import { useEditorUploadScope } from "../../EditorContext";
+import { compressImage, formatFileSize } from "@/lib/utils/compress-image";
 
 const ACCEPT = "image/jpeg,image/png,image/webp,image/gif";
 const MAX_BYTES = 5 * 1024 * 1024;
@@ -33,20 +34,38 @@ export function ImageUrlInput({
       toast.error("Chỉ chấp nhận file ảnh (JPG, PNG, WebP, GIF)");
       return;
     }
-    if (file.size > MAX_BYTES) {
-      toast.error("Ảnh tối đa 5MB");
-      return;
-    }
 
     setUploading(true);
     try {
+      // Nén ảnh trước
+      let processedFile = file;
+      try {
+        const originalSize = formatFileSize(file.size);
+        processedFile = await compressImage(file, {
+          maxWidth: 1920,
+          maxHeight: 1080,
+          quality: 85,
+        });
+        const compressedSize = formatFileSize(processedFile.size);
+        console.log(`Ảnh editor nén: ${originalSize} → ${compressedSize}`);
+      } catch (err) {
+        console.warn("Không thể nén ảnh, sử dụng ảnh gốc:", err);
+      }
+
+      // Check size SAU khi nén
+      if (processedFile.size > MAX_BYTES) {
+        toast.error(`Ảnh sau nén vẫn ${formatFileSize(processedFile.size)}, tối đa ${formatFileSize(MAX_BYTES)}`);
+        setUploading(false);
+        return;
+      }
+
       const supabase = createClient();
-      const ext = file.name.split(".").pop()?.toLowerCase() || "jpg";
+      const ext = processedFile.type === "image/webp" ? "webp" : (file.name.split(".").pop()?.toLowerCase() || "jpg");
       const path = `${uploadScope}/${crypto.randomUUID()}.${ext}`;
-      const { error } = await supabase.storage.from("wedding-photos").upload(path, file, {
+      const { error } = await supabase.storage.from("wedding-photos").upload(path, processedFile, {
         cacheControl: "3600",
         upsert: false,
-        contentType: file.type,
+        contentType: processedFile.type,
       });
       if (error) {
         toast.error(error.message);

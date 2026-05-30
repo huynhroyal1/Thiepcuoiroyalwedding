@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { useEditor } from "@craftjs/core";
+import { useEditor, Element } from "@craftjs/core";
 import Link from "next/link";
 import { useEditorUI } from "@/components/editor/EditorUIContext";
 import { PUBLISHED_CANVAS_WIDTH } from "@/lib/editor/canvasViewport";
@@ -18,6 +18,8 @@ import {
   writeStoredAutosaveMs,
 } from "@/lib/editor/autosavePreferences";
 import { flushPendingEditorEdits } from "@/lib/editor/flushPendingEditorEdits";
+import { ImageBlock } from "@/components/editor/blocks/ImageBlock";
+import { generateElementId } from "@/components/editor/utils/elementId";
 
 interface EditorHeaderProps {
   onSave: (json: string) => Promise<boolean>;
@@ -208,6 +210,63 @@ export function EditorHeader({
     canUndo: q.history.canUndo(),
     canRedo: q.history.canRedo(),
   }));
+
+  const FRAME_STORAGE_KEY = "mehappy_copied_image_frame";
+
+  const readCopiedFrame = async (): Promise<Record<string, unknown> | null> => {
+    try {
+      let text = "";
+      try {
+        text = await navigator.clipboard.readText();
+      } catch {
+        text = "";
+      }
+      if (!text) text = localStorage.getItem(FRAME_STORAGE_KEY) ?? "";
+      if (!text) return null;
+      return JSON.parse(text) as Record<string, unknown>;
+    } catch {
+      return null;
+    }
+  };
+
+  const handlePasteGlobal = async () => {
+    const frame = await readCopiedFrame();
+    if (!frame) return;
+    const pasteProps = { ...(frame as Record<string, unknown>) };
+    delete (pasteProps as any).elementId;
+    if ((pasteProps as any).objectFit === "fill") (pasteProps as any).objectFit = "cover";
+
+    try {
+      // find first Section node under ROOT if available
+      const root = query.node("ROOT").get();
+      const rootNodes = (root.data.nodes ?? []) as string[];
+      let targetParent: string = "ROOT";
+      for (const nid of rootNodes) {
+        try {
+          const n = query.node(nid).get();
+          const type = n.data.type;
+          const display = n.data.displayName as string | undefined;
+          const resolved = type && typeof type === "object" && "resolvedName" in type ? (type as any).resolvedName : typeof type === "function" ? (type as any).name : undefined;
+          if (resolved === "SectionBlock" || display === "Section") {
+            targetParent = nid;
+            break;
+          }
+        } catch {
+          /* ignore */
+        }
+      }
+
+      const tree = query
+        .parseReactElement(
+          <Element is={ImageBlock} {...pasteProps} elementId={generateElementId()} />
+        )
+        .toNodeTree();
+
+      actions.addNodeTree(tree, targetParent);
+    } catch {
+      // ignore
+    }
+  };
 
   const [isSaving, setIsSaving] = useState(false);
   const [lastSavedAt, setLastSavedAt] = useState<Date | null>(null);
@@ -419,6 +478,17 @@ export function EditorHeader({
           ) : (
             <span className="hidden md:inline text-gray-400">(tắt)</span>
           )}
+        </button>
+        <button
+          type="button"
+          onClick={handlePasteGlobal}
+          title="Paste khung ảnh vào canvas"
+          className="p-2 rounded text-gray-500 hover:text-gray-700 hover:bg-gray-100 transition-colors"
+        >
+          <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" d="M9 11l3 3 7-7" />
+            <rect x="3" y="3" width="18" height="18" rx="2" strokeWidth={2} />
+          </svg>
         </button>
 
         <button
