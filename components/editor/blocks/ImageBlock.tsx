@@ -1,6 +1,6 @@
 "use client";
 
-import React, { CSSProperties, useEffect, useState } from "react";
+import React, { CSSProperties, useEffect, useState, useRef } from "react";
 import { useNode } from "@craftjs/core";
 import { useBlockConnect } from "../hooks/useBlockConnect";
 import { blockLayout } from "@/lib/editor/viewerLayout";
@@ -77,11 +77,22 @@ export function ImageBlock({
   const isViewer = useCraftViewerMode();
 
   const [isNarrow, setIsNarrow] = useState(false);
+  const wrapperRef = useRef<HTMLDivElement | null>(null);
   useEffect(() => {
-    const check = () => setIsNarrow(typeof window !== "undefined" ? window.innerWidth <= 420 : false);
-    check();
-    window.addEventListener("resize", check);
-    return () => window.removeEventListener("resize", check);
+    if (typeof ResizeObserver === "undefined") {
+      const check = () => setIsNarrow(typeof window !== "undefined" ? window.innerWidth <= 420 : false);
+      check();
+      window.addEventListener("resize", check);
+      return () => window.removeEventListener("resize", check);
+    }
+    const obs = new ResizeObserver((entries) => {
+      for (const e of entries) {
+        const w = e.contentRect.width;
+        setIsNarrow(w <= 420);
+      }
+    });
+    if (wrapperRef.current) obs.observe(wrapperRef.current);
+    return () => obs.disconnect();
   }, []);
 
   const animAttrs = buildAnimationAttrs(sharedProps);
@@ -116,6 +127,7 @@ export function ImageBlock({
   };
 
   const effectiveObjectFit = isViewer && isNarrow ? "contain" : objectFit;
+  const effectiveScale = isViewer && isNarrow ? 1 : imageScale;
 
   const imgStyle: CSSProperties = {
     width: "100%",
@@ -126,13 +138,17 @@ export function ImageBlock({
     display: "block",
     filter: imageFilter ? buildFilterString(imageFilter) : undefined,
     mixBlendMode: imageBlendMode as CSSProperties["mixBlendMode"],
-    transform: [imageTransform, `scale(${imageScale})`].filter(Boolean).join(" ") || undefined,
+    transform: [imageTransform, `scale(${effectiveScale})`].filter(Boolean).join(" ") || undefined,
     transformOrigin: `${imagePosX}% ${imagePosY}%`,
   };
 
   return (
     <div
-      ref={connectRef}
+      ref={(el) => {
+        // attach both Craft connect and our wrapperRef
+        connectRef(el as HTMLDivElement | null);
+        wrapperRef.current = el as HTMLDivElement | null;
+      }}
       id={domId}
       style={wrapperStyle}
       data-block="image"
