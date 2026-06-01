@@ -1,0 +1,122 @@
+[
+  {
+    "id": "c6fb86c7-1f8b-46e3-90f8-a8a1982543f1",
+    "card_id": "3dd7208a-e18e-4bfc-82a7-8817e29226d3",
+    "guest_name": "huynh",
+    "message": "chúc mừng",
+    "is_approved": true,
+    "created_at": "2026-05-30T04:44:45.912612+00:00"
+  },
+  {
+    "id": "438315e3-69ac-43f3-9c99-ab1f17179c7a",
+    "card_id": "3dd7208a-e18e-4bfc-82a7-8817e29226d3",
+    "guest_name": "duy",
+    "message": "chúc mừng hai bạn",
+    "is_approved": true,
+    "created_at": "2026-05-30T07:05:06.65764+00:00"
+  },
+  {
+    "id": "c8898e7c-5f40-4a6e-998b-4dc26d9cff85",
+    "card_id": "81fc2229-dbe8-4190-8151-ac9cc71d4b38",
+    "guest_name": "Cô Mai",
+    "message": "Chúc hai em trăm năm hạnh phúc! Mong các em luôn yêu thương nhau.",
+    "is_approved": true,
+    "created_at": "2026-05-30T12:16:05.563665+00:00"
+  },
+  {
+    "id": "27bd8eda-c47f-4ae8-8ca1-8b45d5c1c4b0",
+    "card_id": "81fc2229-dbe8-4190-8151-ac9cc71d4b38",
+    "guest_name": "Team Marketing",
+    "message": "Happy wedding từ team Royal Wedding! 🎊",
+    "is_approved": true,
+    "created_at": "2026-05-30T12:16:05.563665+00:00"
+  },
+  {
+    "id": "603ac649-ce8b-4176-9828-d56bbcd78ce0",
+    "card_id": "81fc2229-dbe8-4190-8151-ac9cc71d4b38",
+    "guest_name": "Bác Tuấn",
+    "message": "Chúc mừng hôn lễ! Chúc đôi uyên ương vạn sự như ý.",
+    "is_approved": true,
+    "created_at": "2026-05-30T12:16:05.563665+00:00"
+  },
+  {
+    "id": "2474149f-1c29-44a3-8182-aca93adbaeab",
+    "card_id": "81fc2229-dbe8-4190-8151-ac9cc71d4b38",
+    "guest_name": "Lan Chi",
+    "message": "Chúc mừng ngày trọng đại! Wishing you forever happiness.",
+    "is_approved": true,
+    "created_at": "2026-05-30T12:16:05.563665+00:00"
+  },
+  {
+    "id": "35cc7c53-14c5-4903-ad6f-020338a8068f",
+    "card_id": "81fc2229-dbe8-4190-8151-ac9cc71d4b38",
+    "guest_name": "Khách ẩn danh",
+    "message": "Lời chúc đang chờ duyệt",
+    "is_approved": false,
+    "created_at": "2026-05-30T12:16:05.563665+00:00"
+  },
+  {
+    "id": "4348fafc-716a-4fd4-a3fb-f9af8aa0ea1a",
+    "card_id": "23fdb966-adb7-410e-b89b-395282d0fb13",
+    "guest_name": "Ba Minh Quang",
+    "message": "Ba chúc con trai hạnh phúc bên người bạn đời!",
+    "is_approved": true,
+    "created_at": "2026-05-30T12:16:07.942536+00:00"
+  },
+  {
+    "id": "56b3579b-b928-4a03-980d-a02f6581824f",
+    "card_id": "23fdb966-adb7-410e-b89b-395282d0fb13",
+    "guest_name": "Bảo Ngọc",
+    "message": "Chúc mừng bestie! Cuối cùng cũng chịu cưới rồi hehe",
+    "is_approved": true,
+    "created_at": "2026-05-30T12:16:07.942536+00:00"
+  },
+  {
+    "id": "e8b54a94-f6fe-44c9-841f-8be6ecbb429b",
+    "card_id": "23fdb966-adb7-410e-b89b-395282d0fb13",
+    "guest_name": "Thu Trang",
+    "message": "Rất tiếc không tham dự được, chúc hai bạn vạn sự tốt lành!",
+    "is_approved": true,
+    "created_at": "2026-05-30T12:16:07.942536+00:00"
+  },
+  {
+    "id": "185949ab-6de8-4730-ab48-c57dacf19427",
+    "card_id": "e72cbd65-6fbf-46bb-98d4-46595dc44933",
+    "guest_name": "Cô Ba Linh",
+    "message": "Chúc cháu Mỹ Linh và Quang Huy trăm năm hạnh phúc, sớm có tin vui!",
+    "is_approved": true,
+    "created_at": "2026-05-30T12:16:10.131739+00:00"
+  },
+  {
+    "id": "82612006-c460-4bfa-8647-1e2ef8118917",
+    "card_id": "e72cbd65-6fbf-46bb-98d4-46595dc44933",
+    "guest_name": "Kim Anh",
+    "message": "Bestie cưới rồi! Chúc hai bạn mãi mãi hạnh phúc như hôm nay nhé!",
+    "is_approved": true,
+    "created_at": "2026-05-30T12:16:10.131739+00:00"
+  },
+  {
+    "id": "4e982be3-0f93-4578-89f2-f6033b87b5cd",
+    "card_id": "e72cbd65-6fbf-46bb-98d4-46595dc44933",
+    "guest_name": "Thanh Vân",
+    "message": "Rất tiếc không đến được. Gửi ngàn lời chúc tốt đẹp nhất đến đôi uyên ương!",
+    "is_approved": true,
+    "created_at": "2026-05-30T12:16:10.131739+00:00"
+  },
+  {
+    "id": "7d7bc2d9-8e2e-4b73-91d7-3671bb14a978",
+    "card_id": "e72cbd65-6fbf-46bb-98d4-46595dc44933",
+    "guest_name": "Hiệu trưởng Ngọc",
+    "message": "Chúc cô giáo Mỹ Linh và gia đình mới luôn hạnh phúc, viên mãn!",
+    "is_approved": true,
+    "created_at": "2026-05-30T12:16:10.131739+00:00"
+  },
+  {
+    "id": "e767d381-9f96-42dc-ae21-f77b5f1aa34c",
+    "card_id": "3dd7208a-e18e-4bfc-82a7-8817e29226d3",
+    "guest_name": "ngọc",
+    "message": "chúc mừng hạnh phúc",
+    "is_approved": true,
+    "created_at": "2026-05-31T04:21:57.130284+00:00"
+  }
+]

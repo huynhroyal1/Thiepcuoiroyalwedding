@@ -1,0 +1,12 @@
+{
+  "backup_date": "2026-05-31T14:36:26.755Z",
+  "tables": [
+    "templates",
+    "wedding_cards",
+    "users",
+    "rsvps",
+    "wishes"
+  ],
+  "supabase_url": "https://pwcgejbzgcmaoqrrdavl.supabase.co",
+  "record_counts": {}
+}

@@ -6,12 +6,12 @@
     {
       "id": "mehappy-na01-vip",
       "name": "Thiệp Mời NA01",
-      "description": "Mẫu VIP NA01 import từ HTML rendered MeHappy — chuyển sang Craft.js kéo-thả.",
+      "description": "Mẫu VIP NA01 import từ HTML rendered Royal Wedding — chuyển sang Craft.js kéo-thả.",
       "thumbnail_url": "https://s3-hcm-r2.s3cloud.vn/thiepcuoi-mehappy/users/5711/fc6cd66a-10fc-4248-a999-6e5ed5b5b3ae-full.webp",
       "preview_url": null,
       "plan_required": "vip",
       "style_tags": [
-        "Import MeHappy",
+        "Import Royal Wedding",
         "Sang trọng"
       ],
       "sort_order": 210,
@@ -22,12 +22,12 @@
     {
       "id": "mehappy-xuan-thinh-diem-hang",
       "name": "Xuân Thịnh & Diễm Hằng",
-      "description": "Mẫu VIP Xuân Thịnh & Diễm Hằng import từ HTML rendered MeHappy — chuyển sang Craft.js kéo-thả.",
+      "description": "Mẫu VIP Xuân Thịnh & Diễm Hằng import từ HTML rendered Royal Wedding — chuyển sang Craft.js kéo-thả.",
       "thumbnail_url": "https://s3-hcm-r2.s3cloud.vn/thiepcuoi-mehappy/admin/assets/2bd37ce9-f1b0-4655-a16e-4426c0903859-full.webp",
       "preview_url": null,
       "plan_required": "vip",
       "style_tags": [
-        "Import MeHappy",
+        "Import Royal Wedding",
         "Sang trọng"
       ],
       "sort_order": 209,
@@ -38,12 +38,12 @@
     {
       "id": "mehappy-quang-huy-my-linh",
       "name": "Quang Huy & Mỹ Linh",
-      "description": "Mẫu VIP Classy Vogue Quang Huy & Mỹ Linh import từ HTML rendered MeHappy — chuyển sang Craft.js kéo-thả.",
+      "description": "Mẫu VIP Classy Vogue Quang Huy & Mỹ Linh import từ HTML rendered Royal Wedding — chuyển sang Craft.js kéo-thả.",
       "thumbnail_url": "https://s3-hcm-r2.s3cloud.vn/thiepcuoi-mehappy/users/216/f7c666f1-ad09-4f01-a012-6c515f66b532-full.webp",
       "preview_url": null,
       "plan_required": "vip",
       "style_tags": [
-        "Import MeHappy",
+        "Import Royal Wedding",
         "Sang trọng"
       ],
       "sort_order": 210,
@@ -54,12 +54,12 @@
     {
       "id": "mehappy-minh-quang-cam-linh",
       "name": "Minh Quang & Cẩm Linh",
-      "description": "Mẫu VIP tông đỏ Minh Quang & Cẩm Linh import từ HTML rendered MeHappy — chuyển sang Craft.js kéo-thả.",
+      "description": "Mẫu VIP tông đỏ Minh Quang & Cẩm Linh import từ HTML rendered Royal Wedding — chuyển sang Craft.js kéo-thả.",
       "thumbnail_url": "https://s3-hcm-r2.s3cloud.vn/thiepcuoi-mehappy/users/5711/8c666685-f901-4ad1-a3d0-321805a9a2d5-full.webp",
       "preview_url": null,
       "plan_required": "vip",
       "style_tags": [
-        "Import MeHappy",
+        "Import Royal Wedding",
         "Sang trọng"
       ],
       "sort_order": 211,
@@ -70,12 +70,12 @@
     {
       "id": "mehappy-xuan-thinh-diem-hang-save-date",
       "name": "Xuân Thịnh & Diễm Hằng Save The Date",
-      "description": "Mẫu VIP Save The Date Xuân Thịnh & Diễm Hằng import từ HTML rendered MeHappy — chuyển sang Craft.js kéo-thả.",
+      "description": "Mẫu VIP Save The Date Xuân Thịnh & Diễm Hằng import từ HTML rendered Royal Wedding — chuyển sang Craft.js kéo-thả.",
       "thumbnail_url": "https://s3-hcm-r2.s3cloud.vn/thiepcuoi-mehappy/users/1927/5ba2e24c-eef2-496d-9f6b-f95f66de2e39-full.webp",
       "preview_url": null,
       "plan_required": "vip",
       "style_tags": [
-        "Import MeHappy",
+        "Import Royal Wedding",
         "Sang trọng"
       ],
       "sort_order": 212,
@@ -86,12 +86,12 @@
     {
       "id": "mehappy-pham-tuan-nguyen-them",
       "name": "Phạm Tuân & Nguyễn Thêm",
-      "description": "Mẫu VIP Phạm Tuân & Nguyễn Thêm import từ HTML rendered MeHappy — chuyển sang Craft.js kéo-thả.",
+      "description": "Mẫu VIP Phạm Tuân & Nguyễn Thêm import từ HTML rendered Royal Wedding — chuyển sang Craft.js kéo-thả.",
       "thumbnail_url": "https://s3-hcm-r2.s3cloud.vn/thiepcuoi-mehappy/users/1929/9d282e53-c6c2-43ec-92e7-7d3c04ac30e3-full.webp",
       "preview_url": null,
       "plan_required": "vip",
       "style_tags": [
-        "Import MeHappy",
+        "Import Royal Wedding",
         "Sang trọng"
       ],
       "sort_order": 213,
@@ -107,7 +107,7 @@
       "preview_url": null,
       "plan_required": "vip",
       "style_tags": [
-        "Import MeHappy",
+        "Import Royal Wedding",
         "Sang trọng"
       ],
       "sort_order": 70,
@@ -123,7 +123,7 @@
       "preview_url": null,
       "plan_required": "vip",
       "style_tags": [
-        "Import MeHappy",
+        "Import Royal Wedding",
         "Sang trọng"
       ],
       "sort_order": 80,
@@ -139,7 +139,7 @@
       "preview_url": null,
       "plan_required": "vip",
       "style_tags": [
-        "Import MeHappy",
+        "Import Royal Wedding",
         "Sang trọng"
       ],
       "sort_order": 90,
@@ -155,7 +155,7 @@
       "preview_url": null,
       "plan_required": "vip",
       "style_tags": [
-        "Import MeHappy",
+        "Import Royal Wedding",
         "Sang trọng"
       ],
       "sort_order": 100,
@@ -166,12 +166,12 @@
     {
       "id": "mehappy-romany-vip",
       "name": "Giao diện Romany - Gói VIP",
-      "description": "Mẫu VIP Romany import từ MeHappy template #44 — kéo-thả chỉnh text, ảnh, ngày giờ.",
+      "description": "Mẫu VIP Romany import từ Royal Wedding template #44 — kéo-thả chỉnh text, ảnh, ngày giờ.",
       "thumbnail_url": "https://s3-hcm-r2.s3cloud.vn/thiepcuoi-mehappy/users/1927/3a638fbf-5f9e-49f0-b30e-a4ca7833291e-full.webp",
       "preview_url": null,
       "plan_required": "vip",
       "style_tags": [
-        "Import MeHappy",
+        "Import Royal Wedding",
         "Sang trọng"
       ],
       "sort_order": 105,
@@ -182,12 +182,12 @@
     {
       "id": "mehappy-noble-vip",
       "name": "Giao diện thiệp cưới Noble - Gói VIP",
-      "description": "Mẫu VIP Noble import từ MeHappy template #31 — kéo-thả chỉnh text, ảnh, ngày giờ.",
+      "description": "Mẫu VIP Noble import từ Royal Wedding template #31 — kéo-thả chỉnh text, ảnh, ngày giờ.",
       "thumbnail_url": "https://s3-hcm-r2.s3cloud.vn/thiepcuoi-mehappy/admin/assets/10ac3c5d-5e12-4975-b39e-72f83502675e-full.webp",
       "preview_url": null,
       "plan_required": "vip",
       "style_tags": [
-        "Import MeHappy",
+        "Import Royal Wedding",
         "Sang trọng"
       ],
       "sort_order": 106,
@@ -198,12 +198,12 @@
     {
       "id": "mehappy-bustle-pro",
       "name": "Giao diện Bustle - Gói PRO",
-      "description": "Mẫu PRO Bustle import từ MeHappy template #72 — kéo-thả chỉnh text, ảnh, ngày giờ.",
+      "description": "Mẫu PRO Bustle import từ Royal Wedding template #72 — kéo-thả chỉnh text, ảnh, ngày giờ.",
       "thumbnail_url": "https://s3-hcm-r2.s3cloud.vn/thiepcuoi-mehappy/admin/assets/4ee7ef79-810c-4e84-a8df-834b687393da.webp",
       "preview_url": null,
       "plan_required": "pro",
       "style_tags": [
-        "Import MeHappy",
+        "Import Royal Wedding",
         "Sang trọng"
       ],
       "sort_order": 107,
@@ -214,12 +214,12 @@
     {
       "id": "mehappy-boho-floral-green",
       "name": "Giao diện Boho Floral Green",
-      "description": "Mẫu import từ MeHappy (HTML) — hiển thị qua InvitationHTMLViewer.",
+      "description": "Mẫu import từ Royal Wedding (HTML) — hiển thị qua InvitationHTMLViewer.",
       "thumbnail_url": null,
       "preview_url": null,
       "plan_required": "pro",
       "style_tags": [
-        "Import MeHappy",
+        "Import Royal Wedding",
         "Sang trọng"
       ],
       "sort_order": 108,
@@ -230,12 +230,12 @@
     {
       "id": "mehappy-td03-pro",
       "name": "Giao Diện TD03 - Gói PRO",
-      "description": "Mẫu PRO TD03 import từ MeHappy template #22 — kéo-thả chỉnh text, ảnh, ngày giờ.",
+      "description": "Mẫu PRO TD03 import từ Royal Wedding template #22 — kéo-thả chỉnh text, ảnh, ngày giờ.",
       "thumbnail_url": "https://s3-hcm-r2.s3cloud.vn/thiepcuoi-mehappy/admin/assets/1f6c5e35-9840-4d23-9f1a-5364d7f974ca.webp",
       "preview_url": null,
       "plan_required": "pro",
       "style_tags": [
-        "Import MeHappy",
+        "Import Royal Wedding",
         "Sang trọng"
       ],
       "sort_order": 109,
@@ -246,12 +246,12 @@
     {
       "id": "mehappy-romantic-vip",
       "name": "Giao diện Romantic - Gói VIP",
-      "description": "Mẫu import từ MeHappy template #131 — kéo-thả chỉnh text, ảnh, ngày giờ.",
+      "description": "Mẫu import từ Royal Wedding template #131 — kéo-thả chỉnh text, ảnh, ngày giờ.",
       "thumbnail_url": "https://s3-hcm-r2.s3cloud.vn/thiepcuoi-mehappy/admin/assets/6744ed53-e5ec-4c48-b258-5a84541d4982-medium.webp",
       "preview_url": null,
       "plan_required": "vip",
       "style_tags": [
-        "Import MeHappy",
+        "Import Royal Wedding",
         "Sang trọng"
       ],
       "sort_order": 110,
@@ -262,12 +262,12 @@
     {
       "id": "mehappy-en01-vip",
       "name": "Giao diện thiệp cưới EN01 - Gói VIP",
-      "description": "Mẫu import từ MeHappy template #79 — kéo-thả chỉnh text, ảnh, ngày giờ.",
+      "description": "Mẫu import từ Royal Wedding template #79 — kéo-thả chỉnh text, ảnh, ngày giờ.",
       "thumbnail_url": "https://s3-hcm-r2.s3cloud.vn/thiepcuoi-mehappy/users/1929/517773d6-1412-4637-a5ce-a51c697f28e8-full.webp",
       "preview_url": null,
       "plan_required": "vip",
       "style_tags": [
-        "Import MeHappy",
+        "Import Royal Wedding",
         "Sang trọng"
       ],
       "sort_order": 111,
@@ -278,12 +278,12 @@
     {
       "id": "mehappy-da05-vip",
       "name": "Giao diện thiệp cưới DA05 - Gói VIP",
-      "description": "Mẫu import từ MeHappy template #24 — kéo-thả chỉnh text, ảnh, ngày giờ.",
+      "description": "Mẫu import từ Royal Wedding template #24 — kéo-thả chỉnh text, ảnh, ngày giờ.",
       "thumbnail_url": "https://s3-hcm-r2.s3cloud.vn/thiepcuoi-mehappy/admin/assets/925dcd73-ba01-4918-85a6-9d1417011383.webp",
       "preview_url": null,
       "plan_required": "vip",
       "style_tags": [
-        "Import MeHappy",
+        "Import Royal Wedding",
         "Sang trọng"
       ],
       "sort_order": 112,
@@ -294,12 +294,12 @@
     {
       "id": "mehappy-at01-pro",
       "name": "Giao diện AT01 - Gói PRO",
-      "description": "Mẫu import từ MeHappy template #6 — kéo-thả chỉnh text, ảnh, ngày giờ.",
+      "description": "Mẫu import từ Royal Wedding template #6 — kéo-thả chỉnh text, ảnh, ngày giờ.",
       "thumbnail_url": "https://s3-hcm-r2.s3cloud.vn/thiepcuoi-mehappy/admin/assets/4225f5f8-932a-4c8a-99b5-d00d61308c8a.webp",
       "preview_url": null,
       "plan_required": "pro",
       "style_tags": [
-        "Import MeHappy",
+        "Import Royal Wedding",
         "Sang trọng"
       ],
       "sort_order": 113,
@@ -310,12 +310,12 @@
     {
       "id": "mehappy-brightly-basic",
       "name": "Giao diện Brightly - Gói Basic",
-      "description": "Mẫu import từ MeHappy template #16 — kéo-thả chỉnh text, ảnh, ngày giờ.",
+      "description": "Mẫu import từ Royal Wedding template #16 — kéo-thả chỉnh text, ảnh, ngày giờ.",
       "thumbnail_url": "https://s3-hcm-r2.s3cloud.vn/thiepcuoi-mehappy/admin/assets/bc464547-3708-493b-9ac4-709dc2efecdc.webp",
       "preview_url": null,
       "plan_required": "basic",
       "style_tags": [
-        "Import MeHappy",
+        "Import Royal Wedding",
         "Sang trọng"
       ],
       "sort_order": 114,

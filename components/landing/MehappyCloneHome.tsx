@@ -77,7 +77,7 @@ export function MehappyCloneHome({ showcaseTemplates, couplesPreview, faqItems }
               <span className="block pb-0.5">TẠO THIỆP CƯỚI</span>
               <span className="mt-2 block text-rose-500 sm:mt-2.5">ĐIỆN TỬ</span>
             </h1>
-            <p className="mt-4 text-lg font-bold uppercase tracking-wide text-rose-500 sm:text-xl">HOÀN TOÀN MIỄN PHÍ</p>
+            <p className="mt-4 text-lg font-bold uppercase tracking-wide text-rose-500 sm:text-xl">CHẤT LƯỢNG CAO</p>
             <TypingText
               texts={[
                 "Cho Đám Cưới của bạn trở nên Độc Đáo và Đáng Nhớ hơn ♥",
@@ -102,7 +102,7 @@ export function MehappyCloneHome({ showcaseTemplates, couplesPreview, faqItems }
             <div className="relative z-10 w-[min(100%,420px)]">
               <div className="relative rounded-2xl border border-white/80 bg-white/90 p-2 shadow-xl shadow-rose-200/40">
                 <Image
-                  src={`${MEHAPPY_ASSET}/images/mac2.png`}
+                  src="/images/mac2-original.png"
                   alt="Wedding preview"
                   width={800}
                   height={500}
@@ -116,7 +116,7 @@ export function MehappyCloneHome({ showcaseTemplates, couplesPreview, faqItems }
             <div className="absolute -bottom-2 right-0 z-20 w-[min(38%,140px)] sm:w-[150px]">
               <div className="rounded-[1.75rem] border-[8px] border-neutral-900 bg-neutral-900 shadow-2xl">
                 <Image
-                  src={`${MEHAPPY_ASSET}/images/phone2.png`}
+                  src="/images/phone2-original.png"
                   alt="Wedding mobile preview"
                   width={280}
                   height={560}
