@@ -562,6 +562,11 @@ export function BangGiaClient({ faqItems = faqMehappy, planPrices, planConfig }:
           if (!open) setDetailPlan(null);
         }}
         onBuyFeatures={() => scrollTo("faq")}
+        planConfig={planConfig ?? {
+          basic: { max_photos: 10, max_cards: 1, public_months: 6, features: {} } as any,
+          pro: { max_photos: 40, max_cards: 2, public_months: 24, features: {} } as any,
+          vip: { max_photos: 100, max_cards: 3, public_months: null, features: {} } as any,
+        }}
       />
     </div>
   );
