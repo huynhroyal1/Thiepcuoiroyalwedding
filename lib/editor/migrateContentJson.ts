@@ -74,14 +74,10 @@ function normalizeAbsoluteLayout(blockType: string, props: Record<string, unknow
 // ─── Main migration function ──────────────────────────────────────────────────
 
 export function migrateContentJson(raw: Record<string, unknown>): Record<string, unknown> {
-  console.log('[migrateContentJson] input keys:', Object.keys(raw).filter(k => !k.startsWith('UNSTABLE')));
-  
   if (!isCraftContentJson(raw)) {
-    console.log('[migrateContentJson] NOT craft content - isCraftContentJson returned false');
     return raw;
   }
   const content = sanitizeCraftContent(raw) as ContentJson;
-  console.log('[migrateContentJson] after sanitize, keys:', Object.keys(content).filter(k => !k.startsWith('UNSTABLE')));
 
   Object.entries(content).forEach(([, node]) => {
     if (!node || typeof node !== "object") return;

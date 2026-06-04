@@ -28,8 +28,6 @@ export async function getPlanConfigWithClient(supabase: SupabaseClient): Promise
     .eq("key", "plan_config")
     .maybeSingle();
 
-  console.log('[getPlanConfig] plan_config from DB:', JSON.stringify(configRow?.value)?.slice(0, 500), 'error:', error?.message);
-
   const parsed = parsePlanConfig(configRow?.value);
   let config = parsed ?? { ...DEFAULT_PLAN_CONFIG };
 

@@ -4,7 +4,7 @@ import { getPlanPrices, getPlanConfigFull } from "@/lib/plans/get-plan-prices";
 import type { PlanConfigMap } from "@/lib/plans/plan-config-shared";
 import { BangGiaClient } from "./BangGiaClient";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 300;
 
 export const metadata: Metadata = {
   title: "Bảng giá — Royal Wedding",
@@ -18,6 +18,6 @@ export default async function BangGiaPage() {
     getPlanPrices(),
     getPlanConfigFull(),
   ]);
-  console.log('[BangGiaPage] planConfig:', JSON.stringify(planConfig, null, 2));
+  console.log('[BangGiaPage] planConfig keys:', Object.keys(planConfig));
   return <BangGiaClient faqItems={faqItems} planPrices={planPrices} planConfig={planConfig} />;
 }

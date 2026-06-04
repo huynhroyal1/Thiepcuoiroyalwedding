@@ -65,28 +65,20 @@ export function CraftJsViewer({ card, contentJson, renderVersion }: CraftJsViewe
   const containerRef = useRef<HTMLDivElement>(null);
   const [lightboxSrc, setLightboxSrc] = useState<string | null>(null);
 
-  // Debug: log input contentJson
-  console.log('[CraftJsViewer] INPUT contentJson type:', typeof contentJson);
-  console.log('[CraftJsViewer] INPUT contentJson keys:', contentJson ? Object.keys(contentJson).filter(k => !k.startsWith('UNSTABLE')) : 'NULL/UNDEFINED');
-
   const revision = useMemo(
     () => contentJsonRevision(contentJson, card.updated_at, renderVersion),
     [contentJson, card.updated_at, renderVersion]
   );
   const frameData = useMemo(() => {
     const migrated = migrateContentJson(contentJson);
-    console.log('[CraftJsViewer] migrateContentJson output keys:', Object.keys(migrated).filter(k => !k.startsWith('UNSTABLE')));
     return JSON.stringify(migrated);
   }, [contentJson]);
 
   // Debug: log frameData structure after migrate
   useEffect(() => {
-    console.log('[CraftJsViewer] MOUNT - containerRef exists:', !!containerRef.current);
-    console.log('[CraftJsViewer] frameData length:', frameData.length);
+    if (process.env.NODE_ENV !== 'development') return;
     try {
-      const parsed = JSON.parse(frameData);
-      console.log('[CraftJsViewer] frameData keys:', Object.keys(parsed).filter(k => !k.startsWith('UNSTABLE')));
-      console.log('[CraftJsViewer] ROOT nodes:', JSON.stringify(parsed.ROOT?.nodes));
+      JSON.parse(frameData);
     } catch(e) {
       console.error('[CraftJsViewer] frameData parse error:', e);
     }
@@ -98,10 +90,8 @@ export function CraftJsViewer({ card, contentJson, renderVersion }: CraftJsViewe
     if (!container) return;
 
     const debugTimer = setTimeout(() => {
-      const craftInner = container.querySelector('.craft-inner, .cr-relative, [data-node-id]');
       const childCount = container.querySelectorAll('[data-node-id]').length;
-      console.log('[CraftJsViewer] AFTER RENDER - childCount with data-node-id:', childCount);
-      console.log('[CraftJsViewer] container innerHTML (first 500):', container.innerHTML.slice(0, 500));
+      console.log('[CraftJsViewer] rendered nodes:', childCount);
     }, 2000);
 
     return () => clearTimeout(debugTimer);
@@ -240,7 +230,6 @@ export function CraftJsViewer({ card, contentJson, renderVersion }: CraftJsViewe
         input.style.cssText = "padding: 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; width: 100%;";
         el.replaceWith(input);
         transformed.add(el);
-        console.log("[CraftJsViewer] Replaced 'Họ và tên' with input");
       }
 
       if (text === "Email" && !transformed.has(el) && el.tagName === "A") {
@@ -251,7 +240,6 @@ export function CraftJsViewer({ card, contentJson, renderVersion }: CraftJsViewe
         input.style.cssText = "padding: 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; width: 100%;";
         el.replaceWith(input);
         transformed.add(el);
-        console.log("[CraftJsViewer] Replaced 'Email' with input");
       }
 
       if (text === "Khách mời của" && !transformed.has(el)) {
@@ -262,7 +250,6 @@ export function CraftJsViewer({ card, contentJson, renderVersion }: CraftJsViewe
         input.style.cssText = "padding: 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; width: 100%;";
         el.replaceWith(input);
         transformed.add(el);
-        console.log("[CraftJsViewer] Replaced 'Khách mời của' with input");
       }
 
       if (text === "Số người tham dự" && !transformed.has(el)) {
@@ -274,7 +261,6 @@ export function CraftJsViewer({ card, contentJson, renderVersion }: CraftJsViewe
         input.style.cssText = "padding: 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; width: 100%;";
         el.replaceWith(input);
         transformed.add(el);
-        console.log("[CraftJsViewer] Replaced 'Số người tham dự' with input");
       }
 
       if (text === "Bạn sẽ tham gia sự kiện nào ?" && !transformed.has(el)) {
@@ -288,7 +274,6 @@ export function CraftJsViewer({ card, contentJson, renderVersion }: CraftJsViewe
         `;
         el.replaceWith(select);
         transformed.add(el);
-        console.log("[CraftJsViewer] Replaced 'Bạn sẽ tham gia sự kiện nào ?' with select");
       }
 
       if (text === "Xác nhận" && !transformed.has(el) && el.closest("div")?.innerText?.includes("Họ và tên")) {
@@ -343,7 +328,6 @@ export function CraftJsViewer({ card, contentJson, renderVersion }: CraftJsViewe
         });
         el.replaceWith(btn);
         transformed.add(el);
-        console.log("[CraftJsViewer] Replaced RSVP 'Xác nhận' with button");
       }
 
       // ── Wishes Form Placeholders ────────────────────────────────────────
@@ -356,7 +340,6 @@ export function CraftJsViewer({ card, contentJson, renderVersion }: CraftJsViewe
         input.style.cssText = "padding: 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; width: 100%;";
         el.replaceWith(input);
         transformed.add(el);
-        console.log("[CraftJsViewer] Replaced 'Tên của bạn *' with input");
       }
 
       if (text === "Lời chúc của bạn *" && !transformed.has(el)) {
@@ -368,7 +351,6 @@ export function CraftJsViewer({ card, contentJson, renderVersion }: CraftJsViewe
         textarea.style.cssText = "padding: 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; width: 100%; font-family: inherit;";
         el.replaceWith(textarea);
         transformed.add(el);
-        console.log("[CraftJsViewer] Replaced 'Lời chúc của bạn *' with textarea");
       }
 
       if (text === "Gửi lời chúc" && !transformed.has(el) && (el.tagName === "BUTTON" || el.tagName === "A")) {
@@ -387,8 +369,6 @@ export function CraftJsViewer({ card, contentJson, renderVersion }: CraftJsViewe
             toast.error("Vui lòng nhập tên và lời chúc");
             return;
           }
-
-          console.log("[CraftJsViewer] Submitting wishes:", { guestName, message });
 
           try {
             const res = await fetch("/api/wishes", {
@@ -430,11 +410,8 @@ export function CraftJsViewer({ card, contentJson, renderVersion }: CraftJsViewe
         });
         el.replaceWith(btn);
         transformed.add(el);
-        console.log("[CraftJsViewer] Replaced 'Gửi lời chúc' with button");
       }
     }
-
-    console.log("[CraftJsViewer] Form transformation complete. Transformed", transformed.size, "elements");
   }, [card.id]);
 
   return (

@@ -37,7 +37,6 @@ export function isCraftContentJson(content: unknown): content is Record<string, 
   // Check for actual ROOT key (standard Craft.js format)
   const rootResolvedName = getResolvedName(c.ROOT);
   if (rootResolvedName === "RootCanvas") {
-    console.log('[isCraftContentJson] Found ROOT with RootCanvas');
     return true;
   }
 
@@ -47,7 +46,6 @@ export function isCraftContentJson(content: unknown): content is Record<string, 
     const n = node as CraftNode;
     return n.parent === "ROOT" && getResolvedName(node) !== undefined;
   });
-  console.log('[isCraftContentJson] hasRootParent:', hasRootParent);
   return hasRootParent;
 }
 
@@ -92,7 +90,6 @@ export function sanitizeCraftContent(raw: Record<string, unknown>): Record<strin
       }),
       linkedNodes: {},
     };
-    console.log('[sanitizeCraftContent] Injected virtual ROOT node with', sanitized.ROOT.nodes.length, 'children');
   }
 
   for (const node of Object.values(sanitized)) {
@@ -110,8 +107,6 @@ export function sanitizeCraftContent(raw: Record<string, unknown>): Record<strin
       n.linkedNodes = linked;
     }
   }
-
-  console.log('[sanitizeCraftContent] output keys count:', Object.keys(sanitized).length);
 
   return sanitized;
 }
