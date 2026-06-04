@@ -9,6 +9,8 @@ export const CRAFT_RESOLVER_NAMES = new Set([
   "IconBlock",
   "GiftBoxBlock",
   "RootCanvas",
+  // Legacy / imported blocks that may exist in old templates
+  "WishesBlock",
 ]);
 
 type CraftNode = {
@@ -31,7 +33,9 @@ export function isCraftContentJson(content: unknown): content is Record<string, 
   if (content == null || typeof content !== "object") return false;
   const c = content as Record<string, unknown>;
   if (c.type === "raw-html") return false;
-  return getResolvedName(c.ROOT) === "RootCanvas";
+  const resolvedName = getResolvedName(c.ROOT);
+  console.log('[isCraftContentJson] ROOT resolvedName:', resolvedName, '=== "RootCanvas"?', resolvedName === "RootCanvas");
+  return resolvedName === "RootCanvas";
 }
 
 /**
@@ -47,6 +51,7 @@ export function sanitizeCraftContent(raw: Record<string, unknown>): Record<strin
     if (node == null || typeof node !== "object") continue;
 
     const resolvedName = getResolvedName(node);
+    console.log(`[sanitizeCraftContent] node "${id}" resolvedName:`, resolvedName, 'in CRAFT_RESOLVER_NAMES?', CRAFT_RESOLVER_NAMES.has(resolvedName || ''));
     if (!resolvedName || !CRAFT_RESOLVER_NAMES.has(resolvedName)) continue;
 
     sanitized[id] = {
@@ -54,6 +59,8 @@ export function sanitizeCraftContent(raw: Record<string, unknown>): Record<strin
       type: { resolvedName },
     };
   }
+
+  console.log('[sanitizeCraftContent] output keys:', Object.keys(sanitized).filter(k => !k.startsWith('UNSTABLE')));
 
   for (const node of Object.values(sanitized)) {
     if (!node || typeof node !== "object") continue;

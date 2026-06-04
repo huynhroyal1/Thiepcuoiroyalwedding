@@ -261,6 +261,7 @@ body:has(.invitation-page) {
 /* ── Editor canvas: phone frame + centered 390px content ── */
 .editor-canvas-main {
   width: 100%;
+  min-width: 0;
 }
 
 .editor-canvas-root {
@@ -268,14 +269,15 @@ body:has(.invitation-page) {
   flex-direction: column;
   align-items: center;
   width: 100%;
-  overflow-x: clip;
+  overflow-x: hidden;
 }
 
 .editor-craft-content {
   flex-shrink: 0;
   margin-left: auto;
   margin-right: auto;
-  overflow-x: clip;
+  overflow-x: hidden;
+  max-width: 100%;
 }
 
 .editor-craft-content > div {

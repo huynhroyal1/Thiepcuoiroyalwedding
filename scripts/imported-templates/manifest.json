@@ -4,6 +4,22 @@
   "note": "Thêm mẫu mới vào templates[]; đặt Craft JSON tại content/{content_file}. Chạy: npm run seed:templates",
   "templates": [
     {
+      "id": "mewedding-lightly-pro",
+      "name": "Lightly Pro",
+      "description": "Mẫu import từ meWedding — raw HTML giữ nguyên layout 100%.",
+      "thumbnail_url": null,
+      "preview_url": null,
+      "plan_required": "pro",
+      "style_tags": [
+        "Import Royal Wedding",
+        "Sang trọng"
+      ],
+      "sort_order": 214,
+      "is_active": true,
+      "content_type": "raw-html",
+      "content_file": "mewedding-lightly.json"
+    },
+    {
       "id": "mehappy-na01-vip",
       "name": "Thiệp Mời NA01",
       "description": "Mẫu VIP NA01 import từ HTML rendered Royal Wedding — chuyển sang Craft.js kéo-thả.",
@@ -322,6 +338,134 @@
       "is_active": true,
       "content_type": "craft",
       "content_file": "mehappy-brightly-basic.json"
+    },
+    {
+      "id": "mehappy-template-22",
+      "name": "TD03 PRO",
+      "description": "Mẫu PRO TD03 import từ Royal Wedding — kéo-thả chỉnh text, ảnh, ngày giờ.",
+      "thumbnail_url": "https://s3-hcm-r2.s3cloud.vn/thiepcuoi-mehappy/admin/assets/1f6c5e35-9840-4d23-9f1a-5364d7f974ca.webp",
+      "preview_url": null,
+      "plan_required": "pro",
+      "style_tags": [
+        "Import Royal Wedding",
+        "Sang trọng"
+      ],
+      "sort_order": 115,
+      "is_active": true,
+      "content_type": "craft",
+      "content_file": "mehappy-template-22.json"
+    },
+    {
+      "id": "mehappy-template-128",
+      "name": "Template #128",
+      "description": "Mẫu clone từ mehappy.vn template #128 — chuyển sang Craft.js kéo-thả.",
+      "thumbnail_url": null,
+      "preview_url": null,
+      "plan_required": "pro",
+      "style_tags": [
+        "Import MeHappy",
+        "Test Clone"
+      ],
+      "sort_order": 116,
+      "is_active": true,
+      "content_type": "craft",
+      "content_file": "mehappy-template-128.json"
+    },
+    {
+      "id": "mewedding-foreign-basic",
+      "name": "Foreign Basic",
+      "description": "Mẫu import — chuyển Craft.js kéo-thả, giữ layout & text gốc.",
+      "thumbnail_url": null,
+      "preview_url": null,
+      "plan_required": "basic",
+      "style_tags": [
+        "Import MeHappy",
+        "Sang trọng"
+      ],
+      "sort_order": 200,
+      "is_active": true,
+      "content_type": "craft",
+      "content_file": "mewedding-foreign-basic.json"
+    },
+    {
+      "id": "mehappy-ds03-vip",
+      "name": "DS03 - Gói VIP",
+      "description": "Mẫu import — chuyển Craft.js kéo-thả, giữ layout & text gốc.",
+      "thumbnail_url": "https://s3-hcm-r2.s3cloud.vn/thiepcuoi-mehappy/admin/assets/f2119798-2ae6-4818-8629-69a2b47c4010-medium.webp",
+      "preview_url": null,
+      "plan_required": "vip",
+      "style_tags": [
+        "Import MeHappy",
+        "Sang trọng"
+      ],
+      "sort_order": 220,
+      "is_active": true,
+      "content_type": "craft",
+      "content_file": "mehappy-ds03-vip.json"
+    },
+    {
+      "id": "mehappy-ds01-vip",
+      "name": "DS01 - Gói VIP",
+      "description": "Mẫu import — chuyển Craft.js kéo-thả, giữ layout & text gốc.",
+      "thumbnail_url": "https://s3-hcm-r2.s3cloud.vn/thiepcuoi-mehappy/admin/assets/321604d4-608c-42b7-8868-00de20fb0b35-medium.webp",
+      "preview_url": null,
+      "plan_required": "vip",
+      "style_tags": [
+        "Import MeHappy",
+        "Sang trọng"
+      ],
+      "sort_order": 200,
+      "is_active": true,
+      "content_type": "craft",
+      "content_file": "mehappy-ds01-vip.json"
+    },
+    {
+      "id": "mehappy-ds02-vip",
+      "name": "DS02 - Gói VIP",
+      "description": "Mẫu import — chuyển Craft.js kéo-thả, giữ layout & text gốc.",
+      "thumbnail_url": "https://s3-hcm-r2.s3cloud.vn/thiepcuoi-mehappy/admin/assets/5b1992b2-841e-4f2d-84b8-c6b3b0cb32d6.webp",
+      "preview_url": null,
+      "plan_required": "vip",
+      "style_tags": [
+        "Import MeHappy",
+        "Sang trọng"
+      ],
+      "sort_order": 200,
+      "is_active": true,
+      "content_type": "craft",
+      "content_file": "mehappy-ds02-vip.json"
+    },
+    {
+      "id": "mehappy-da04-pro",
+      "name": "DA04 - Gói PRO",
+      "description": "Mẫu import — chuyển Craft.js kéo-thả, giữ layout & text gốc.",
+      "thumbnail_url": "https://s3-hcm-r2.s3cloud.vn/thiepcuoi-mehappy/admin/assets/43f8db5d-e1b9-43f0-90f9-a93e82a24f38.webp",
+      "preview_url": null,
+      "plan_required": "pro",
+      "style_tags": [
+        "Import MeHappy",
+        "Sang trọng"
+      ],
+      "sort_order": 200,
+      "is_active": true,
+      "content_type": "craft",
+      "content_file": "mehappy-da04-pro.json"
+    },
+    {
+      "id": "mehappy-brightly-pro",
+      "name": "Brightly - Gói PRO",
+      "description": "Mẫu import — chuyển Craft.js kéo-thả, giữ layout & text gốc.",
+      "thumbnail_url": "https://s3-hcm-r2.s3cloud.vn/thiepcuoi-mehappy/admin/assets/bc464547-3708-493b-9ac4-709dc2efecdc.webp",
+      "preview_url": null,
+      "plan_required": "pro",
+      "style_tags": [
+        "Import MeHappy",
+        "Sang trọng"
+      ],
+      "sort_order": 200,
+      "is_active": true,
+      "content_type": "craft",
+      "content_file": "mehappy-brightly-pro.json"
     }
   ]
 }

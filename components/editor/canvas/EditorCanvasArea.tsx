@@ -147,11 +147,12 @@ export function EditorCanvasArea({ frameData, frameKey, children }: EditorCanvas
         style={{
           transform: zoom !== 1 ? `scale(${zoom})` : undefined,
           transformOrigin: "top center",
+          maxWidth: "100%",
         }}
       >
         <div
           className="relative overflow-hidden rounded-[20px] border-[6px] border-gray-800 bg-white shadow-xl"
-          style={{ width: viewportWidth, minHeight: 700 }}
+          style={{ width: viewportWidth, minHeight: 700, maxWidth: "100%" }}
         >
           <div className="flex h-6 items-center justify-center bg-gray-900">
             <div className="h-2 w-16 rounded-full bg-gray-700" />
@@ -170,7 +171,8 @@ export function EditorCanvasArea({ frameData, frameKey, children }: EditorCanvas
               className="editor-canvas-root"
               style={{
                 width: viewportWidth,
-                overflowX: "clip",
+                maxWidth: "100%",
+                overflowX: "hidden",
                 overflowY: "auto",
                 maxHeight: "calc(100vh - 200px)",
                 position: "relative",

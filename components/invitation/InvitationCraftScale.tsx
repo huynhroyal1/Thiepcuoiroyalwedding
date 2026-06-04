@@ -6,6 +6,10 @@ import { PUBLISHED_CANVAS_WIDTH } from "@/lib/editor/canvasViewport";
 /**
  * Keeps Craft invitation layout at 390px design coordinates and scales down
  * uniformly on narrow viewports so editor WYSIWYG matches /thiep preview.
+ *
+ * Key insight: the transform:scale() only applies when the container is NARROWER
+ * than 390px (scale < 1). When viewport >= 390px, scale=1, no transform,
+ * and outer div gets no inline style — CSS from parent takes over.
  */
 export function InvitationCraftScale({ children }: { children: ReactNode }) {
   const outerRef = useRef<HTMLDivElement>(null);

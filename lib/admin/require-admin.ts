@@ -5,7 +5,10 @@ export async function requireAdmin() {
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  if (!user) return null;
+  if (!user) {
+    console.warn('[requireAdmin] no user in server session (route handler)');
+    return null;
+  }
 
   const { data: profile } = await supabase
     .from("profiles")
@@ -13,5 +16,7 @@ export async function requireAdmin() {
     .eq("id", user.id)
     .single();
 
-  return profile?.role === "admin" ? user : null;
+  const isAdmin = profile?.role === "admin";
+  if (!isAdmin) console.warn('[requireAdmin] user is not admin', { userId: user.id, role: profile?.role });
+  return isAdmin ? user : null;
 }

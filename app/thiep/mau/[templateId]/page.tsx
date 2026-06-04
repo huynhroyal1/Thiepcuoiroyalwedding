@@ -34,8 +34,12 @@ export default async function TemplatePreviewPage({ params, searchParams }: Prop
   noStore();
 
   const { templateId } = await params;
-  const { v: renderVersion } = await searchParams;
-  const template = await fetchTemplateForPreview(templateId);
+  console.log('[TemplatePreviewPage] preview request for templateId=', templateId);
+  const sp = (await searchParams) as any;
+  const { v: renderVersion } = sp;
+  const debug = Boolean(sp?.debug === '1' || sp?.v);
+  const template = await fetchTemplateForPreview(templateId, { forcePreview: debug });
+  console.log('[TemplatePreviewPage] fetchTemplateForPreview result for', templateId, '=>', !!template, template ? { id: template.id, is_active: template.is_active } : null);
   if (!template) notFound();
 
   if (!hasPublishedInvitationDesign(template.content_json)) {

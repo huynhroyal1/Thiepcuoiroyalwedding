@@ -7,6 +7,7 @@ import { ButtonBlock } from "./blocks/ButtonBlock";
 import { IconBlock } from "./blocks/IconBlock";
 import { GiftBoxBlock } from "./blocks/GiftBoxBlock";
 import { RootCanvas } from "./blocks/RootCanvas";
+import { WishesBlock } from "./blocks/WishesBlock";
 
 export const editorResolver = {
   SectionBlock,
@@ -18,6 +19,8 @@ export const editorResolver = {
   IconBlock,
   GiftBoxBlock,
   RootCanvas,
+  // Legacy / imported block
+  WishesBlock,
 };
 
 export type ResolverKeys = keyof typeof editorResolver;

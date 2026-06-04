@@ -64,19 +64,66 @@ interface CraftJsViewerProps {
 export function CraftJsViewer({ card, contentJson, renderVersion }: CraftJsViewerProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [lightboxSrc, setLightboxSrc] = useState<string | null>(null);
+
+  // Debug: log input contentJson
+  console.log('[CraftJsViewer] INPUT contentJson type:', typeof contentJson);
+  console.log('[CraftJsViewer] INPUT contentJson keys:', contentJson ? Object.keys(contentJson).filter(k => !k.startsWith('UNSTABLE')) : 'NULL/UNDEFINED');
+
   const revision = useMemo(
     () => contentJsonRevision(contentJson, card.updated_at, renderVersion),
     [contentJson, card.updated_at, renderVersion]
   );
-  const frameData = useMemo(
-    () => JSON.stringify(migrateContentJson(contentJson)),
-    [contentJson]
-  );
+  const frameData = useMemo(() => {
+    const migrated = migrateContentJson(contentJson);
+    console.log('[CraftJsViewer] migrateContentJson output keys:', Object.keys(migrated).filter(k => !k.startsWith('UNSTABLE')));
+    return JSON.stringify(migrated);
+  }, [contentJson]);
+
+  // Debug: log frameData structure after migrate
+  useEffect(() => {
+    console.log('[CraftJsViewer] MOUNT - containerRef exists:', !!containerRef.current);
+    console.log('[CraftJsViewer] frameData length:', frameData.length);
+    try {
+      const parsed = JSON.parse(frameData);
+      console.log('[CraftJsViewer] frameData keys:', Object.keys(parsed).filter(k => !k.startsWith('UNSTABLE')));
+      console.log('[CraftJsViewer] ROOT nodes:', JSON.stringify(parsed.ROOT?.nodes));
+    } catch(e) {
+      console.error('[CraftJsViewer] frameData parse error:', e);
+    }
+  }, [frameData]);
+
+  // Debug: observe Craft Frame rendering
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    const debugTimer = setTimeout(() => {
+      const craftInner = container.querySelector('.craft-inner, .cr-relative, [data-node-id]');
+      const childCount = container.querySelectorAll('[data-node-id]').length;
+      console.log('[CraftJsViewer] AFTER RENDER - childCount with data-node-id:', childCount);
+      console.log('[CraftJsViewer] container innerHTML (first 500):', container.innerHTML.slice(0, 500));
+    }, 2000);
+
+    return () => clearTimeout(debugTimer);
+  }, [revision, frameData]);
 
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
     let fallbackTimer: ReturnType<typeof setTimeout> | null = null;
+
+    // Global handler for unhandled promise rejections to avoid blank screens
+    const onUnhandledRejection = (ev: PromiseRejectionEvent) => {
+      try {
+        console.error('[CraftJsViewer] Unhandled rejection caught', ev.reason);
+        // Prevent default logging to console as uncaught
+        ev.preventDefault?.();
+      } catch (err) {
+        // ignore
+      }
+    };
+
+    window.addEventListener('unhandledrejection', onUnhandledRejection as any);
 
     // ── 1. IntersectionObserver for animate.css animations ────────────────────
     const animObserver = new IntersectionObserver(
@@ -162,6 +209,7 @@ export function CraftJsViewer({ card, contentJson, renderVersion }: CraftJsViewe
       if (fallbackTimer) clearTimeout(fallbackTimer);
       animObserver.disconnect();
       cleanupFns.forEach((fn) => fn());
+      window.removeEventListener('unhandledrejection', onUnhandledRejection as any);
     };
   }, [revision]);
 
@@ -275,13 +323,19 @@ export function CraftJsViewer({ card, contentJson, renderVersion }: CraftJsViewe
               }),
             });
 
-            if (!res.ok) {
-              const data = await res.json();
-              toast.error(data.error || "Lỗi xác nhận tham dự");
-              return;
-            }
+              let data: any = null;
+              try {
+                data = await res.json();
+              } catch {
+                // ignore parse errors
+              }
 
-            toast.success("✓ Xác nhận tham dự thành công!");
+              if (!res.ok || (data && (data.code === 403 || data.error === 'Forbidden' || data.msg === 'permission error'))) {
+                toast.error((data && (data.error || data.msg)) || "Lỗi xác nhận tham dự");
+                return;
+              }
+
+              toast.success("✓ Xác nhận tham dự thành công!");
           } catch (err) {
             console.error("RSVP error:", err);
             toast.error("Lỗi gửi request. Vui lòng thử lại.");
@@ -317,7 +371,7 @@ export function CraftJsViewer({ card, contentJson, renderVersion }: CraftJsViewe
         console.log("[CraftJsViewer] Replaced 'Lời chúc của bạn *' with textarea");
       }
 
-      if ((text === "Gửi lời chúc" || text.includes("Gửi lời")) && !transformed.has(el)) {
+      if (text === "Gửi lời chúc" && !transformed.has(el) && (el.tagName === "BUTTON" || el.tagName === "A")) {
         const btn = document.createElement("button");
         btn.type = "button";
         btn.className = "wishes-submit-btn";
@@ -347,18 +401,26 @@ export function CraftJsViewer({ card, contentJson, renderVersion }: CraftJsViewe
               }),
             });
 
-            if (!res.ok) {
-              const data = await res.json();
-              toast.error(data.error || "Lỗi gửi lời chúc");
+            let data: any = null;
+            try {
+              data = await res.json();
+            } catch {
+              // ignore parse errors
+            }
+
+            if (!res.ok || (data && (data.code === 403 || data.error === 'Forbidden' || data.msg === 'permission error'))) {
+              toast.error((data && (data.error || data.msg)) || "Lỗi gửi lời chúc");
               return;
             }
 
-            const result = await res.json();
-            if (result.wish?.id) {
+            const result = data;
+
+            if (result?.wish?.id) {
               toast.success("✓ Lời chúc đã gửi! Cảm ơn bạn.");
             } else {
               toast.info("Lời chúc của bạn đang chờ duyệt.");
             }
+
             parent.querySelector<HTMLInputElement>(".wishes-name-input")!.value = "";
             parent.querySelector<HTMLTextAreaElement>(".wishes-message-textarea")!.value = "";
           } catch (err) {
@@ -430,6 +492,8 @@ export function CraftJsViewer({ card, contentJson, renderVersion }: CraftJsViewe
           </button>
         </div>
       )}
+      
+
     </EditorCardProvider>
   );
 }
@@ -440,3 +504,5 @@ function executeAction(
 ) {
   runBlockEvent(ev, { onLightbox: setLightboxSrc });
 }
+      
+
