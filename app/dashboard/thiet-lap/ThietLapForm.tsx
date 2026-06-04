@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState, useTransition } from "react";
+import { useCallback, useState, useTransition } from "react";
 import * as Tabs from "@radix-ui/react-tabs";
 import * as Switch from "@radix-ui/react-switch";
 import { toast } from "sonner";
@@ -40,8 +40,6 @@ type Props = {
   photos: WeddingPhoto[];
   templates?: TemplateRow[];
   initialTemplateFromQuery?: string;
-  needTemplateHint?: boolean;
-  templateSource?: string;
 };
 
 export function ThietLapForm({
@@ -49,20 +47,9 @@ export function ThietLapForm({
   photos: initialPhotos,
   templates = [],
   initialTemplateFromQuery,
-  needTemplateHint,
-  templateSource,
 }: Props) {
   const router = useRouter();
 
-  useEffect(() => {
-    if (needTemplateHint) {
-      toast.info(
-        templateSource === "html"
-          ? "Thiệp mẫu HTML không dùng trình chỉnh sửa kéo-thả. Chọn mẫu Craft bên dưới để chỉnh sửa (áp dụng mẫu mới sẽ thay nội dung hiện tại)."
-          : "Vui lòng chọn mẫu thiệp trước khi mở trình chỉnh sửa."
-      );
-    }
-  }, [needTemplateHint, templateSource]);
   const [pending, start] = useTransition();
   const [applyingTemplate, setApplyingTemplate] = useState<string | null>(null);
   const [photos, setPhotos] = useState(initialPhotos);

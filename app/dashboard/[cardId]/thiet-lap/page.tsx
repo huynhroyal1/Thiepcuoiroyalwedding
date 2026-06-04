@@ -38,8 +38,6 @@ export default async function ThietLapPage({
       photos={photos ?? []}
       templates={(templates ?? []) as TemplateRow[]}
       initialTemplateFromQuery={sp.template}
-      needTemplateHint={sp.needTemplate === "1"}
-      templateSource={sp.source}
     />
   );
 }
