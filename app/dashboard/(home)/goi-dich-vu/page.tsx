@@ -7,6 +7,8 @@ import { createClient } from "@/lib/supabase/server";
 import type { Plan } from "@/types";
 import { GoiDichVuClient } from "./GoiDichVuClient";
 
+export const dynamic = "force-dynamic";
+
 export default async function GoiDichVuPage() {
   const ensured = await ensureWeddingCard();
   if (!ensured.data) return <p className="text-red-600">{ensured.error}</p>;

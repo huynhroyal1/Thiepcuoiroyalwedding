@@ -1,4 +1,5 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
+import { unstable_noStore as noStore } from "next/cache";
 import { PLANS } from "@/lib/payos";
 import { createServiceRoleClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
@@ -19,6 +20,8 @@ export {
 } from "@/lib/plans/plan-config-shared";
 
 export async function getPlanConfigWithClient(supabase: SupabaseClient): Promise<PlanConfigMap> {
+  noStore();
+
   const { data: configRow } = await supabase
     .from("website_settings")
     .select("value")

@@ -3,6 +3,8 @@ import { getFaqItems } from "@/lib/data/faq-items";
 import { getPlanPrices } from "@/lib/plans/get-plan-prices";
 import { BangGiaClient } from "./BangGiaClient";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Bảng giá — Royal Wedding",
   description:
