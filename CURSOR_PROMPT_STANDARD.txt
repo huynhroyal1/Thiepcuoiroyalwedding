@@ -1,0 +1,37 @@
+# PROMPT CHUẨN CLONE WEP - MeHappy Wedding Platform
+
+---
+
+Dự án: MeHappy Wedding Platform (Next.js + Supabase + Craft.js)
+Path: E:/wep/New folder (2)/ban co thiep moi/Huynh_Royal_16_05_2026 (3)/tet/Huynh_Royal_24_05_2026
+
+Mô tả: Nền tảng thiệp cưới online với:
+- Trang thiệp: Craft.js (kéo-thả editor) + Next.js App Router
+- Block components: components/editor/blocks/ (SectionBlock, TextBlock, ImageBlock, CountdownBlock, DividerBlock, ButtonBlock, IconBlock, GiftBoxBlock, RootCanvas, WishesBlock)
+- Resolver: components/editor/resolver.ts
+- Content sanitize: lib/editor/sanitizeCraftContent.ts (CRAFT_RESOLVER_NAMES phải KHỚP với resolver)
+- Migration: lib/editor/migrateContentJson.ts → sanitizeCraftContent → craftContentJsonRevision
+
+QUAN TRỌNG - Các lỗi thường gặp:
+1. MÀN TRẮNG template: Kiểm tra CRAFT_RESOLVER_NAMES có chứa TẤT CẢ block type trong content_json không
+2. Block mới trong editor → PHẢI thêm vào BOTH resolver.ts VÀ CRAFT_RESOLVER_NAMES
+3. Import từ ngoài vào → có thể có block lạ cần whitelist
+
+---
+
+# STANDARD PROMPT FOR CLONE WEP - MeHappy Wedding Platform
+
+Project: MeHappy Wedding Platform (Next.js + Supabase + Craft.js)
+Path: E:/wep/New folder (2)/ban co thiep moi/Huynh_Royal_16_05_2026 (3)/tet/Huynh_Royal_24_05_2026
+
+Description: Online wedding invitation platform with:
+- Invitation pages: Craft.js (drag-drop editor) + Next.js App Router
+- Block components: components/editor/blocks/ (SectionBlock, TextBlock, ImageBlock, CountdownBlock, DividerBlock, ButtonBlock, IconBlock, GiftBoxBlock, RootCanvas, WishesBlock)
+- Resolver: components/editor/resolver.ts
+- Content sanitize: lib/editor/sanitizeCraftContent.ts (CRAFT_RESOLVER_NAMES must MATCH resolver)
+- Migration: lib/editor/migrateContentJson.ts → sanitizeCraftContent → craftContentJsonRevision
+
+IMPORTANT - Common issues:
+1. BLANK/WHITE screen template: Check if CRAFT_RESOLVER_NAMES contains ALL block types in content_json
+2. New block in editor → MUST add to BOTH resolver.ts AND CRAFT_RESOLVER_NAMES
+3. Import from external source → may have unknown blocks that need whitelisting

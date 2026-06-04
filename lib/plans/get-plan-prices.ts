@@ -25,3 +25,8 @@ export async function getPlanPrices(serviceRole = false): Promise<PlanPricesMap>
   const config = await getPlanConfig(serviceRole);
   return planConfigToPricesMap(config);
 }
+
+/** Full plan config including limits (max_photos, max_cards, public_months, etc.) */
+export async function getPlanConfigFull(serviceRole = false): Promise<PlanConfigMap> {
+  return getPlanConfig(serviceRole);
+}

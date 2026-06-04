@@ -11,6 +11,7 @@ import { fileURLToPath } from "url";
 import { createClient } from "@supabase/supabase-js";
 import { cleanMehappyHtml, mehappyHtmlToContentJson } from "./imported-templates/clean-mehappy-html.mjs";
 import { mehappyHtmlToCraftContentJson } from "../lib/editor/mehappy-html-to-craft.mjs";
+import { ladipageHtmlToCraftContentJson } from "../lib/editor/ladipage-html-to-craft.mjs";
 import { upsertImportedTemplates } from "./seed-imported-templates.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -71,6 +72,16 @@ function guessNameFromHtml(html) {
   return null;
 }
 
+function detectHtmlType(html) {
+  // LadiPage (mewedding.vn) indicators
+  if (html.includes("class=\"ladi-") || html.includes("class='ladi-")) return "ladipage";
+  if (html.includes("w.ladicdn.com")) return "ladipage";
+  // MeHappy indicators
+  if (html.includes("sections-wrapper") || html.includes("content-wrapper")) return "mehappy";
+  if (html.includes("data-node-id=") && html.includes("content-container")) return "mehappy";
+  return "mehappy"; // default to mehappy
+}
+
 async function main() {
   const args = parseArgs(process.argv.slice(2));
   if (!args.id || !args.file) {
@@ -87,10 +98,29 @@ async function main() {
   }
 
   const rawHtml = readFileSync(htmlPath, "utf8");
-  const cleaned = cleanMehappyHtml(rawHtml);
-  const contentJson = args.craft
-    ? mehappyHtmlToCraftContentJson(cleaned)
-    : mehappyHtmlToContentJson(rawHtml);
+  const htmlType = detectHtmlType(rawHtml);
+
+  // LadiPage HTML should NOT be cleaned - it has different structure than MeHappy
+  let cleaned;
+  if (htmlType === "ladipage") {
+    // Keep LadiPage HTML as-is (no cleaning needed)
+    cleaned = rawHtml;
+  } else {
+    cleaned = cleanMehappyHtml(rawHtml);
+  }
+
+  let contentJson;
+  if (args.craft) {
+    if (htmlType === "ladipage") {
+      console.log("  Detected: LadiPage (mewedding) → LadipageCraft converter");
+      contentJson = ladipageHtmlToCraftContentJson(cleaned);
+    } else {
+      console.log("  Detected: MeHappy HTML → MeHappyCraft converter");
+      contentJson = mehappyHtmlToCraftContentJson(cleaned);
+    }
+  } else {
+    contentJson = mehappyHtmlToContentJson(rawHtml);
+  }
 
   const htmlOut = join(CONTENT_DIR, `${args.id}.html`);
   const jsonOut = join(CONTENT_DIR, `${args.id}.json`);
@@ -107,8 +137,8 @@ async function main() {
     description:
       args.description ??
       (args.craft
-        ? "Mẫu import từ MeHappy — chuyển Craft.js kéo-thả, giữ layout & text gốc."
-        : "Mẫu import từ MeHappy (HTML) — hiển thị qua InvitationHTMLViewer."),
+        ? "Mẫu import — chuyển Craft.js kéo-thả, giữ layout & text gốc."
+        : "Mẫu import (HTML) — hiển thị qua InvitationHTMLViewer."),
     thumbnail_url: args.thumbnail ?? guessThumbnail(cleaned),
     preview_url: args.previewUrl ?? null,
     plan_required: args.plan,

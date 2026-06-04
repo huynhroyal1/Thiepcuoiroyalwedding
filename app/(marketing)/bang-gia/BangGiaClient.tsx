@@ -1,12 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { Check, Crown, Sparkles, Star, Tag, X } from "lucide-react";
 import clsx from "clsx";
 import { faqMehappy } from "@/lib/data/mehappy-landing";
 import { formatPlanPriceDisplay } from "@/lib/plans/format-plan-price";
 import type { PlanPricesMap } from "@/lib/plans/get-plan-prices";
+import type { PlanConfigMap } from "@/lib/plans/plan-config-shared";
 import { formatVnd } from "@/lib/utils";
 import type { FaqItem } from "@/types";
 import { MarketingMobileNav } from "@/components/landing/MarketingMobileNav";
@@ -27,21 +28,6 @@ const PLUS_PACKAGE_PRICE = {
 
 type Cell = "yes" | "no" | string;
 
-const COMPARE_ROWS: { label: string; basic: Cell; pro: Cell; vip: Cell }[] = [
-  { label: "Hỗ trợ mọi lúc mọi nơi", basic: "yes", pro: "yes", vip: "yes" },
-  { label: "Chỉnh sửa không giới hạn trên website", basic: "yes", pro: "yes", vip: "yes" },
-  { label: "Gửi mời và truy cập không giới hạn", basic: "yes", pro: "yes", vip: "yes" },
-  { label: "Nhạc nền, hiệu ứng tim / tuyết / chuyển động", basic: "yes", pro: "yes", vip: "yes" },
-  { label: "Số lượng ảnh cưới", basic: "10 ảnh", pro: "40 ảnh", vip: "100 ảnh" },
-  { label: "Thời gian công khai thiệp", basic: "6 tháng", pro: "2 năm", vip: "Trọn đời" },
-  { label: "Số thiệp có thể tạo", basic: "1", pro: "2", vip: "3" },
-  { label: "Mã QR in thiệp giấy", basic: "yes", pro: "yes", vip: "yes" },
-  { label: "Đếm ngược & Google Maps", basic: "yes", pro: "yes", vip: "yes" },
-  { label: "RSVP & quản lý khách mời", basic: "yes", pro: "yes", vip: "yes" },
-  { label: "Giao diện VIP độc quyền", basic: "no", pro: "no", vip: "yes" },
-  { label: "Tên miền riêng (Custom domain)", basic: "no", pro: "no", vip: "yes" },
-];
-
 function CellIcon({ v }: { v: Cell }) {
   if (v === "yes")
     return (
@@ -61,9 +47,19 @@ function CellIcon({ v }: { v: Cell }) {
 type BangGiaProps = {
   faqItems?: FaqItem[];
   planPrices?: PlanPricesMap;
+  planConfig?: PlanConfigMap;
 };
 
-export function BangGiaClient({ faqItems = faqMehappy, planPrices }: BangGiaProps) {
+function formatPublicMonths(months: number | null): string {
+  if (months === null) return "Trọn đời";
+  if (months >= 12) {
+    const years = months / 12;
+    return years === 1 ? "1 năm" : `${years} năm`;
+  }
+  return `${months} tháng`;
+}
+
+export function BangGiaClient({ faqItems = faqMehappy, planPrices, planConfig }: BangGiaProps) {
   const [mobilePlan, setMobilePlan] = useState<PlanKey>("pro");
   const [comparePlus, setComparePlus] = useState(false);
   const [detailPlan, setDetailPlan] = useState<PlanKey | null>(null);
@@ -88,6 +84,30 @@ export function BangGiaClient({ faqItems = faqMehappy, planPrices }: BangGiaProp
   const proDisplay = formatPlanPriceDisplay(prices.pro);
   const vipDisplay = formatPlanPriceDisplay(prices.vip);
 
+  // Dynamic COMPARE_ROWS from planConfig
+  const compareRows: { label: string; basic: Cell; pro: Cell; vip: Cell }[] = useMemo(() => {
+    const cfg = planConfig ?? {
+      basic: { max_photos: 10, max_cards: 1, public_months: 6 } as any,
+      pro: { max_photos: 40, max_cards: 2, public_months: 24 } as any,
+      vip: { max_photos: 100, max_cards: 3, public_months: null } as any,
+    };
+    return [
+      { label: "Hỗ trợ mọi lúc mọi nơi", basic: "yes", pro: "yes", vip: "yes" },
+      { label: "Chỉnh sửa không giới hạn trên website", basic: "yes", pro: "yes", vip: "yes" },
+      { label: "Gửi mời và truy cập không giới hạn", basic: "yes", pro: "yes", vip: "yes" },
+      { label: "Nhạc nền, hiệu ứng tim / tuyết / chuyển động", basic: "yes", pro: "yes", vip: "yes" },
+      { label: "Số lượng ảnh cưới", basic: `${cfg.basic.max_photos} ảnh`, pro: `${cfg.pro.max_photos} ảnh`, vip: `${cfg.vip.max_photos} ảnh` },
+      { label: "Thời gian công khai thiệp", basic: formatPublicMonths(cfg.basic.public_months), pro: formatPublicMonths(cfg.pro.public_months), vip: formatPublicMonths(cfg.vip.public_months) },
+      { label: "Số thiệp có thể tạo", basic: String(cfg.basic.max_cards), pro: String(cfg.pro.max_cards), vip: String(cfg.vip.max_cards) },
+      { label: "Mã QR in thiệp giấy", basic: "yes", pro: "yes", vip: "yes" },
+      { label: "Đếm ngược & Google Maps", basic: "yes", pro: "yes", vip: "yes" },
+      { label: "RSVP & quản lý khách mời", basic: "yes", pro: "yes", vip: "yes" },
+      { label: "Giao diện VIP độc quyền", basic: "no", pro: "no", vip: "yes" },
+      { label: "Tên miền riêng (Custom domain)", basic: "no", pro: "no", vip: "yes" },
+    ];
+  }, [planConfig]);
+
+  // Dynamic cards from planConfig
   const cards: Record<
     PlanKey,
     {
@@ -103,78 +123,85 @@ export function BangGiaClient({ faqItems = faqMehappy, planPrices }: BangGiaProp
       secondary?: { label: string; onClick?: () => void; outline?: boolean; href?: string };
       tertiary?: { label: string; href?: string; outline?: boolean };
     }
-  > = {
-    basic: {
-      title: "BASIC",
-      badge: undefined,
-      badgeStyle: undefined,
-      discount: basicDisplay.discountPercent != null ? `-${basicDisplay.discountPercent}%` : undefined,
-      listPrice: basicDisplay.listPrice,
-      priceLabel: basicDisplay.label,
-      sub: DESIGN_EXTRA.basic,
-      features: [
-        "Trình thiết kế thiệp cơ bản",
-        "6 tháng công khai thiệp",
-        "Số lượng ảnh cơ bản",
-        "Các tính năng cơ bản",
-        "Gửi mời không giới hạn",
-      ],
-      primaryCta: {
-        label: "Xem chi tiết",
-        className: "w-full rounded-xl border border-transparent py-2.5 text-sm font-semibold text-neutral-700 hover:bg-neutral-100",
+  > = useMemo(() => {
+    const cfg = planConfig ?? {
+      basic: { max_photos: 10, max_cards: 1, public_months: 6 } as any,
+      pro: { max_photos: 40, max_cards: 2, public_months: 24 } as any,
+      vip: { max_photos: 100, max_cards: 3, public_months: null } as any,
+    };
+    return {
+      basic: {
+        title: "BASIC",
+        badge: undefined,
+        badgeStyle: undefined,
+        discount: basicDisplay.discountPercent != null ? `-${basicDisplay.discountPercent}%` : undefined,
+        listPrice: basicDisplay.listPrice,
+        priceLabel: basicDisplay.label,
+        sub: DESIGN_EXTRA.basic,
+        features: [
+          "Trình thiết kế thiệp cơ bản",
+          `${formatPublicMonths(cfg.basic.public_months)} công khai thiệp`,
+          `${cfg.basic.max_photos} ảnh cưới`,
+          "Các tính năng cơ bản",
+          "Gửi mời không giới hạn",
+        ],
+        primaryCta: {
+          label: "Xem chi tiết",
+          className: "w-full rounded-xl border border-transparent py-2.5 text-sm font-semibold text-neutral-700 hover:bg-neutral-100",
+        },
+        secondary: { label: "Mua lẻ tính năng", onClick: () => scrollTo("faq"), outline: true },
+        tertiary: { label: "Yêu cầu thiết kế hộ", outline: true },
       },
-      secondary: { label: "Mua lẻ tính năng", onClick: () => scrollTo("faq"), outline: true },
-      tertiary: { label: "Yêu cầu thiết kế hộ", outline: true },
-    },
-    pro: {
-      title: "PRO",
-      badge: "Phổ biến",
-      badgeStyle: "bg-blue-600 text-white",
-      discount: proDisplay.discountPercent != null ? `-${proDisplay.discountPercent}%` : undefined,
-      listPrice: proDisplay.listPrice,
-      priceLabel: proDisplay.label,
-      sub: DESIGN_EXTRA.pro,
-      features: [
-        "Trình thiết kế thiệp nâng cao",
-        "2 năm công khai thiệp",
-        "Số lượng ảnh nâng cao",
-        "Các tính năng nâng cao",
-        "Sử dụng thiệp gói PRO",
-      ],
-      primaryCta: {
-        label: "Xem chi tiết",
-        className: "w-full rounded-xl border border-transparent py-2.5 text-sm font-semibold text-neutral-700 hover:bg-neutral-100",
+      pro: {
+        title: "PRO",
+        badge: "Phổ biến",
+        badgeStyle: "bg-blue-600 text-white",
+        discount: proDisplay.discountPercent != null ? `-${proDisplay.discountPercent}%` : undefined,
+        listPrice: proDisplay.listPrice,
+        priceLabel: proDisplay.label,
+        sub: DESIGN_EXTRA.pro,
+        features: [
+          "Trình thiết kế thiệp nâng cao",
+          `${formatPublicMonths(cfg.pro.public_months)} công khai thiệp`,
+          `${cfg.pro.max_photos} ảnh cưới`,
+          "Các tính năng nâng cao",
+          "Sử dụng thiệp gói PRO",
+        ],
+        primaryCta: {
+          label: "Xem chi tiết",
+          className: "w-full rounded-xl border border-transparent py-2.5 text-sm font-semibold text-neutral-700 hover:bg-neutral-100",
+        },
+        secondary: { label: "Mua lẻ tính năng", onClick: () => scrollTo("faq"), outline: true },
+        tertiary: { label: "Chọn gói này", outline: false },
       },
-      secondary: { label: "Mua lẻ tính năng", onClick: () => scrollTo("faq"), outline: true },
-      tertiary: { label: "Chọn gói này", outline: false },
-    },
-    vip: {
-      title: "VIP",
-      badge: "Tốt nhất",
-      badgeStyle: "bg-amber-500 text-white",
-      discount: vipDisplay.discountPercent != null ? `-${vipDisplay.discountPercent}%` : undefined,
-      listPrice: vipDisplay.listPrice,
-      priceLabel: vipDisplay.label,
-      sub: DESIGN_EXTRA.vip,
-      features: [
-        "Trình thiết kế thiệp toàn diện",
-        "Trọn đời công khai thiệp",
-        "Số lượng ảnh tối đa",
-        "Mở khóa tất cả các tính năng",
-        "Sử dụng thiệp gói VIP",
-      ],
-      primaryCta: {
-        label: "Xem chi tiết",
-        className: "w-full rounded-xl border border-transparent py-2.5 text-sm font-semibold text-neutral-700 hover:bg-neutral-100",
+      vip: {
+        title: "VIP",
+        badge: "Tốt nhất",
+        badgeStyle: "bg-amber-500 text-white",
+        discount: vipDisplay.discountPercent != null ? `-${vipDisplay.discountPercent}%` : undefined,
+        listPrice: vipDisplay.listPrice,
+        priceLabel: vipDisplay.label,
+        sub: DESIGN_EXTRA.vip,
+        features: [
+          "Trình thiết kế thiệp toàn diện",
+          `${formatPublicMonths(cfg.vip.public_months)} công khai thiệp`,
+          `${cfg.vip.max_photos} ảnh cưới`,
+          "Mở khóa tất cả các tính năng",
+          "Sử dụng thiệp gói VIP",
+        ],
+        primaryCta: {
+          label: "Xem chi tiết",
+          className: "w-full rounded-xl border border-transparent py-2.5 text-sm font-semibold text-neutral-700 hover:bg-neutral-100",
+        },
+        secondary: {
+          label: "Thiết kế theo yêu cầu",
+          outline: true,
+          href: "mailto:mehappy.vnn@gmail.com?subject=Thiết kế thiệp VIP theo yêu cầu",
+        },
+        tertiary: { label: "Chọn gói này", outline: false },
       },
-      secondary: {
-        label: "Thiết kế theo yêu cầu",
-        outline: true,
-        href: "mailto:mehappy.vnn@gmail.com?subject=Thiết kế thiệp VIP theo yêu cầu",
-      },
-      tertiary: { label: "Chọn gói này", outline: false },
-    },
-  };
+    };
+  }, [planConfig, basicDisplay, proDisplay, vipDisplay, scrollTo]);
 
   function PricingCard({ plan }: { plan: PlanKey }) {
     const c = cards[plan];
@@ -432,7 +459,7 @@ export function BangGiaClient({ faqItems = faqMehappy, planPrices }: BangGiaProp
                   <td className="px-3 py-2.5 text-center">{comparePlus ? <CellIcon v="yes" /> : <CellIcon v="no" />}</td>
                   <td className="px-3 py-2.5 text-center">{comparePlus ? <CellIcon v="yes" /> : <CellIcon v="no" />}</td>
                 </tr>
-                {COMPARE_ROWS.map((row, idx) => (
+                {compareRows.map((row, idx) => (
                   <tr key={row.label} className="border-b border-neutral-100">
                     <td
                       className={clsx(

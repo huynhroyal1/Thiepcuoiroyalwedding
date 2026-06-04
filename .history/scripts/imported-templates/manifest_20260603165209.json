@@ -1,0 +1,375 @@
+{
+  "$schema": "./manifest.schema.json",
+  "source": "mehappy",
+  "note": "Thêm mẫu mới vào templates[]; đặt Craft JSON tại content/{content_file}. Chạy: npm run seed:templates",
+  "templates": [
+    {
+      "id": "mewedding-lightly-pro",
+      "name": "Lightly Pro",
+      "description": "Mẫu import từ meWedding — raw HTML giữ nguyên layout 100%.",
+      "thumbnail_url": null,
+      "preview_url": null,
+      "plan_required": "pro",
+      "style_tags": [
+        "Import Royal Wedding",
+        "Sang trọng"
+      ],
+      "sort_order": 214,
+      "is_active": true,
+      "content_type": "raw-html",
+      "content_file": "mewedding-lightly.json"
+    },
+    {
+      "id": "mehappy-na01-vip",
+      "name": "Thiệp Mời NA01",
+      "description": "Mẫu VIP NA01 import từ HTML rendered Royal Wedding — chuyển sang Craft.js kéo-thả.",
+      "thumbnail_url": "https://s3-hcm-r2.s3cloud.vn/thiepcuoi-mehappy/users/5711/fc6cd66a-10fc-4248-a999-6e5ed5b5b3ae-full.webp",
+      "preview_url": null,
+      "plan_required": "vip",
+      "style_tags": [
+        "Import Royal Wedding",
+        "Sang trọng"
+      ],
+      "sort_order": 210,
+      "is_active": true,
+      "content_type": "craft",
+      "content_file": "mehappy-na01-vip.json"
+    },
+    {
+      "id": "mehappy-xuan-thinh-diem-hang",
+      "name": "Xuân Thịnh & Diễm Hằng",
+      "description": "Mẫu VIP Xuân Thịnh & Diễm Hằng import từ HTML rendered Royal Wedding — chuyển sang Craft.js kéo-thả.",
+      "thumbnail_url": "https://s3-hcm-r2.s3cloud.vn/thiepcuoi-mehappy/admin/assets/2bd37ce9-f1b0-4655-a16e-4426c0903859-full.webp",
+      "preview_url": null,
+      "plan_required": "vip",
+      "style_tags": [
+        "Import Royal Wedding",
+        "Sang trọng"
+      ],
+      "sort_order": 209,
+      "is_active": true,
+      "content_type": "craft",
+      "content_file": "mehappy-xuan-thinh-diem-hang.json"
+    },
+    {
+      "id": "mehappy-quang-huy-my-linh",
+      "name": "Quang Huy & Mỹ Linh",
+      "description": "Mẫu VIP Classy Vogue Quang Huy & Mỹ Linh import từ HTML rendered Royal Wedding — chuyển sang Craft.js kéo-thả.",
+      "thumbnail_url": "https://s3-hcm-r2.s3cloud.vn/thiepcuoi-mehappy/users/216/f7c666f1-ad09-4f01-a012-6c515f66b532-full.webp",
+      "preview_url": null,
+      "plan_required": "vip",
+      "style_tags": [
+        "Import Royal Wedding",
+        "Sang trọng"
+      ],
+      "sort_order": 210,
+      "is_active": true,
+      "content_type": "craft",
+      "content_file": "mehappy-quang-huy-my-linh.json"
+    },
+    {
+      "id": "mehappy-minh-quang-cam-linh",
+      "name": "Minh Quang & Cẩm Linh",
+      "description": "Mẫu VIP tông đỏ Minh Quang & Cẩm Linh import từ HTML rendered Royal Wedding — chuyển sang Craft.js kéo-thả.",
+      "thumbnail_url": "https://s3-hcm-r2.s3cloud.vn/thiepcuoi-mehappy/users/5711/8c666685-f901-4ad1-a3d0-321805a9a2d5-full.webp",
+      "preview_url": null,
+      "plan_required": "vip",
+      "style_tags": [
+        "Import Royal Wedding",
+        "Sang trọng"
+      ],
+      "sort_order": 211,
+      "is_active": true,
+      "content_type": "craft",
+      "content_file": "mehappy-minh-quang-cam-linh.json"
+    },
+    {
+      "id": "mehappy-xuan-thinh-diem-hang-save-date",
+      "name": "Xuân Thịnh & Diễm Hằng Save The Date",
+      "description": "Mẫu VIP Save The Date Xuân Thịnh & Diễm Hằng import từ HTML rendered Royal Wedding — chuyển sang Craft.js kéo-thả.",
+      "thumbnail_url": "https://s3-hcm-r2.s3cloud.vn/thiepcuoi-mehappy/users/1927/5ba2e24c-eef2-496d-9f6b-f95f66de2e39-full.webp",
+      "preview_url": null,
+      "plan_required": "vip",
+      "style_tags": [
+        "Import Royal Wedding",
+        "Sang trọng"
+      ],
+      "sort_order": 212,
+      "is_active": true,
+      "content_type": "craft",
+      "content_file": "mehappy-xuan-thinh-diem-hang-save-date.json"
+    },
+    {
+      "id": "mehappy-pham-tuan-nguyen-them",
+      "name": "Phạm Tuân & Nguyễn Thêm",
+      "description": "Mẫu VIP Phạm Tuân & Nguyễn Thêm import từ HTML rendered Royal Wedding — chuyển sang Craft.js kéo-thả.",
+      "thumbnail_url": "https://s3-hcm-r2.s3cloud.vn/thiepcuoi-mehappy/users/1929/9d282e53-c6c2-43ec-92e7-7d3c04ac30e3-full.webp",
+      "preview_url": null,
+      "plan_required": "vip",
+      "style_tags": [
+        "Import Royal Wedding",
+        "Sang trọng"
+      ],
+      "sort_order": 213,
+      "is_active": true,
+      "content_type": "craft",
+      "content_file": "mehappy-pham-tuan-nguyen-them.json"
+    },
+    {
+      "id": "mehappy-trung-nghia-nhat-le",
+      "name": "Trung Nghĩa & Nhật Lệ",
+      "description": "Mẫu thiệp cưới tông hồng nâu sang trọng, ảnh cưới lớn, timeline tình yêu, album, lời chúc, RSVP và mừng cưới.",
+      "thumbnail_url": "https://s3-hcm-r2.s3cloud.vn/thiepcuoi-mehappy/users/1926/f025e875-b0c2-4b82-8cba-dab31177a2c2-full.webp",
+      "preview_url": null,
+      "plan_required": "vip",
+      "style_tags": [
+        "Import Royal Wedding",
+        "Sang trọng"
+      ],
+      "sort_order": 70,
+      "is_active": true,
+      "content_type": "craft",
+      "content_file": "mehappy-trung-nghia-nhat-le.json"
+    },
+    {
+      "id": "mehappy-hoang-phi-mai-huong",
+      "name": "Hoàng Phi & Mai Hương",
+      "description": "Mẫu thiệp cưới tông trắng vàng trang nhã, bố cục ảnh cưới sang trọng, câu chuyện tình yêu, album, sự kiện, RSVP, lời chúc và mừng cưới.",
+      "thumbnail_url": "https://s3-hcm-r2.s3cloud.vn/thiepcuoi-mehappy/admin/assets/43f8db5d-e1b9-43f0-90f9-a93e82a24f38.webp",
+      "preview_url": null,
+      "plan_required": "vip",
+      "style_tags": [
+        "Import Royal Wedding",
+        "Sang trọng"
+      ],
+      "sort_order": 80,
+      "is_active": true,
+      "content_type": "craft",
+      "content_file": "mehappy-hoang-phi-mai-huong.json"
+    },
+    {
+      "id": "mehappy-duc-anh-thu-trang",
+      "name": "Đức Anh & Thu Trang",
+      "description": "Mẫu thiệp cưới tông hồng đỏ lãng mạn, nhiều ảnh cưới, timeline, dresscode, album, RSVP, lời chúc và hộp mừng cưới.",
+      "thumbnail_url": "https://s3-hcm-r2.s3cloud.vn/thiepcuoi-mehappy/users/1928/e99c1af1-d573-41f3-bf0c-71df4aa6eba0-medium.webp",
+      "preview_url": null,
+      "plan_required": "vip",
+      "style_tags": [
+        "Import Royal Wedding",
+        "Sang trọng"
+      ],
+      "sort_order": 90,
+      "is_active": true,
+      "content_type": "craft",
+      "content_file": "mehappy-duc-anh-thu-trang.json"
+    },
+    {
+      "id": "mehappy-van-tien-thao-dung",
+      "name": "Văn Tiến & Thảo Dung",
+      "description": "Mẫu thiệp cưới phong cách Artistic Love, tông xám hồng, nhiều ảnh cưới, love story, countdown, RSVP, album, lời chúc và gửi quà mừng.",
+      "thumbnail_url": "https://s3-hcm-r2.s3cloud.vn/thiepcuoi-mehappy/users/5711/59e57cc3-d5dc-48da-b05c-e6c1c880cbad-full.webp",
+      "preview_url": null,
+      "plan_required": "vip",
+      "style_tags": [
+        "Import Royal Wedding",
+        "Sang trọng"
+      ],
+      "sort_order": 100,
+      "is_active": true,
+      "content_type": "craft",
+      "content_file": "mehappy-van-tien-thao-dung.json"
+    },
+    {
+      "id": "mehappy-romany-vip",
+      "name": "Giao diện Romany - Gói VIP",
+      "description": "Mẫu VIP Romany import từ Royal Wedding template #44 — kéo-thả chỉnh text, ảnh, ngày giờ.",
+      "thumbnail_url": "https://s3-hcm-r2.s3cloud.vn/thiepcuoi-mehappy/users/1927/3a638fbf-5f9e-49f0-b30e-a4ca7833291e-full.webp",
+      "preview_url": null,
+      "plan_required": "vip",
+      "style_tags": [
+        "Import Royal Wedding",
+        "Sang trọng"
+      ],
+      "sort_order": 105,
+      "is_active": true,
+      "content_type": "craft",
+      "content_file": "mehappy-romany-vip.json"
+    },
+    {
+      "id": "mehappy-noble-vip",
+      "name": "Giao diện thiệp cưới Noble - Gói VIP",
+      "description": "Mẫu VIP Noble import từ Royal Wedding template #31 — kéo-thả chỉnh text, ảnh, ngày giờ.",
+      "thumbnail_url": "https://s3-hcm-r2.s3cloud.vn/thiepcuoi-mehappy/admin/assets/10ac3c5d-5e12-4975-b39e-72f83502675e-full.webp",
+      "preview_url": null,
+      "plan_required": "vip",
+      "style_tags": [
+        "Import Royal Wedding",
+        "Sang trọng"
+      ],
+      "sort_order": 106,
+      "is_active": true,
+      "content_type": "craft",
+      "content_file": "mehappy-noble-vip.json"
+    },
+    {
+      "id": "mehappy-bustle-pro",
+      "name": "Giao diện Bustle - Gói PRO",
+      "description": "Mẫu PRO Bustle import từ Royal Wedding template #72 — kéo-thả chỉnh text, ảnh, ngày giờ.",
+      "thumbnail_url": "https://s3-hcm-r2.s3cloud.vn/thiepcuoi-mehappy/admin/assets/4ee7ef79-810c-4e84-a8df-834b687393da.webp",
+      "preview_url": null,
+      "plan_required": "pro",
+      "style_tags": [
+        "Import Royal Wedding",
+        "Sang trọng"
+      ],
+      "sort_order": 107,
+      "is_active": true,
+      "content_type": "craft",
+      "content_file": "mehappy-bustle-pro.json"
+    },
+    {
+      "id": "mehappy-boho-floral-green",
+      "name": "Giao diện Boho Floral Green",
+      "description": "Mẫu import từ Royal Wedding (HTML) — hiển thị qua InvitationHTMLViewer.",
+      "thumbnail_url": null,
+      "preview_url": null,
+      "plan_required": "pro",
+      "style_tags": [
+        "Import Royal Wedding",
+        "Sang trọng"
+      ],
+      "sort_order": 108,
+      "is_active": true,
+      "content_type": "raw-html",
+      "content_file": "mehappy-boho-floral-green.json"
+    },
+    {
+      "id": "mehappy-td03-pro",
+      "name": "Giao Diện TD03 - Gói PRO",
+      "description": "Mẫu PRO TD03 import từ Royal Wedding template #22 — kéo-thả chỉnh text, ảnh, ngày giờ.",
+      "thumbnail_url": "https://s3-hcm-r2.s3cloud.vn/thiepcuoi-mehappy/admin/assets/1f6c5e35-9840-4d23-9f1a-5364d7f974ca.webp",
+      "preview_url": null,
+      "plan_required": "pro",
+      "style_tags": [
+        "Import Royal Wedding",
+        "Sang trọng"
+      ],
+      "sort_order": 109,
+      "is_active": true,
+      "content_type": "craft",
+      "content_file": "mehappy-td03-pro.json"
+    },
+    {
+      "id": "mehappy-romantic-vip",
+      "name": "Giao diện Romantic - Gói VIP",
+      "description": "Mẫu import từ Royal Wedding template #131 — kéo-thả chỉnh text, ảnh, ngày giờ.",
+      "thumbnail_url": "https://s3-hcm-r2.s3cloud.vn/thiepcuoi-mehappy/admin/assets/6744ed53-e5ec-4c48-b258-5a84541d4982-medium.webp",
+      "preview_url": null,
+      "plan_required": "vip",
+      "style_tags": [
+        "Import Royal Wedding",
+        "Sang trọng"
+      ],
+      "sort_order": 110,
+      "is_active": true,
+      "content_type": "craft",
+      "content_file": "mehappy-romantic-vip.json"
+    },
+    {
+      "id": "mehappy-en01-vip",
+      "name": "Giao diện thiệp cưới EN01 - Gói VIP",
+      "description": "Mẫu import từ Royal Wedding template #79 — kéo-thả chỉnh text, ảnh, ngày giờ.",
+      "thumbnail_url": "https://s3-hcm-r2.s3cloud.vn/thiepcuoi-mehappy/users/1929/517773d6-1412-4637-a5ce-a51c697f28e8-full.webp",
+      "preview_url": null,
+      "plan_required": "vip",
+      "style_tags": [
+        "Import Royal Wedding",
+        "Sang trọng"
+      ],
+      "sort_order": 111,
+      "is_active": true,
+      "content_type": "craft",
+      "content_file": "mehappy-en01-vip.json"
+    },
+    {
+      "id": "mehappy-da05-vip",
+      "name": "Giao diện thiệp cưới DA05 - Gói VIP",
+      "description": "Mẫu import từ Royal Wedding template #24 — kéo-thả chỉnh text, ảnh, ngày giờ.",
+      "thumbnail_url": "https://s3-hcm-r2.s3cloud.vn/thiepcuoi-mehappy/admin/assets/925dcd73-ba01-4918-85a6-9d1417011383.webp",
+      "preview_url": null,
+      "plan_required": "vip",
+      "style_tags": [
+        "Import Royal Wedding",
+        "Sang trọng"
+      ],
+      "sort_order": 112,
+      "is_active": true,
+      "content_type": "craft",
+      "content_file": "mehappy-da05-vip.json"
+    },
+    {
+      "id": "mehappy-at01-pro",
+      "name": "Giao diện AT01 - Gói PRO",
+      "description": "Mẫu import từ Royal Wedding template #6 — kéo-thả chỉnh text, ảnh, ngày giờ.",
+      "thumbnail_url": "https://s3-hcm-r2.s3cloud.vn/thiepcuoi-mehappy/admin/assets/4225f5f8-932a-4c8a-99b5-d00d61308c8a.webp",
+      "preview_url": null,
+      "plan_required": "pro",
+      "style_tags": [
+        "Import Royal Wedding",
+        "Sang trọng"
+      ],
+      "sort_order": 113,
+      "is_active": true,
+      "content_type": "craft",
+      "content_file": "mehappy-at01-pro.json"
+    },
+    {
+      "id": "mehappy-brightly-basic",
+      "name": "Giao diện Brightly - Gói Basic",
+      "description": "Mẫu import từ Royal Wedding template #16 — kéo-thả chỉnh text, ảnh, ngày giờ.",
+      "thumbnail_url": "https://s3-hcm-r2.s3cloud.vn/thiepcuoi-mehappy/admin/assets/bc464547-3708-493b-9ac4-709dc2efecdc.webp",
+      "preview_url": null,
+      "plan_required": "basic",
+      "style_tags": [
+        "Import Royal Wedding",
+        "Sang trọng"
+      ],
+      "sort_order": 114,
+      "is_active": true,
+      "content_type": "craft",
+      "content_file": "mehappy-brightly-basic.json"
+    },
+    {
+      "id": "mehappy-template-22",
+      "name": "TD03 PRO",
+      "description": "Mẫu PRO TD03 import từ Royal Wedding — kéo-thả chỉnh text, ảnh, ngày giờ.",
+      "thumbnail_url": "https://s3-hcm-r2.s3cloud.vn/thiepcuoi-mehappy/admin/assets/1f6c5e35-9840-4d23-9f1a-5364d7f974ca.webp",
+      "preview_url": null,
+      "plan_required": "pro",
+      "style_tags": [
+        "Import Royal Wedding",
+        "Sang trọng"
+      ],
+      "sort_order": 115,
+      "is_active": true,
+      "content_type": "craft",
+      "content_file": "mehappy-template-22.json"
+    },
+    {
+      "id": "mewedding-foreign-basic",
+      "name": "Foreign Basic",
+      "description": "Mẫu import — chuyển Craft.js kéo-thả, giữ layout & text gốc.",
+      "thumbnail_url": null,
+      "preview_url": null,
+      "plan_required": "basic",
+      "style_tags": [
+        "Import MeHappy",
+        "Sang trọng"
+      ],
+      "sort_order": 200,
+      "is_active": true,
+      "content_type": "craft",
+      "content_file": "mewedding-foreign-basic.json"
+    }
+  ]
+}

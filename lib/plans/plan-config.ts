@@ -22,11 +22,13 @@ export {
 export async function getPlanConfigWithClient(supabase: SupabaseClient): Promise<PlanConfigMap> {
   noStore();
 
-  const { data: configRow } = await supabase
+  const { data: configRow, error } = await supabase
     .from("website_settings")
     .select("value")
     .eq("key", "plan_config")
     .maybeSingle();
+
+  console.log('[getPlanConfig] plan_config from DB:', JSON.stringify(configRow?.value)?.slice(0, 500), 'error:', error?.message);
 
   const parsed = parsePlanConfig(configRow?.value);
   let config = parsed ?? { ...DEFAULT_PLAN_CONFIG };
