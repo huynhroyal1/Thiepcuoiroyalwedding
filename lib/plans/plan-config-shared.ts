@@ -148,7 +148,7 @@ export function parsePlanConfig(value: unknown): PlanConfigMap | null {
         0,
         Number(p.max_photos_album ?? p.max_photos) || DEFAULT_PLAN_CONFIG[tier].max_photos_album
       ),
-      max_photos: Math.max(0, Number(p.max_photos) || DEFAULT_PLAN_CONFIG[tier].max_photos),
+      max_photos: Math.max(0, Number(p.max_photos || p.max_photos_album) || DEFAULT_PLAN_CONFIG[tier].max_photos),
       public_months:
         p.public_months === null || p.public_months === "lifetime"
           ? null
