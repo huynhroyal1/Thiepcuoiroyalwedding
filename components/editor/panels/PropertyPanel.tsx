@@ -678,7 +678,13 @@ function ButtonPanel({ props, setProp }: { props: Record<string, unknown>; setPr
   return (
     <div className="space-y-1">
       <Row label="Nhãn"><TextInput value={(props.label as string) ?? ""} onChange={(v) => setProp((p) => { p.label = v; })} /></Row>
-      <Row label="URL"><TextInput value={(props.url as string) ?? "#"} onChange={(v) => setProp((p) => { p.url = v; })} /></Row>
+      <div>
+        <Row label="URL"><TextInput value={(props.url as string) ?? "#"} onChange={(v) => setProp((p) => { p.url = v; })} /></Row>
+        <p className="px-[5.5rem] pb-1 text-[10px] text-gray-400 leading-relaxed">
+          Google Maps: dán link Google Maps (maps.google.com, goo.gl/maps...) hoặc địa chỉ để mở chỉ đường. Ví dụ:{" "}
+          <span className="font-mono bg-gray-100 px-0.5 rounded">TP.HCM Wedding Palace</span>
+        </p>
+      </div>
       <Row label="Vị trí T"><NumberInput value={props.top as number} onChange={(v) => setProp((p) => { p.top = v; })} /></Row>
       <Row label="Vị trí L"><NumberInput value={props.left as number} onChange={(v) => setProp((p) => { p.left = v; })} /></Row>
       <Row label="Chiều rộng"><NumberInput value={props.width as number} onChange={(v) => setProp((p) => { p.width = v; })} min={80} /></Row>

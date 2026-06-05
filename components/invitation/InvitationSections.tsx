@@ -8,6 +8,7 @@ import { formatWeddingDateVi } from "@/lib/format-wedding";
 import { CountdownTimer } from "@/components/ui/CountdownTimer";
 import { RsvpSection } from "@/components/invitation/RsvpSection";
 import { WishesSection } from "@/components/invitation/WishesSection";
+import { mapsUrlToEmbed, mapsUrlToDirections } from "@/lib/utils";
 
 export type TemplateProps = {
   card: WeddingCard;
@@ -61,9 +62,9 @@ type ThemeKey = keyof typeof themes;
 export function InvitationSections({ card, photos, guest, theme }: TemplateProps & { theme: ThemeKey }) {
   const t = themes[theme];
   const mapsEmbed = card.venue_maps_url?.includes("http")
-    ? card.venue_maps_url
+    ? mapsUrlToEmbed(card.venue_maps_url)
     : card.venue_address
-      ? `https://www.google.com/maps?q=${encodeURIComponent(card.venue_address)}&output=embed`
+      ? mapsUrlToEmbed(card.venue_address)
       : null;
 
   const style: CSSProperties | undefined =
@@ -154,15 +155,12 @@ export function InvitationSections({ card, photos, guest, theme }: TemplateProps
           )}
           {mapsEmbed && (
             <a
-              href={
-                card.venue_maps_url ??
-                `https://maps.google.com/?q=${encodeURIComponent(card.venue_address ?? "")}`
-              }
+              href={mapsUrlToDirections(card.venue_address ?? "")}
               target="_blank"
               rel="noreferrer"
               className={`block text-center text-sm font-medium underline ${t.accent}`}
             >
-              Xem bản đồ
+              Xem chỉ đường
             </a>
           )}
         </div>

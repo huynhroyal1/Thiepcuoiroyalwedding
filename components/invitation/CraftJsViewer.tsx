@@ -172,6 +172,31 @@ export function CraftJsViewer({ card, contentJson, renderVersion }: CraftJsViewe
     const eventElements = container.querySelectorAll("[data-events]");
     const cleanupFns: (() => void)[] = [];
 
+    // ── Fallback: buttons with href but no "link" event → open href directly ──
+    const buttonFallbacks = container.querySelectorAll<HTMLAnchorElement>('[data-block="button"] a[href]');
+    buttonFallbacks.forEach((anchor) => {
+      const el = anchor.closest("[data-events]") as HTMLElement | null;
+      if (el) {
+        const eventsJson = el.dataset.events ?? "";
+        try {
+          const events: SharedEventItem[] = JSON.parse(eventsJson);
+          const hasLink = events.some((ev) => ev.action === "link");
+          if (hasLink) return; // Already handled by data-events
+        } catch {
+          // invalid JSON → treat as no events
+        }
+      }
+      const handler = (e: Event) => {
+        e.preventDefault();
+        const href = anchor.getAttribute("href");
+        if (href && href !== "#") {
+          window.open(href, "_blank", "noopener,noreferrer");
+        }
+      };
+      anchor.addEventListener("click", handler);
+      cleanupFns.push(() => anchor.removeEventListener("click", handler));
+    });
+
     eventElements.forEach((el) => {
       const eventsJson = (el as HTMLElement).dataset.events;
       if (!eventsJson) return;
