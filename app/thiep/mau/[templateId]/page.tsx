@@ -12,6 +12,9 @@ export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
 type Props = {
+  params: Promise<{ templateId: string }>;
+  searchParams: Promise<{ v?: string }>;
+};
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { templateId } = await params;
@@ -31,9 +34,9 @@ export default async function TemplatePreviewPage({ params, searchParams }: Prop
   noStore();
 
   const { templateId } = await params;
-  const sp = (await searchParams) as any;
-  const { v: renderVersion } = sp;
-  const debug = Boolean(sp?.debug === '1' || sp?.v);
+  const sp = (await searchParams) as Record<string, unknown>;
+  const renderVersion = sp?.v as string | undefined;
+  const debug = Boolean(sp?.debug === "1" || sp?.v);
   const template = await fetchTemplateForPreview(templateId, { forcePreview: debug });
   if (!template) notFound();
 
