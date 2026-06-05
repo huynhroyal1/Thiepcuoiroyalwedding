@@ -10,13 +10,11 @@ import type { WeddingCard } from "@/types";
 import type { SharedEventItem } from "@/components/editor/utils/styleHelpers";
 import { runBlockEvent } from "@/lib/editor/runBlockEvent";
 import { InvitationCraftScale } from "@/components/invitation/InvitationCraftScale";
-import { toast } from "sonner";
 import "animate.css";
 
 function revealInvitationAnimation(el: HTMLElement) {
   const animEntry = el.dataset.animEntry;
   if (!animEntry) return;
-  // Always strip pending — effect re-runs can re-add it while shown is already set.
   el.classList.remove("invitation-anim-pending");
   if (el.classList.contains("invitation-anim-shown")) return;
   const dur = parseFloat(el.dataset.animDur ?? "1");
@@ -50,17 +48,9 @@ function isElementInScrollView(el: HTMLElement): boolean {
 interface CraftJsViewerProps {
   card: WeddingCard;
   contentJson: Record<string, unknown>;
-  /** Bust Craft Frame cache after save (?v= from preview URL). */
   renderVersion?: string | number | null;
 }
 
-/**
- * Read-only renderer for wedding cards saved as Craft.js node trees.
- * - `enabled={false}` disables all drag/drop/select interactions.
- * - IntersectionObserver triggers animate.css animations when scrolled into view.
- * - Event listeners (click/hover) are attached based on `data-events` attributes.
- * - Fits parent frame (max 390px, 100% on narrow phones).
- */
 export function CraftJsViewer({ card, contentJson, renderVersion }: CraftJsViewerProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [lightboxSrc, setLightboxSrc] = useState<string | null>(null);
@@ -69,29 +59,28 @@ export function CraftJsViewer({ card, contentJson, renderVersion }: CraftJsViewe
     () => contentJsonRevision(contentJson, card.updated_at, renderVersion),
     [contentJson, card.updated_at, renderVersion]
   );
+
   const frameData = useMemo(() => {
     const migrated = migrateContentJson(contentJson);
     return JSON.stringify(migrated);
   }, [contentJson]);
 
-  // Debug: log frameData structure after migrate
   useEffect(() => {
-    if (process.env.NODE_ENV !== 'development') return;
+    if (process.env.NODE_ENV !== "development") return;
     try {
       JSON.parse(frameData);
-    } catch(e) {
-      console.error('[CraftJsViewer] frameData parse error:', e);
+    } catch (e) {
+      console.error("[CraftJsViewer] frameData parse error:", e);
     }
   }, [frameData]);
 
-  // Debug: observe Craft Frame rendering
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
 
     const debugTimer = setTimeout(() => {
-      const childCount = container.querySelectorAll('[data-node-id]').length;
-      console.log('[CraftJsViewer] rendered nodes:', childCount);
+      const childCount = container.querySelectorAll("[data-node-id]").length;
+      console.log("[CraftJsViewer] rendered nodes:", childCount);
     }, 2000);
 
     return () => clearTimeout(debugTimer);
@@ -102,20 +91,17 @@ export function CraftJsViewer({ card, contentJson, renderVersion }: CraftJsViewe
     if (!container) return;
     let fallbackTimer: ReturnType<typeof setTimeout> | null = null;
 
-    // Global handler for unhandled promise rejections to avoid blank screens
     const onUnhandledRejection = (ev: PromiseRejectionEvent) => {
       try {
-        console.error('[CraftJsViewer] Unhandled rejection caught', ev.reason);
-        // Prevent default logging to console as uncaught
+        console.error("[CraftJsViewer] Unhandled rejection caught", ev.reason);
         ev.preventDefault?.();
-      } catch (err) {
+      } catch {
         // ignore
       }
     };
 
-    window.addEventListener('unhandledrejection', onUnhandledRejection as any);
+    window.addEventListener("unhandledrejection", onUnhandledRejection as never);
 
-    // ── 1. IntersectionObserver for animate.css animations ────────────────────
     const animObserver = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -141,10 +127,9 @@ export function CraftJsViewer({ card, contentJson, renderVersion }: CraftJsViewe
         animObserver.observe(el);
       }
     });
-    // Fail-safe: if IntersectionObserver misses initial viewport timing, reveal only visible blocks.
+
     fallbackTimer = setTimeout(() => revealVisibleAnimations(container), 900);
 
-    // ── 2. Apply hover effects from data-hover-effect attribute ───────────────
     const hoverElements = container.querySelectorAll("[data-hover-effect]");
     hoverElements.forEach((el) => {
       const effect = (el as HTMLElement).dataset.hoverEffect;
@@ -153,7 +138,6 @@ export function CraftJsViewer({ card, contentJson, renderVersion }: CraftJsViewe
       }
     });
 
-    // Apply sticky elements
     const stickyElements = container.querySelectorAll("[data-sticky='true']");
     stickyElements.forEach((el) => {
       (el as HTMLElement).style.position = "sticky";
@@ -161,18 +145,15 @@ export function CraftJsViewer({ card, contentJson, renderVersion }: CraftJsViewe
       (el as HTMLElement).style.zIndex = "50";
     });
 
-    // Apply custom CSS classes
     const customClassElements = container.querySelectorAll("[data-custom-class]");
     customClassElements.forEach((el) => {
       const cls = (el as HTMLElement).dataset.customClass;
       if (cls) cls.split(" ").filter(Boolean).forEach((c) => (el as HTMLElement).classList.add(c));
     });
 
-    // ── 3. Event listeners via data-events ────────────────────────────────────
     const eventElements = container.querySelectorAll("[data-events]");
     const cleanupFns: (() => void)[] = [];
 
-    // ── Fallback: buttons with href but no "link" event → open href directly ──
     const buttonFallbacks = container.querySelectorAll<HTMLAnchorElement>('[data-block="button"] a[href]');
     buttonFallbacks.forEach((anchor) => {
       const el = anchor.closest("[data-events]") as HTMLElement | null;
@@ -181,11 +162,12 @@ export function CraftJsViewer({ card, contentJson, renderVersion }: CraftJsViewe
         try {
           const events: SharedEventItem[] = JSON.parse(eventsJson);
           const hasLink = events.some((ev) => ev.action === "link");
-          if (hasLink) return; // Already handled by data-events
+          if (hasLink) return;
         } catch {
           // invalid JSON → treat as no events
         }
       }
+
       const handler = (e: Event) => {
         e.preventDefault();
         const href = anchor.getAttribute("href");
@@ -224,220 +206,9 @@ export function CraftJsViewer({ card, contentJson, renderVersion }: CraftJsViewe
       if (fallbackTimer) clearTimeout(fallbackTimer);
       animObserver.disconnect();
       cleanupFns.forEach((fn) => fn());
-      window.removeEventListener('unhandledrejection', onUnhandledRejection as any);
+      window.removeEventListener("unhandledrejection", onUnhandledRejection as never);
     };
   }, [revision]);
-
-  // ── 4. Transform form placeholders into real inputs ───────────────────────
-  useEffect(() => {
-    const container = containerRef.current;
-    if (!container) return;
-
-    console.log("[CraftJsViewer] Starting form transformation...");
-
-    const cardId = card.id;
-
-    // Find all links/buttons and replace placeholders with actual inputs
-    const allElements = container.querySelectorAll<HTMLElement>("a, button, div");
-
-    // Track which elements we've transformed
-    const transformed = new Set<HTMLElement>();
-
-    for (const el of allElements) {
-      const text = el.innerText?.trim() || "";
-
-      // ── RSVP Form Placeholders ──────────────────────────────────────────
-      if (text === "Họ và tên" && !transformed.has(el)) {
-        const input = document.createElement("input");
-        input.type = "text";
-        input.placeholder = "Họ và tên";
-        input.className = "rsvp-name-input";
-        input.style.cssText = "padding: 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; width: 100%;";
-        el.replaceWith(input);
-        transformed.add(el);
-      }
-
-      if (text === "Email" && !transformed.has(el) && el.tagName === "A") {
-        const input = document.createElement("input");
-        input.type = "email";
-        input.placeholder = "Email";
-        input.className = "rsvp-email-input";
-        input.style.cssText = "padding: 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; width: 100%;";
-        el.replaceWith(input);
-        transformed.add(el);
-      }
-
-      if (text === "Khách mời của" && !transformed.has(el)) {
-        const input = document.createElement("input");
-        input.type = "text";
-        input.placeholder = "Khách mời của";
-        input.className = "rsvp-invited-by-input";
-        input.style.cssText = "padding: 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; width: 100%;";
-        el.replaceWith(input);
-        transformed.add(el);
-      }
-
-      if (text === "Số người tham dự" && !transformed.has(el)) {
-        const input = document.createElement("input");
-        input.type = "number";
-        input.placeholder = "Số người tham dự";
-        input.value = "1";
-        input.className = "rsvp-count-input";
-        input.style.cssText = "padding: 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; width: 100%;";
-        el.replaceWith(input);
-        transformed.add(el);
-      }
-
-      if (text === "Bạn sẽ tham gia sự kiện nào ?" && !transformed.has(el)) {
-        const select = document.createElement("select");
-        select.className = "rsvp-event-select";
-        select.style.cssText = "padding: 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; width: 100%;";
-        select.innerHTML = `
-          <option value="">-- Bạn sẽ tham gia sự kiện nào ? --</option>
-          <option value="true">Có, tôi sẽ đến</option>
-          <option value="false">Xin lỗi, tôi bận mất rồi</option>
-        `;
-        el.replaceWith(select);
-        transformed.add(el);
-      }
-
-      if (text === "Xác nhận" && !transformed.has(el) && el.closest("div")?.innerText?.includes("Họ và tên")) {
-        const btn = document.createElement("button");
-        btn.type = "button";
-        btn.className = "rsvp-submit-btn";
-        btn.innerText = "Xác nhận";
-        btn.style.cssText = "padding: 10px; background: #8b7355; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; width: 100%;";
-        btn.addEventListener("click", async (e) => {
-          e.preventDefault();
-          const parent = btn.closest("div") || container;
-          const guestName = (parent.querySelector<HTMLInputElement>(".rsvp-name-input")?.value || "").trim();
-          const guestCount = parseInt(parent.querySelector<HTMLInputElement>(".rsvp-count-input")?.value || "1") || 1;
-          const attending = parent.querySelector<HTMLSelectElement>(".rsvp-event-select")?.value === "true";
-          const note = "";
-
-          if (!guestName) {
-            toast.error("Vui lòng nhập họ tên");
-            return;
-          }
-
-          try {
-            const res = await fetch("/api/rsvp", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({
-                cardId,
-                guestName,
-                attending,
-                guestCount,
-                note: note || null,
-              }),
-            });
-
-              let data: any = null;
-              try {
-                data = await res.json();
-              } catch {
-                // ignore parse errors
-              }
-
-              if (!res.ok || (data && (data.code === 403 || data.error === 'Forbidden' || data.msg === 'permission error'))) {
-                toast.error((data && (data.error || data.msg)) || "Lỗi xác nhận tham dự");
-                return;
-              }
-
-              toast.success("✓ Xác nhận tham dự thành công!");
-          } catch (err) {
-            console.error("RSVP error:", err);
-            toast.error("Lỗi gửi request. Vui lòng thử lại.");
-          }
-        });
-        el.replaceWith(btn);
-        transformed.add(el);
-      }
-
-      // ── Wishes Form Placeholders ────────────────────────────────────────
-      if (text === "Tên của bạn *" && !transformed.has(el)) {
-        const input = document.createElement("input");
-        input.type = "text";
-        input.placeholder = "Tên của bạn *";
-        input.required = true;
-        input.className = "wishes-name-input";
-        input.style.cssText = "padding: 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; width: 100%;";
-        el.replaceWith(input);
-        transformed.add(el);
-      }
-
-      if (text === "Lời chúc của bạn *" && !transformed.has(el)) {
-        const textarea = document.createElement("textarea");
-        textarea.placeholder = "Lời chúc của bạn *";
-        textarea.required = true;
-        textarea.rows = 4;
-        textarea.className = "wishes-message-textarea";
-        textarea.style.cssText = "padding: 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; width: 100%; font-family: inherit;";
-        el.replaceWith(textarea);
-        transformed.add(el);
-      }
-
-      if (text === "Gửi lời chúc" && !transformed.has(el) && (el.tagName === "BUTTON" || el.tagName === "A")) {
-        const btn = document.createElement("button");
-        btn.type = "button";
-        btn.className = "wishes-submit-btn";
-        btn.innerText = "Gửi lời chúc";
-        btn.style.cssText = "padding: 10px; background: #8b7355; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; width: 100%;";
-        btn.addEventListener("click", async (e) => {
-          e.preventDefault();
-          const parent = btn.closest("div") || container;
-          const guestName = (parent.querySelector<HTMLInputElement>(".wishes-name-input")?.value || "").trim();
-          const message = (parent.querySelector<HTMLTextAreaElement>(".wishes-message-textarea")?.value || "").trim();
-
-          if (!guestName || !message) {
-            toast.error("Vui lòng nhập tên và lời chúc");
-            return;
-          }
-
-          try {
-            const res = await fetch("/api/wishes", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({
-                cardId,
-                guestName,
-                message,
-              }),
-            });
-
-            let data: any = null;
-            try {
-              data = await res.json();
-            } catch {
-              // ignore parse errors
-            }
-
-            if (!res.ok || (data && (data.code === 403 || data.error === 'Forbidden' || data.msg === 'permission error'))) {
-              toast.error((data && (data.error || data.msg)) || "Lỗi gửi lời chúc");
-              return;
-            }
-
-            const result = data;
-
-            if (result?.wish?.id) {
-              toast.success("✓ Lời chúc đã gửi! Cảm ơn bạn.");
-            } else {
-              toast.info("Lời chúc của bạn đang chờ duyệt.");
-            }
-
-            parent.querySelector<HTMLInputElement>(".wishes-name-input")!.value = "";
-            parent.querySelector<HTMLTextAreaElement>(".wishes-message-textarea")!.value = "";
-          } catch (err) {
-            console.error("Wishes error:", err);
-            toast.error("Lỗi gửi request. Vui lòng thử lại.");
-          }
-        });
-        el.replaceWith(btn);
-        transformed.add(el);
-      }
-    }
-  }, [card.id]);
 
   return (
     <EditorCardProvider card={card}>
@@ -453,7 +224,6 @@ export function CraftJsViewer({ card, contentJson, renderVersion }: CraftJsViewe
         </div>
       </InvitationCraftScale>
 
-      {/* Lightbox overlay */}
       {lightboxSrc && (
         <div
           style={{
@@ -467,7 +237,6 @@ export function CraftJsViewer({ card, contentJson, renderVersion }: CraftJsViewe
           }}
           onClick={() => setLightboxSrc(null)}
         >
-          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={lightboxSrc}
             alt="Lightbox"
@@ -494,8 +263,6 @@ export function CraftJsViewer({ card, contentJson, renderVersion }: CraftJsViewe
           </button>
         </div>
       )}
-      
-
     </EditorCardProvider>
   );
 }
@@ -506,5 +273,3 @@ function executeAction(
 ) {
   runBlockEvent(ev, { onLightbox: setLightboxSrc });
 }
-      
-

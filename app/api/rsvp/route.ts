@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createPublicSupabase } from "@/lib/supabase/public";
+import { createServiceRoleClient } from "@/lib/supabase/admin";
 import { rsvpSchema } from "@/lib/validations/api";
 
 export async function POST(request: Request) {
@@ -38,11 +39,12 @@ export async function POST(request: Request) {
   }
 
   const guestCount = parsed.data.guestCount ?? 1;
+  const normalizedGuestName = parsed.data.guestName.trim();
 
   const { error } = await supabase.from("rsvp").insert({
     card_id: parsed.data.cardId,
     guest_id: parsed.data.guestId ?? null,
-    guest_name: parsed.data.guestName,
+    guest_name: normalizedGuestName,
     attending: parsed.data.attending,
     guest_count: guestCount,
     note: parsed.data.note ?? null,
@@ -50,6 +52,59 @@ export async function POST(request: Request) {
 
   if (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });
+  }
+
+  try {
+    const admin = createServiceRoleClient();
+
+    if (parsed.data.guestId) {
+      const { error: guestUpdateError } = await admin
+        .from("guests")
+        .update({
+          attending: parsed.data.attending,
+          num_guests: guestCount,
+          name: normalizedGuestName,
+        })
+        .eq("id", parsed.data.guestId)
+        .eq("card_id", parsed.data.cardId);
+
+      if (guestUpdateError) {
+        console.error("Failed to sync guest RSVP:", guestUpdateError.message);
+      }
+    } else {
+      const { data: matchedGuests, error: matchError } = await admin
+        .from("guests")
+        .select("id, name")
+        .eq("card_id", parsed.data.cardId)
+        .ilike("name", normalizedGuestName);
+
+      if (matchError) {
+        console.error("Failed to match guest by name:", matchError.message);
+      } else if (matchedGuests && matchedGuests.length === 1) {
+        const matchedGuest = matchedGuests[0];
+        const { error: guestUpdateError } = await admin
+          .from("guests")
+          .update({
+            attending: parsed.data.attending,
+            num_guests: guestCount,
+            name: normalizedGuestName,
+          })
+          .eq("id", matchedGuest.id)
+          .eq("card_id", parsed.data.cardId);
+
+        if (guestUpdateError) {
+          console.error("Failed to sync matched guest RSVP:", guestUpdateError.message);
+        }
+      } else if ((matchedGuests?.length ?? 0) > 1) {
+        console.warn("Multiple guests matched RSVP name; skipping guest sync", {
+          cardId: parsed.data.cardId,
+          guestName: normalizedGuestName,
+          matches: matchedGuests?.map((guest) => guest.id),
+        });
+      }
+    }
+  } catch (syncError) {
+    console.error("Guest RSVP sync error:", syncError);
   }
 
   return NextResponse.json({ success: true, message: "Đã xác nhận tham dự" });

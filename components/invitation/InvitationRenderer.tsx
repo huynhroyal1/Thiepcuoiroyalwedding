@@ -6,6 +6,7 @@ import { MinimalModern } from "@/components/invitation/templates/MinimalModern";
 import { CraftJsViewer } from "@/components/invitation/CraftJsViewer";
 import { InvitationHTMLViewer } from "@/components/invitation/InvitationHTMLViewer";
 import { InvitationExperience } from "@/components/invitation/InvitationExperience";
+import { InvitationSections } from "@/components/invitation/InvitationSections";
 import type { TemplateProps } from "@/components/invitation/InvitationSections";
 import { isCraftContentJson } from "@/lib/editor/sanitizeCraftContent";
 
@@ -41,11 +42,14 @@ export function InvitationRenderer(props: TemplateProps) {
     body = <InvitationHTMLViewer html={typeof html === "string" ? html : ""} />;
   } else if (isCraftContentJson(cj)) {
     body = (
-      <CraftJsViewer
-        card={props.card}
-        contentJson={cj}
-        renderVersion={props.renderVersion}
-      />
+      <>
+        <CraftJsViewer
+          card={props.card}
+          contentJson={cj}
+          renderVersion={props.renderVersion}
+        />
+        <InvitationSections {...props} theme="minimal" />
+      </>
     );
   } else {
     // Legacy template
