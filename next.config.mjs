@@ -35,6 +35,16 @@ const nextConfig = {
         hostname: "placehold.co",
         pathname: "/**",
       },
+      {
+        protocol: "https",
+        hostname: "ladicdn.com",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "w.ladicdn.com",
+        pathname: "/**",
+      },
     ],
   },
 };
