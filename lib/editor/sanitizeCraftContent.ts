@@ -13,6 +13,19 @@ export const CRAFT_RESOLVER_NAMES = new Set([
   "WishesBlock",
 ]);
 
+/**
+ * True when content_json is raw HTML imported from MeHappy/mehappy.
+ * These have a top-level `html` string (not a Craft node object).
+ * Format: {"html": "<div..."} or {"html": "<html..."}
+ */
+export function isRawHtmlContentJson(content: unknown): boolean {
+  if (!content || typeof content !== "object") return false;
+  const c = content as Record<string, unknown>;
+  if (c.type === "raw-html") return true;
+  if (typeof c.html === "string" && c.html.trim().length > 0) return true;
+  return false;
+}
+
 type CraftNode = {
   type?: { resolvedName?: string } | string;
   nodes?: string[];
@@ -32,7 +45,9 @@ function getResolvedName(node: unknown): string | undefined {
 export function isCraftContentJson(content: unknown): content is Record<string, unknown> {
   if (content == null || typeof content !== "object") return false;
   const c = content as Record<string, unknown>;
+  // Explicit raw-html type field OR legacy html string property — neither is a Craft tree
   if (c.type === "raw-html") return false;
+  if (typeof c.html === "string" && c.html.trim().length > 0) return false;
 
   // Check for actual ROOT key (standard Craft.js format)
   const rootResolvedName = getResolvedName(c.ROOT);
@@ -54,7 +69,8 @@ export function isCraftContentJson(content: unknown): content is Record<string, 
  * so Craft.js deserialize does not throw "Cannot find component <undefined />".
  */
 export function sanitizeCraftContent(raw: Record<string, unknown>): Record<string, unknown> {
-  if (raw.type === "raw-html") return raw;
+  // Return as-is for raw HTML content — no Craft nodes to sanitize
+  if (isRawHtmlContentJson(raw)) return raw;
 
   const sanitized: Record<string, unknown> = {};
   let hasRootParent = false;

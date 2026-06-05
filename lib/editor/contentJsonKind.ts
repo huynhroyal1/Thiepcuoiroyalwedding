@@ -1,12 +1,10 @@
-import { isCraftContentJson } from "@/lib/editor/sanitizeCraftContent";
+import { isCraftContentJson, isRawHtmlContentJson } from "@/lib/editor/sanitizeCraftContent";
 
 export type ContentJsonKind = "none" | "raw-html" | "craft";
 
 export function getContentJsonKind(content: unknown): ContentJsonKind {
-  if (content == null || typeof content !== "object") return "none";
-  const c = content as Record<string, unknown>;
-  if (c.type === "raw-html") return "raw-html";
-  if (isCraftContentJson(c)) return "craft";
+  if (isRawHtmlContentJson(content)) return "raw-html";
+  if (isCraftContentJson(content)) return "craft";
   return "none";
 }
 

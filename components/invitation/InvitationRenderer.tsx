@@ -15,14 +15,30 @@ const TEMPLATES = {
   "minimal-modern": MinimalModern,
 } as const;
 
+/**
+ * True when content_json is raw HTML imported from MeHappy/mehappy.
+ * Format: {"html": "<div...", ...} — no `type` field, no ROOT node.
+ * Detected by checking for a top-level `html` string property.
+ */
+function isRawHtmlContent(content: unknown): boolean {
+  if (!content || typeof content !== "object") return false;
+  const c = content as Record<string, unknown>;
+  // Explicit type field (standard format)
+  if (c.type === "raw-html") return true;
+  // Legacy imported format: {"html": "<div..."} or {"html": "<html..."}
+  if (typeof c.html === "string" && c.html.trim().length > 0) return true;
+  return false;
+}
+
 export function InvitationRenderer(props: TemplateProps) {
   const cj = props.card.content_json;
 
   let body: React.ReactNode;
 
-  if (cj && typeof cj === "object" && (cj as Record<string, unknown>).type === "raw-html") {
-    // MeHappy-format raw HTML card
-    body = <InvitationHTMLViewer html={(cj as Record<string, unknown>).html as string} />;
+  if (isRawHtmlContent(cj)) {
+    // MeHappy-format raw HTML card (legacy imported)
+    const html = (cj as Record<string, unknown>).html;
+    body = <InvitationHTMLViewer html={typeof html === "string" ? html : ""} />;
   } else if (isCraftContentJson(cj)) {
     body = (
       <CraftJsViewer
