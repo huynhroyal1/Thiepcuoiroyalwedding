@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
@@ -302,23 +303,12 @@ export function KhoGiaoDienClient({ templates, faqItems = faqMehappy }: Props) {
               >
                 <div className="relative aspect-[9/16] max-h-[22rem] w-full shrink-0 overflow-hidden bg-neutral-100">
                   {img ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img
-                      src={img}
-                      alt={t.name}
-                      className="h-full w-full object-cover object-top"
-                      loading="lazy"
-                      onError={(e) => {
-                        const target = e.currentTarget as HTMLImageElement;
-                        target.style.display = "none";
-                        const placeholder = target.nextElementSibling as HTMLElement | null;
-                        if (placeholder) placeholder.style.display = "flex";
-                      }}
-                    />
-                  ) : null}
-                  <div className="absolute inset-0 hidden items-center justify-center bg-gradient-to-b from-rose-100 via-rose-50 to-white">
-                    <span className="font-serif text-xl font-semibold text-rose-400/90">Royal Wedding</span>
-                  </div>
+                    <Image src={img} alt={t.name} fill className="object-cover object-top" sizes="(max-width:768px) 100vw, 360px" />
+                  ) : (
+                    <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-b from-rose-100 via-rose-50 to-white">
+                      <span className="font-serif text-xl font-semibold text-rose-400/90">Royal Wedding</span>
+                    </div>
+                  )}
                   <div className={clsx("absolute left-2 top-2 z-10 flex items-center gap-1 rounded-md px-2 py-0.5", ui.wrap)}>
                     {ui.icon}
                     <span className="text-[10px] font-bold leading-none">{ui.label}</span>
