@@ -16,6 +16,7 @@ function dispatchMusicEvent(type: "invitation:music:play" | "invitation:music:pa
 export function BackgroundMusic({ src }: Props) {
   const audioRef = useRef<HTMLAudioElement>(null);
   const [playing, setPlaying] = useState(false);
+  const hasInteractedRef = useRef(false);
 
   const play = useCallback(async () => {
     const el = audioRef.current;
@@ -39,7 +40,16 @@ export function BackgroundMusic({ src }: Props) {
     dispatchMusicEvent("invitation:music:pause");
   }, []);
 
-  // Listen for native audio events (e.g. browser blocks autoplay → user starts elsewhere)
+  useEffect(() => {
+    if (!src || hasInteractedRef.current) return;
+    hasInteractedRef.current = true;
+
+    const el = audioRef.current;
+    if (!el) return;
+    el.muted = false;
+    void play();
+  }, [src, play]);
+
   useEffect(() => {
     const el = audioRef.current;
     if (!el) return;
@@ -49,14 +59,6 @@ export function BackgroundMusic({ src }: Props) {
     el.addEventListener("pause", onPause);
     return () => { el.removeEventListener("play", onPlay); el.removeEventListener("pause", onPause); };
   }, []);
-
-  useEffect(() => {
-    if (!src) return;
-    const el = audioRef.current;
-    if (!el) return;
-    el.muted = false;
-    void play();
-  }, [src, play]);
 
   const toggle = useCallback(async () => {
     if (playing) {
