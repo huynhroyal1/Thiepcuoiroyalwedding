@@ -16,7 +16,6 @@ function dispatchMusicEvent(type: "invitation:music:play" | "invitation:music:pa
 export function BackgroundMusic({ src }: Props) {
   const audioRef = useRef<HTMLAudioElement>(null);
   const [playing, setPlaying] = useState(false);
-  const hasInteractedRef = useRef(false);
 
   const play = useCallback(async () => {
     const el = audioRef.current;
@@ -41,9 +40,7 @@ export function BackgroundMusic({ src }: Props) {
   }, []);
 
   useEffect(() => {
-    if (!src || hasInteractedRef.current) return;
-    hasInteractedRef.current = true;
-
+    if (!src) return;
     const el = audioRef.current;
     if (!el) return;
     el.muted = false;
@@ -81,7 +78,7 @@ export function BackgroundMusic({ src }: Props) {
         title={playing ? "Tạm dừng nhạc" : "Phát nhạc"}
       >
         <span
-          className={`invitation-music-disc ${playing ? "invitation-music-disc--spinning" : "invitation-music-disc--paused"}`}
+          className={`invitation-music-disc ${playing ? "invitation-music-disc--spinning" : "invitation-music-disc--spinning"}`}
         >
           <Music2 className="invitation-music-disc__icon h-5 w-5" strokeWidth={2} />
         </span>
