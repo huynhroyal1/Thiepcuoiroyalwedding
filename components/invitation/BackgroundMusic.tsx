@@ -16,41 +16,25 @@ function dispatchMusicEvent(type: "invitation:music:play" | "invitation:music:pa
 export function BackgroundMusic({ src }: Props) {
   const audioRef = useRef<HTMLAudioElement>(null);
   const [playing, setPlaying] = useState(false);
-  const audioContextRef = useRef<AudioContext | null>(null);
-  const hasAttemptedRef = useRef(false);
+  const initializedRef = useRef(false);
 
-  const getAudioContext = useCallback(() => {
-    if (!audioContextRef.current) {
-      audioContextRef.current = new (window.AudioContext || (window as any).webkitAudioContext)();
+  const tryUnmute = useCallback(async (el: HTMLAudioElement) => {
+    el.volume = 0.55;
+    el.muted = false;
+    try {
+      await el.play();
+      setPlaying(true);
+      dispatchMusicEvent("invitation:music:play");
+    } catch {
+      setPlaying(false);
     }
-    return audioContextRef.current;
   }, []);
 
   const play = useCallback(async () => {
     const el = audioRef.current;
     if (!el || !src) return false;
-
-    // Try AudioContext approach first (more reliable for autoplay)
-    try {
-      const ctx = getAudioContext();
-      if (ctx.state === "suspended") {
-        await ctx.resume();
-      }
-    } catch {
-      // AudioContext not supported, fall through to HTML5 Audio
-    }
-
-    el.volume = 0.55;
-    try {
-      await el.play();
-      setPlaying(true);
-      dispatchMusicEvent("invitation:music:play");
-      return true;
-    } catch {
-      setPlaying(false);
-      return false;
-    }
-  }, [src, getAudioContext]);
+    return tryUnmute(el);
+  }, [src, tryUnmute]);
 
   const pause = useCallback(() => {
     const el = audioRef.current;
@@ -60,65 +44,56 @@ export function BackgroundMusic({ src }: Props) {
   }, []);
 
   useEffect(() => {
-    if (!src || hasAttemptedRef.current) return;
-    hasAttemptedRef.current = true;
+    if (!src || initializedRef.current) return;
+    initializedRef.current = true;
 
     const el = audioRef.current;
     if (!el) return;
 
-    // Try autoplay immediately (works on localhost)
-    const attemptPlay = async () => {
-      el.muted = false;
-      const success = await play();
-      if (!success) {
-        // If autoplay blocked, try muted autoplay then unmute
-        el.muted = true;
+    // Bắt đầu muted để browser cho phép autoplay,
+    // rồi mới thử bỏ mute để phát ra âm thanh.
+    el.muted = true;
+    el.volume = 0.55;
+
+    const attemptUnmute = async () => {
+      const audioEl = audioRef.current;
+      if (!audioEl) return;
+
+      if (audioEl.muted) {
+        // Nếu đang muted: thử phát muted trước, rồi unmute.
         try {
-          await el.play();
-          // Small delay then unmute
-          setTimeout(() => {
-            el.muted = false;
-            setPlaying(true);
-            dispatchMusicEvent("invitation:music:play");
-          }, 100);
+          await audioEl.play();
+          await tryUnmute(audioEl);
         } catch {
-          // Still blocked, user needs to interact
+          // Browser vẫn chặn, đợi tương tác của user.
           setPlaying(false);
         }
+      } else {
+        await tryUnmute(audioEl);
       }
     };
 
-    attemptPlay();
-  }, [src, play]);
+    // Thử ngay lập tức khi mount.
+    void attemptUnmute();
 
-  // Listen for ANY user interaction to start music
-  useEffect(() => {
-    if (!src) return;
-
-    const events: (keyof DocumentEventMap)[] = ["click", "touchstart", "keydown", "scroll", "wheel"];
+    // Mọi tương tác đầu tiên đều có thể là user gesture.
+    const events: (keyof DocumentEventMap)[] = [
+      "click",
+      "touchstart",
+      "keydown",
+    ];
     const handler = async () => {
-      const el = audioRef.current;
-      if (!el || playing) return;
-
-      el.muted = false;
-      try {
-        await el.play();
-        setPlaying(true);
-        dispatchMusicEvent("invitation:music:play");
-      } catch {
-        // Still blocked
-      }
-
-      // Remove listeners after first successful/failed attempt
-      events.forEach((e) => document.removeEventListener(e, handler));
+      await attemptUnmute();
+      events.forEach((eventName) => document.removeEventListener(eventName, handler));
     };
-
-    events.forEach((e) => document.addEventListener(e, handler, { once: true, passive: true }));
+    events.forEach((eventName) =>
+      document.addEventListener(eventName, handler, { once: true, passive: true }),
+    );
 
     return () => {
-      events.forEach((e) => document.removeEventListener(e, handler));
+      events.forEach((eventName) => document.removeEventListener(eventName, handler));
     };
-  }, [src, playing]);
+  }, [src, tryUnmute]);
 
   useEffect(() => {
     const el = audioRef.current;
@@ -127,7 +102,10 @@ export function BackgroundMusic({ src }: Props) {
     const onPause = () => { setPlaying(false); dispatchMusicEvent("invitation:music:pause"); };
     el.addEventListener("play", onPlay);
     el.addEventListener("pause", onPause);
-    return () => { el.removeEventListener("play", onPlay); el.removeEventListener("pause", onPause); };
+    return () => {
+      el.removeEventListener("play", onPlay);
+      el.removeEventListener("pause", onPause);
+    };
   }, []);
 
   const toggle = useCallback(async () => {
@@ -142,7 +120,7 @@ export function BackgroundMusic({ src }: Props) {
 
   return (
     <>
-      <audio ref={audioRef} src={src} loop preload="auto" playsInline />
+      <audio ref={audioRef} src={src} loop preload="auto" playsInline muted />
       <button
         type="button"
         onClick={() => void toggle()}
