@@ -166,18 +166,7 @@ export function InvitationSections({ card, photos, guest, theme }: TemplateProps
         </div>
       </section>
 
-      {photos.length > 0 && (
-        <section className="px-2 py-16">
-          <h2 className="mb-8 text-center font-serif text-2xl">Album ảnh</h2>
-          <div className="columns-2 gap-2 sm:columns-3">
-            {photos.map((p) => (
-              <div key={p.id} className="mb-2 break-inside-avoid overflow-hidden rounded-lg">
-                <Image src={p.url} alt="" width={400} height={500} className="h-auto w-full object-cover" />
-              </div>
-            ))}
-          </div>
-        </section>
-      )}
+      {photos.length > 0 && <AlbumSwiper photos={photos} />}
 
       <RsvpSection cardId={card.id} defaultName={guest?.name} guestId={guest?.id} />
       <WishesSection cardId={card.id} />
