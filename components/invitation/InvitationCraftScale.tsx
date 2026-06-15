@@ -57,26 +57,21 @@ export function InvitationCraftScale({ children }: { children: ReactNode }) {
 
   return (
     <div ref={outerRef} className="invitation-craft-scaler w-full overflow-x-clip">
-      <div
-        style={
-          scale < 1
-            ? { width: "100%", height, position: "relative" as const }
-            : undefined
-        }
-      >
+      {scale < 1 ? (
         <div
-          ref={innerRef}
           style={{
-            width: PUBLISHED_CANVAS_WIDTH,
-            marginLeft: "auto",
-            marginRight: "auto",
-            transform: scale < 1 ? `scale(${scale})` : undefined,
+            width: "100%",
+            height,
+            position: "relative",
+            zoom: scale,
             transformOrigin: "top center",
           }}
         >
           {children}
         </div>
-      </div>
+      ) : (
+        <div className="mx-auto w-full max-w-full">{children}</div>
+      )}
     </div>
   );
 }
