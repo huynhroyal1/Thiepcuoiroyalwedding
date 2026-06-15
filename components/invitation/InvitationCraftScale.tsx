@@ -1,47 +1,57 @@
 "use client";
 
-import React, { useEffect, useRef, useState, type ReactNode } from "react";
+import React, { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import { PUBLISHED_CANVAS_WIDTH } from "@/lib/editor/canvasViewport";
 
-/**
- * Keeps Craft invitation layout at 390px design coordinates and scales down
- * uniformly on narrow viewports so editor WYSIWYG matches /thiep preview.
- *
- * Key insight: the transform:scale() only applies when the container is NARROWER
- * than 390px (scale < 1). When viewport >= 390px, scale=1, no transform,
- * and outer div gets no inline style — CSS from parent takes over.
- */
+type Layout = { scale: number; height: number };
+
 export function InvitationCraftScale({ children }: { children: ReactNode }) {
   const outerRef = useRef<HTMLDivElement>(null);
   const innerRef = useRef<HTMLDivElement>(null);
-  const [layout, setLayout] = useState({ scale: 1, height: 0 });
+  const [layout, setLayout] = useState<Layout>({ scale: 1, height: 0 });
+  const stableLayoutRef = useRef<Layout>({ scale: 1, height: 0 });
+  const roRef = useRef<ResizeObserver | null>(null);
+
+  const applyLayout = useCallback((next: Layout) => {
+    const current = stableLayoutRef.current;
+    if (Math.abs(current.scale - next.scale) < 0.0005 && Math.abs(current.height - next.height) < 0.5) {
+      return;
+    }
+    stableLayoutRef.current = next;
+    setLayout(next);
+  }, []);
 
   useEffect(() => {
     const outer = outerRef.current;
     const inner = innerRef.current;
     if (!outer || !inner) return;
 
+    let raf = 0;
+
     const update = () => {
-      const frameW = outer.clientWidth;
-      const scale = frameW >= PUBLISHED_CANVAS_WIDTH ? 1 : frameW / PUBLISHED_CANVAS_WIDTH;
-      const naturalH = inner.scrollHeight;
-      setLayout({
-        scale,
-        height: scale < 1 ? Math.ceil(naturalH * scale) : 0,
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        const frameW = outer.clientWidth;
+        const scale = frameW >= PUBLISHED_CANVAS_WIDTH ? 1 : frameW / PUBLISHED_CANVAS_WIDTH;
+        const naturalH = inner.scrollHeight;
+        applyLayout({
+          scale,
+          height: scale < 1 ? Math.ceil(naturalH * scale) : 0,
+        });
       });
     };
 
     const ro = new ResizeObserver(update);
     ro.observe(outer);
-    const mo = new MutationObserver(update);
-    mo.observe(inner, { childList: true, subtree: true, attributes: true });
+    roRef.current = ro;
 
     update();
     return () => {
       ro.disconnect();
-      mo.disconnect();
+      roRef.current = null;
+      cancelAnimationFrame(raf);
     };
-  }, []);
+  }, [applyLayout]);
 
   const { scale, height } = layout;
 
