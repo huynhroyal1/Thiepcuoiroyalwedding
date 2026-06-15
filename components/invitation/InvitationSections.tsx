@@ -8,7 +8,7 @@ import { formatWeddingDateVi } from "@/lib/format-wedding";
 import { CountdownTimer } from "@/components/ui/CountdownTimer";
 import { RsvpSection } from "@/components/invitation/RsvpSection";
 import { WishesSection } from "@/components/invitation/WishesSection";
-import { AlbumSwiper } from "@/components/invitation/AlbumSwiper";
+import { AlbumGrid } from "@/components/invitation/AlbumGrid";
 import { mapsUrlToEmbed, mapsUrlToDirections } from "@/lib/utils";
 
 export type TemplateProps = {
@@ -167,7 +167,7 @@ export function InvitationSections({ card, photos, guest, theme }: TemplateProps
         </div>
       </section>
 
-      {photos.length > 0 && <AlbumSwiper photos={photos} />}
+      <AlbumGrid photos={photos} />
 
       <RsvpSection cardId={card.id} defaultName={guest?.name} guestId={guest?.id} />
       <WishesSection cardId={card.id} />
