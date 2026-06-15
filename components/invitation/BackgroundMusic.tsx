@@ -16,10 +16,30 @@ function dispatchMusicEvent(type: "invitation:music:play" | "invitation:music:pa
 export function BackgroundMusic({ src }: Props) {
   const audioRef = useRef<HTMLAudioElement>(null);
   const [playing, setPlaying] = useState(false);
+  const audioContextRef = useRef<AudioContext | null>(null);
+  const hasAttemptedRef = useRef(false);
+
+  const getAudioContext = useCallback(() => {
+    if (!audioContextRef.current) {
+      audioContextRef.current = new (window.AudioContext || (window as any).webkitAudioContext)();
+    }
+    return audioContextRef.current;
+  }, []);
 
   const play = useCallback(async () => {
     const el = audioRef.current;
     if (!el || !src) return false;
+
+    // Try AudioContext approach first (more reliable for autoplay)
+    try {
+      const ctx = getAudioContext();
+      if (ctx.state === "suspended") {
+        await ctx.resume();
+      }
+    } catch {
+      // AudioContext not supported, fall through to HTML5 Audio
+    }
+
     el.volume = 0.55;
     try {
       await el.play();
@@ -30,7 +50,7 @@ export function BackgroundMusic({ src }: Props) {
       setPlaying(false);
       return false;
     }
-  }, [src]);
+  }, [src, getAudioContext]);
 
   const pause = useCallback(() => {
     const el = audioRef.current;
@@ -40,12 +60,65 @@ export function BackgroundMusic({ src }: Props) {
   }, []);
 
   useEffect(() => {
-    if (!src) return;
+    if (!src || hasAttemptedRef.current) return;
+    hasAttemptedRef.current = true;
+
     const el = audioRef.current;
     if (!el) return;
-    el.muted = false;
-    void play();
+
+    // Try autoplay immediately (works on localhost)
+    const attemptPlay = async () => {
+      el.muted = false;
+      const success = await play();
+      if (!success) {
+        // If autoplay blocked, try muted autoplay then unmute
+        el.muted = true;
+        try {
+          await el.play();
+          // Small delay then unmute
+          setTimeout(() => {
+            el.muted = false;
+            setPlaying(true);
+            dispatchMusicEvent("invitation:music:play");
+          }, 100);
+        } catch {
+          // Still blocked, user needs to interact
+          setPlaying(false);
+        }
+      }
+    };
+
+    attemptPlay();
   }, [src, play]);
+
+  // Listen for ANY user interaction to start music
+  useEffect(() => {
+    if (!src) return;
+
+    const events: (keyof DocumentEventMap)[] = ["click", "touchstart", "keydown", "scroll", "wheel"];
+    const handler = async () => {
+      const el = audioRef.current;
+      if (!el || playing) return;
+
+      el.muted = false;
+      try {
+        await el.play();
+        setPlaying(true);
+        dispatchMusicEvent("invitation:music:play");
+      } catch {
+        // Still blocked
+      }
+
+      // Remove listeners after first successful/failed attempt
+      events.forEach((e) => document.removeEventListener(e, handler));
+    };
+
+    events.forEach((e) => document.addEventListener(e, handler, { once: true, passive: true }));
+
+    return () => {
+      events.forEach((e) => document.removeEventListener(e, handler));
+    };
+  }, [src, playing]);
 
   useEffect(() => {
     const el = audioRef.current;
