@@ -1,104 +1,121 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
-const PX_PER_SECOND = 22;
-const SWIPER_POLL_MS = 400;
+const SCROLL_SPEED = 25; // px/s
+const SWIPER_INTERVAL = 2200; // ms giữa mỗi lần vuốt ảnh
+const USER_PAUSE_MS = 3000;
 
 export function InvitationAutoScroll() {
+  const rafRef = useRef(0);
+  const lastRef = useRef(performance.now());
+  const pausedRef = useRef(false);
+  const modeRef = useRef<"scroll" | "swiper" | "idle">("scroll");
+  const swiperReadyRef = useRef(false);
+  const swiperSlidesRef = useRef(0);
+  const swiperPassesRef = useRef(0);
+  const swiperLastSlideRef = useRef(0);
+
+  const getSwiperFromDOM = () => {
+    if (typeof document === "undefined") return null;
+    const el = document.querySelector(".album-swiper") as HTMLElement | null;
+    if (!el) return null;
+    const cls = el.classList;
+    if (!cls.contains("swiper-initialized") && !cls.contains("swiper-initialized")) {
+      return null;
+    }
+    const inst = (el as unknown as { swiper?: { activeIndex: number; slides: { length: number } } }).swiper;
+    if (!inst) return null;
+    return inst;
+  };
+
+  const pause = (ms = USER_PAUSE_MS) => {
+    pausedRef.current = true;
+    setTimeout(() => {
+      pausedRef.current = false;
+      lastRef.current = performance.now();
+    }, ms);
+  };
+
+  const enterSwiperMode = () => {
+    const swiper = getSwiperFromDOM();
+    if (!swiper) return;
+    modeRef.current = "swiper";
+    swiperReadyRef.current = true;
+    swiperSlidesRef.current = swiper.slides.length;
+    swiperPassesRef.current = 0;
+    swiperLastSlideRef.current = swiper.activeIndex;
+  };
+
+  const exitSwiperMode = () => {
+    modeRef.current = "scroll";
+    swiperReadyRef.current = false;
+    lastRef.current = performance.now();
+  };
+
   useEffect(() => {
     if (typeof window === "undefined") return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-    let raf = 0;
-    let last = performance.now();
-    let pausedByUser = false;
-    let started = false;
-    let resumeTimer: ReturnType<typeof setTimeout> | null = null;
-    let swiperViewportPause = false;
-    let lastSwiperCheck = 0;
-
-    const resume = () => {
-      if (resumeTimer) clearTimeout(resumeTimer);
-      resumeTimer = setTimeout(() => {
-        pausedByUser = false;
-        last = performance.now();
-      }, 4000);
-    };
-
-    const markUserPause = () => {
-      if (!started) return;
-      pausedByUser = true;
-      resume();
-    };
-
-    const updateSwiperPause = (now: number) => {
-      if (now - lastSwiperCheck < SWIPER_POLL_MS) return;
-      lastSwiperCheck = now;
-      if (typeof document === "undefined") return;
-      const el = document.querySelector(".swiper, .album-swiper, [data-swiper]");
-      if (!el) {
-        swiperViewportPause = false;
-        return;
-      }
-      const rect = el.getBoundingClientRect();
-      swiperViewportPause = rect.bottom > 0 && rect.top < window.innerHeight;
-    };
-
-    const onMusicPlay = () => {
-      if (!started) {
-        started = true;
-        last = performance.now();
-      }
-      pausedByUser = false;
-      last = performance.now();
-    };
-
-    const onMusicPause = () => {
-      pausedByUser = true;
-      if (resumeTimer) clearTimeout(resumeTimer);
-    };
-
-    const onWheel = () => markUserPause();
-    const onTouch = () => markUserPause();
-    const onKey = (e: KeyboardEvent) => {
-      if (!started) return;
+    const onUserScroll = () => pause();
+    const onUserTouch = () => pause();
+    const onUserKey = (e: KeyboardEvent) => {
       if (["ArrowUp", "ArrowDown", "PageUp", "PageDown", "Home", "End", " "].includes(e.key)) {
-        markUserPause();
+        pause();
       }
     };
 
-    window.addEventListener("wheel", onWheel, { passive: true });
-    window.addEventListener("touchstart", onTouch, { passive: true });
-    window.addEventListener("keydown", onKey);
-    window.addEventListener("invitation:music:play", onMusicPlay);
-    window.addEventListener("invitation:music:pause", onMusicPause);
+    window.addEventListener("wheel", onUserScroll, { passive: true });
+    window.addEventListener("touchstart", onUserTouch, { passive: true });
+    window.addEventListener("keydown", onUserKey);
 
     const tick = (now: number) => {
-      const dt = Math.min((now - last) / 1000, 0.05);
-      last = now;
-      updateSwiperPause(now);
+      const dt = (now - lastRef.current) / 1000;
+      lastRef.current = now;
 
-      if (!pausedByUser && !swiperViewportPause) {
+      if (!pausedRef.current) {
         const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
-        if (maxScroll > 8 && window.scrollY < maxScroll - 1) {
-          window.scrollBy({ top: PX_PER_SECOND * dt, behavior: "auto" });
+
+        if (modeRef.current === "scroll") {
+          if (maxScroll > 8 && window.scrollY < maxScroll - 1) {
+            window.scrollBy({ top: SCROLL_SPEED * dt, behavior: "auto" });
+          }
+
+          const swiper = getSwiperFromDOM();
+          if (swiper) {
+            const rect = (document.querySelector(".album-swiper") as HTMLElement | null)?.getBoundingClientRect();
+            if (rect && rect.bottom > 0 && rect.top < window.innerHeight * 0.9) {
+              enterSwiperMode();
+            }
+          }
+        } else if (modeRef.current === "swiper") {
+          const swiper = getSwiperFromDOM();
+          if (!swiper) {
+            exitSwiperMode();
+            return;
+          }
+
+          if (swiper.activeIndex !== swiperLastSlideRef.current) {
+            swiperLastSlideRef.current = swiper.activeIndex;
+            swiperPassesRef.current += 1;
+          }
+
+          if (swiperPassesRef.current >= swiperSlidesRef.current) {
+            exitSwiperMode();
+          }
         }
       }
 
-      raf = requestAnimationFrame(tick);
+      rafRef.current = requestAnimationFrame(tick);
     };
 
-    raf = requestAnimationFrame(tick);
+    rafRef.current = requestAnimationFrame(tick);
 
     return () => {
-      cancelAnimationFrame(raf);
-      if (resumeTimer) clearTimeout(resumeTimer);
-      window.removeEventListener("wheel", onWheel);
-      window.removeEventListener("touchstart", onTouch);
-      window.removeEventListener("keydown", onKey);
-      window.removeEventListener("invitation:music:play", onMusicPlay);
-      window.removeEventListener("invitation:music:pause", onMusicPause);
+      cancelAnimationFrame(rafRef.current);
+      window.removeEventListener("wheel", onUserScroll);
+      window.removeEventListener("touchstart", onUserTouch);
+      window.removeEventListener("keydown", onUserKey);
     };
   }, []);
 

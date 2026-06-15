@@ -12,6 +12,8 @@ type Props = {
 };
 
 export function AlbumSwiper({ photos }: Props) {
+  console.log("[AlbumSwiper] render", { count: photos.length, urls: photos.map((p) => p.url) });
+
   if (!photos.length) return null;
 
   return (

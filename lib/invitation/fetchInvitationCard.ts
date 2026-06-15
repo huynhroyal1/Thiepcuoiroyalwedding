@@ -76,23 +76,40 @@ export async function fetchInvitationCard(
 }
 
 export async function fetchInvitationPhotos(cardId: string) {
+  console.log("[fetchInvitationPhotos] start", { cardId });
+
   const publicSupabase = createPublicSupabase();
-  const { data: publicPhotos } = await publicSupabase
+  const { data: publicPhotos, error: publicError } = await publicSupabase
     .from("wedding_photos")
     .select("*")
     .eq("card_id", cardId)
     .order("sort_order", { ascending: true });
 
+  console.log("[fetchInvitationPhotos] public query", {
+    count: publicPhotos?.length ?? 0,
+    error: publicError?.message,
+    rows: publicPhotos,
+  });
+
   if (publicPhotos && publicPhotos.length > 0) {
+    console.log("[fetchInvitationPhotos] return public photos", { count: publicPhotos.length });
     return publicPhotos;
   }
 
   const supabase = await createClient();
-  const { data: ownPhotos } = await supabase
+  const { data: ownPhotos, error: ownError } = await supabase
     .from("wedding_photos")
     .select("*")
     .eq("card_id", cardId)
     .order("sort_order", { ascending: true });
 
-  return ownPhotos ?? [];
+  console.log("[fetchInvitationPhotos] owner query", {
+    count: ownPhotos?.length ?? 0,
+    error: ownError?.message,
+    rows: ownPhotos,
+  });
+
+  const result = ownPhotos ?? [];
+  console.log("[fetchInvitationPhotos] return", { count: result.length });
+  return result;
 }
