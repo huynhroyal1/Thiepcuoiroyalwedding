@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { migrateContentJson } from "@/lib/editor/migrateContentJson";
 import { contentJsonRevision } from "@/lib/editor/contentJsonRevision";
 import { Editor, Frame } from "@craftjs/core";
@@ -202,6 +202,8 @@ export function CraftJsViewer({ card, contentJson, renderVersion }: CraftJsViewe
       });
     });
 
+    initAlbumSwiper(container);
+
     return () => {
       if (fallbackTimer) clearTimeout(fallbackTimer);
       animObserver.disconnect();
@@ -272,4 +274,109 @@ function executeAction(
   setLightboxSrc: (src: string | null) => void
 ) {
   runBlockEvent(ev, { onLightbox: setLightboxSrc });
+}
+
+function destroyAlbumSwiper(container: HTMLElement) {
+  const existing = (container as unknown as { swiper?: { destroy(allowDestroyEl?: boolean, deleteInstance?: boolean): void } }).swiper;
+  if (!existing) return;
+  try {
+    existing.destroy(true, true);
+  } catch {
+    // ignore cleanup errors
+  }
+  delete (container as unknown as { swiper?: unknown }).swiper;
+}
+
+function initAlbumSwiper(container: HTMLElement) {
+  const swiperContainer = container.querySelector<HTMLElement>(".album-swiper-container");
+  if (!swiperContainer) {
+    console.log("[CraftJsViewer] album swiper container not found");
+    return;
+  }
+
+  destroyAlbumSwiper(swiperContainer);
+
+  const swiperWrapper = swiperContainer.querySelector<HTMLElement>(".swiper-wrapper");
+  if (!swiperWrapper) {
+    console.log("[CraftJsViewer] album swiper wrapper not found");
+    return;
+  }
+
+  const slides = swiperWrapper.querySelectorAll<HTMLElement>(".swiper-slide");
+  if (!slides.length) {
+    console.log("[CraftJsViewer] album swiper slides not found");
+    return;
+  }
+
+  swiperContainer.classList.add("swiper", "swiper-initialized");
+  const prevBtn = swiperContainer.querySelector<HTMLElement>(".swiper-button-prev");
+  const nextBtn = swiperContainer.querySelector<HTMLElement>(".swiper-button-next");
+  const pagination = swiperContainer.querySelector<HTMLElement>(".swiper-pagination");
+  if (prevBtn) prevBtn.classList.add("swiper-button-prev");
+  if (nextBtn) nextBtn.classList.add("swiper-button-next");
+  if (pagination) pagination.classList.add("swiper-pagination");
+
+  const ensureSwiperCss = () => {
+    if (typeof document === "undefined") return;
+    const ids = ["swiper-css-craft", "swiper-nav-css-craft", "swiper-pagination-css-craft"];
+    const urls = [
+      "https://cdn.jsdelivr.net/npm/swiper@11.2.10/swiper.min.css",
+      "https://cdn.jsdelivr.net/npm/swiper@11.2.10/modules/navigation.min.css",
+      "https://cdn.jsdelivr.net/npm/swiper@11.2.10/modules/pagination.min.css",
+    ];
+    ids.forEach((id, idx) => {
+      if (!document.getElementById(id)) {
+        const link = document.createElement("link");
+        link.id = id;
+        link.rel = "stylesheet";
+        link.href = urls[idx];
+        document.head.appendChild(link);
+      }
+    });
+  };
+
+  const tryInit = () => {
+    ensureSwiperCss();
+    const SwiperLib = (window as unknown as { Swiper?: unknown }).Swiper;
+    if (!SwiperLib) {
+      setTimeout(tryInit, 50);
+      return;
+    }
+
+    const instance = new (SwiperLib as new (el: HTMLElement, opts: unknown) => { update(): void; destroy(allowDestroyEl?: boolean, deleteInstance?: boolean): void })(
+      swiperContainer,
+      {
+        loop: true,
+        speed: 900,
+        spaceBetween: 10,
+        slidesPerView: 1.15,
+        centeredSlides: true,
+        navigation: {
+          nextEl: nextBtn ?? undefined,
+          prevEl: prevBtn ?? undefined,
+        },
+        pagination: {
+          el: pagination ?? undefined,
+          clickable: true,
+        },
+        autoplay: {
+          delay: 2200,
+          disableOnInteraction: false,
+          pauseOnMouseEnter: true,
+        },
+        keyboard: { enabled: true },
+      }
+    );
+
+    (swiperContainer as unknown as { swiper?: unknown }).swiper = instance;
+    console.log("[CraftJsViewer] album swiper initialized", {
+      slides: slides.length,
+      activeIndex: (instance as { activeIndex?: number }).activeIndex,
+      autoplay: (instance as { params?: { autoplay?: boolean } }).params?.autoplay,
+    });
+
+    setTimeout(() => instance.update(), 0);
+  };
+
+  tryInit();
 }
