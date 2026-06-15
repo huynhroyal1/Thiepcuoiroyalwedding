@@ -14,6 +14,7 @@ export function InvitationAutoScroll() {
     let pausedByUser = false;
     let started = false;
     let resumeTimer: ReturnType<typeof setTimeout> | null = null;
+    let interactionPaused = false;
 
     const resume = () => {
       if (resumeTimer) clearTimeout(resumeTimer);
@@ -21,6 +22,15 @@ export function InvitationAutoScroll() {
         pausedByUser = false;
         last = performance.now();
       }, 4000);
+    };
+
+    const pauseInteraction = () => {
+      interactionPaused = true;
+    };
+
+    const resumeInteraction = () => {
+      interactionPaused = false;
+      last = performance.now();
     };
 
     const onMusicPlay = () => {
@@ -55,17 +65,33 @@ export function InvitationAutoScroll() {
       }
     };
 
+    const onPointerDown = (e: PointerEvent) => {
+      const target = e.target as HTMLElement | null;
+      if (!target) return;
+      const swiper = target.closest(".swiper, .album-swiper, [data-swiper]");
+      if (swiper) pauseInteraction();
+    };
+
+    const onPointerUp = () => {
+      if (interactionPaused) {
+        resumeInteraction();
+        last = performance.now();
+      }
+    };
+
     window.addEventListener("wheel", onWheel, { passive: true });
     window.addEventListener("touchstart", onTouch, { passive: true });
     window.addEventListener("keydown", onKey);
     window.addEventListener("invitation:music:play", onMusicPlay);
     window.addEventListener("invitation:music:pause", onMusicPause);
+    window.addEventListener("pointerdown", onPointerDown);
+    window.addEventListener("pointerup", onPointerUp);
 
     const tick = (now: number) => {
       const dt = Math.min((now - last) / 1000, 0.05);
       last = now;
 
-      if (!pausedByUser) {
+      if (!pausedByUser && !interactionPaused) {
         const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
         if (maxScroll > 8 && window.scrollY < maxScroll - 1) {
           window.scrollBy({ top: PX_PER_SECOND * dt, behavior: "auto" });
@@ -85,6 +111,8 @@ export function InvitationAutoScroll() {
       window.removeEventListener("keydown", onKey);
       window.removeEventListener("invitation:music:play", onMusicPlay);
       window.removeEventListener("invitation:music:pause", onMusicPause);
+      window.removeEventListener("pointerdown", onPointerDown);
+      window.removeEventListener("pointerup", onPointerUp);
     };
   }, []);
 
