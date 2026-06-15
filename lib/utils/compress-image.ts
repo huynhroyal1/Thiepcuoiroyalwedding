@@ -18,8 +18,8 @@ export async function compressImageViaServer(
   options: CompressOptions = {}
 ): Promise<File> {
   const {
-    maxWidth = 4096,
-    maxHeight = 4096,
+    maxWidth = 2560,
+    maxHeight = 2560,
     quality = 95,
   } = options;
 

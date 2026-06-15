@@ -5,8 +5,8 @@ export async function POST(request: Request) {
   try {
     const formData = await request.formData();
     const file = formData.get("file") as File;
-  const maxWidth = parseInt(formData.get("maxWidth") as string) || 4096;
-  const maxHeight = parseInt(formData.get("maxHeight") as string) || 4096;
+  const maxWidth = parseInt(formData.get("maxWidth") as string) || 2560;
+  const maxHeight = parseInt(formData.get("maxHeight") as string) || 2560;
   const quality = parseInt(formData.get("quality") as string) || 95;
 
     if (!file) {
