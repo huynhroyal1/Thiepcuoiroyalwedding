@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 
 const PX_PER_SECOND = 22;
+const SWIPER_POLL_MS = 400;
 
 export function InvitationAutoScroll() {
   useEffect(() => {
@@ -14,7 +15,8 @@ export function InvitationAutoScroll() {
     let pausedByUser = false;
     let started = false;
     let resumeTimer: ReturnType<typeof setTimeout> | null = null;
-    let interactionPaused = false;
+    let swiperViewportPause = false;
+    let lastSwiperCheck = 0;
 
     const resume = () => {
       if (resumeTimer) clearTimeout(resumeTimer);
@@ -24,13 +26,23 @@ export function InvitationAutoScroll() {
       }, 4000);
     };
 
-    const pauseInteraction = () => {
-      interactionPaused = true;
+    const markUserPause = () => {
+      if (!started) return;
+      pausedByUser = true;
+      resume();
     };
 
-    const resumeInteraction = () => {
-      interactionPaused = false;
-      last = performance.now();
+    const updateSwiperPause = (now: number) => {
+      if (now - lastSwiperCheck < SWIPER_POLL_MS) return;
+      lastSwiperCheck = now;
+      if (typeof document === "undefined") return;
+      const el = document.querySelector(".swiper, .album-swiper, [data-swiper]");
+      if (!el) {
+        swiperViewportPause = false;
+        return;
+      }
+      const rect = el.getBoundingClientRect();
+      swiperViewportPause = rect.bottom > 0 && rect.top < window.innerHeight;
     };
 
     const onMusicPlay = () => {
@@ -47,35 +59,12 @@ export function InvitationAutoScroll() {
       if (resumeTimer) clearTimeout(resumeTimer);
     };
 
-    const onWheel = () => {
-      if (!started) return;
-      pausedByUser = true;
-      resume();
-    };
-    const onTouch = () => {
-      if (!started) return;
-      pausedByUser = true;
-      resume();
-    };
+    const onWheel = () => markUserPause();
+    const onTouch = () => markUserPause();
     const onKey = (e: KeyboardEvent) => {
       if (!started) return;
       if (["ArrowUp", "ArrowDown", "PageUp", "PageDown", "Home", "End", " "].includes(e.key)) {
-        pausedByUser = true;
-        resume();
-      }
-    };
-
-    const onPointerDown = (e: PointerEvent) => {
-      const target = e.target as HTMLElement | null;
-      if (!target) return;
-      const swiper = target.closest(".swiper, .album-swiper, [data-swiper]");
-      if (swiper) pauseInteraction();
-    };
-
-    const onPointerUp = () => {
-      if (interactionPaused) {
-        resumeInteraction();
-        last = performance.now();
+        markUserPause();
       }
     };
 
@@ -84,14 +73,13 @@ export function InvitationAutoScroll() {
     window.addEventListener("keydown", onKey);
     window.addEventListener("invitation:music:play", onMusicPlay);
     window.addEventListener("invitation:music:pause", onMusicPause);
-    window.addEventListener("pointerdown", onPointerDown);
-    window.addEventListener("pointerup", onPointerUp);
 
     const tick = (now: number) => {
       const dt = Math.min((now - last) / 1000, 0.05);
       last = now;
+      updateSwiperPause(now);
 
-      if (!pausedByUser && !interactionPaused) {
+      if (!pausedByUser && !swiperViewportPause) {
         const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
         if (maxScroll > 8 && window.scrollY < maxScroll - 1) {
           window.scrollBy({ top: PX_PER_SECOND * dt, behavior: "auto" });
@@ -111,8 +99,6 @@ export function InvitationAutoScroll() {
       window.removeEventListener("keydown", onKey);
       window.removeEventListener("invitation:music:play", onMusicPlay);
       window.removeEventListener("invitation:music:pause", onMusicPause);
-      window.removeEventListener("pointerdown", onPointerDown);
-      window.removeEventListener("pointerup", onPointerUp);
     };
   }, []);
 
