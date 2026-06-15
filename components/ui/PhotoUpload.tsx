@@ -58,9 +58,9 @@ export function PhotoUpload({
             try {
               const originalSize = formatFileSize(file.size);
               processedFile = await compressImage(file, {
-                maxWidth: 2560,
-                maxHeight: 1920,
-                quality: 88,
+                maxWidth: 4096,
+                maxHeight: 4096,
+                quality: 95,
               });
               const compressedSize = formatFileSize(processedFile.size);
               console.log(`Ảnh nén: ${originalSize} → ${compressedSize}`);
