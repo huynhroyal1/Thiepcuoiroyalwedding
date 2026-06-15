@@ -29,7 +29,9 @@ export function AlbumSwiper({ photos }: Props) {
         pagination={{ clickable: true }}
         autoplay={{ delay: 2200, disableOnInteraction: false, pauseOnMouseEnter: true }}
         className="album-swiper"
-        style={{ maxWidth: 720, margin: "0 auto" }}
+        style={{ maxWidth: 720, margin: "0 auto", height: 520 }}
+        observer
+        observeParents
       >
         {photos.map((photo) => (
           <SwiperSlide key={photo.id} className="!flex items-center justify-center">
