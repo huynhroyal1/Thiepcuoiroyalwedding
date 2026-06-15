@@ -2,8 +2,8 @@
 
 import { useEffect, useRef } from "react";
 
-const SCROLL_SPEED = 28; // px/s - tốc độ cuộn tự động
-const PAUSE_AFTER_USER_MS = 2500; // dừng 2.5s sau khi người dùng cuộn
+const SCROLL_SPEED = 80; // px/s - nhanh gấp 3 lần
+const PAUSE_AFTER_USER_MS = 2000;
 
 export function InvitationAutoScroll() {
   const rafRef = useRef(0);
