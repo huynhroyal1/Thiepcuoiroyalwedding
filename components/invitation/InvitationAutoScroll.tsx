@@ -2,70 +2,44 @@
 
 import { useEffect, useRef } from "react";
 
-const SCROLL_SPEED = 25; // px/s
-const SWIPER_INTERVAL = 2200; // ms giữa mỗi lần vuốt ảnh
-const USER_PAUSE_MS = 3000;
+const SCROLL_SPEED = 28; // px/s - tốc độ cuộn tự động
+const PAUSE_AFTER_USER_MS = 2500; // dừng 2.5s sau khi người dùng cuộn
 
 export function InvitationAutoScroll() {
   const rafRef = useRef(0);
   const lastRef = useRef(performance.now());
   const pausedRef = useRef(false);
-  const modeRef = useRef<"scroll" | "swiper" | "idle">("scroll");
-  const swiperReadyRef = useRef(false);
-  const swiperSlidesRef = useRef(0);
-  const swiperPassesRef = useRef(0);
-  const swiperLastSlideRef = useRef(0);
+  const pauseTimerRef = useRef<ReturnType<typeof setTimeout>>();
 
-  const getSwiperFromDOM = () => {
-    if (typeof document === "undefined") return null;
-    const el = document.querySelector(".album-swiper") as HTMLElement | null;
-    if (!el) return null;
-    const cls = el.classList;
-    if (!cls.contains("swiper-initialized") && !cls.contains("swiper-initialized")) {
-      return null;
+  const clearPause = () => {
+    if (pauseTimerRef.current) {
+      clearTimeout(pauseTimerRef.current);
+      pauseTimerRef.current = null;
     }
-    const inst = (el as unknown as { swiper?: { activeIndex: number; slides: { length: number } } }).swiper;
-    if (!inst) return null;
-    return inst;
   };
 
-  const pause = (ms = USER_PAUSE_MS) => {
+  const scheduleResume = () => {
+    clearPause();
     pausedRef.current = true;
-    setTimeout(() => {
+    pauseTimerRef.current = setTimeout(() => {
       pausedRef.current = false;
       lastRef.current = performance.now();
-    }, ms);
-  };
-
-  const enterSwiperMode = () => {
-    const swiper = getSwiperFromDOM();
-    if (!swiper) return;
-    modeRef.current = "swiper";
-    swiperReadyRef.current = true;
-    swiperSlidesRef.current = swiper.slides.length;
-    swiperPassesRef.current = 0;
-    swiperLastSlideRef.current = swiper.activeIndex;
-  };
-
-  const exitSwiperMode = () => {
-    modeRef.current = "scroll";
-    swiperReadyRef.current = false;
-    lastRef.current = performance.now();
+    }, PAUSE_AFTER_USER_MS);
   };
 
   useEffect(() => {
     if (typeof window === "undefined") return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-    const onUserScroll = () => pause();
-    const onUserTouch = () => pause();
+    const onUserWheel = () => scheduleResume();
+    const onUserTouch = () => scheduleResume();
     const onUserKey = (e: KeyboardEvent) => {
       if (["ArrowUp", "ArrowDown", "PageUp", "PageDown", "Home", "End", " "].includes(e.key)) {
-        pause();
+        scheduleResume();
       }
     };
 
-    window.addEventListener("wheel", onUserScroll, { passive: true });
+    window.addEventListener("wheel", onUserWheel, { passive: true });
     window.addEventListener("touchstart", onUserTouch, { passive: true });
     window.addEventListener("keydown", onUserKey);
 
@@ -75,45 +49,21 @@ export function InvitationAutoScroll() {
 
       if (!pausedRef.current) {
         const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
-
-        if (modeRef.current === "scroll") {
-          if (maxScroll > 8 && window.scrollY < maxScroll - 1) {
-            window.scrollBy({ top: SCROLL_SPEED * dt, behavior: "auto" });
-          }
-
-          const swiper = getSwiperFromDOM();
-          if (swiper) {
-            const rect = (document.querySelector(".album-swiper") as HTMLElement | null)?.getBoundingClientRect();
-            if (rect && rect.bottom > 0 && rect.top < window.innerHeight * 0.9) {
-              enterSwiperMode();
-            }
-          }
-        } else if (modeRef.current === "swiper") {
-          const swiper = getSwiperFromDOM();
-          if (!swiper) {
-            exitSwiperMode();
-            return;
-          }
-
-          if (swiper.activeIndex !== swiperLastSlideRef.current) {
-            swiperLastSlideRef.current = swiper.activeIndex;
-            swiperPassesRef.current += 1;
-          }
-
-          if (swiperPassesRef.current >= swiperSlidesRef.current) {
-            exitSwiperMode();
-          }
+        if (maxScroll > 8 && window.scrollY < maxScroll - 1) {
+          window.scrollBy({ top: SCROLL_SPEED * dt, behavior: "auto" });
         }
       }
 
       rafRef.current = requestAnimationFrame(tick);
     };
 
+    lastRef.current = performance.now();
     rafRef.current = requestAnimationFrame(tick);
 
     return () => {
       cancelAnimationFrame(rafRef.current);
-      window.removeEventListener("wheel", onUserScroll);
+      clearPause();
+      window.removeEventListener("wheel", onUserWheel);
       window.removeEventListener("touchstart", onUserTouch);
       window.removeEventListener("keydown", onUserKey);
     };
