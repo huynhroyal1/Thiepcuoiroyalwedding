@@ -4,12 +4,6 @@ import { useEffect } from "react";
 
 const PX_PER_SECOND = 22;
 
-/**
- * Slowly auto-scrolls the invitation page.
- * Pauses when:
- *  - user scrolls/touches/keys
- *  - music pauses (listens for `invitation:music:pause` / `invitation:music:play`)
- */
 export function InvitationAutoScroll() {
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -18,13 +12,10 @@ export function InvitationAutoScroll() {
     let raf = 0;
     let last = performance.now();
     let pausedByUser = false;
-    let pausedByMusic = false;
+    let started = false;
     let resumeTimer: ReturnType<typeof setTimeout> | null = null;
 
-    const isPaused = () => pausedByUser || pausedByMusic;
-
-    const pauseByUser = () => {
-      pausedByUser = true;
+    const resume = () => {
       if (resumeTimer) clearTimeout(resumeTimer);
       resumeTimer = setTimeout(() => {
         pausedByUser = false;
@@ -33,19 +24,34 @@ export function InvitationAutoScroll() {
     };
 
     const onMusicPlay = () => {
-      pausedByMusic = false;
+      if (!started) {
+        started = true;
+        last = performance.now();
+      }
+      pausedByUser = false;
       last = performance.now();
     };
+
     const onMusicPause = () => {
-      pausedByMusic = true;
+      pausedByUser = true;
       if (resumeTimer) clearTimeout(resumeTimer);
     };
 
-    const onWheel = () => pauseByUser();
-    const onTouch = () => pauseByUser();
+    const onWheel = () => {
+      if (!started) return;
+      pausedByUser = true;
+      resume();
+    };
+    const onTouch = () => {
+      if (!started) return;
+      pausedByUser = true;
+      resume();
+    };
     const onKey = (e: KeyboardEvent) => {
+      if (!started) return;
       if (["ArrowUp", "ArrowDown", "PageUp", "PageDown", "Home", "End", " "].includes(e.key)) {
-        pauseByUser();
+        pausedByUser = true;
+        resume();
       }
     };
 
@@ -59,7 +65,7 @@ export function InvitationAutoScroll() {
       const dt = Math.min((now - last) / 1000, 0.05);
       last = now;
 
-      if (!isPaused()) {
+      if (!pausedByUser) {
         const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
         if (maxScroll > 8 && window.scrollY < maxScroll - 1) {
           window.scrollBy({ top: PX_PER_SECOND * dt, behavior: "auto" });
@@ -69,15 +75,11 @@ export function InvitationAutoScroll() {
       raf = requestAnimationFrame(tick);
     };
 
-    const startTimer = setTimeout(() => {
-      last = performance.now();
-      raf = requestAnimationFrame(tick);
-    }, 1200);
+    raf = requestAnimationFrame(tick);
 
     return () => {
-      clearTimeout(startTimer);
-      if (resumeTimer) clearTimeout(resumeTimer);
       cancelAnimationFrame(raf);
+      if (resumeTimer) clearTimeout(resumeTimer);
       window.removeEventListener("wheel", onWheel);
       window.removeEventListener("touchstart", onTouch);
       window.removeEventListener("keydown", onKey);
