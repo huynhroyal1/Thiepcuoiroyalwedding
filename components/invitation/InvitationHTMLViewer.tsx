@@ -38,12 +38,104 @@ function ensureTailwindCdn() {
   }
 }
 
-/**
- * Renders raw HTML wedding card (MeHappy-format sections).
- * - Adds IntersectionObserver for `anim-hidden` class → fadeInUp on scroll
- * - Supports `data-anim-entry` (same as CraftJsViewer)
- * - Handles data-events click/hover actions
- */
+function destroyAlbumSwiper(container: HTMLElement) {
+  const existing = (container as unknown as { swiper?: { destroy(allowDestroyEl?: boolean, deleteInstance?: boolean): void } }).swiper;
+  if (!existing) return;
+  try {
+    existing.destroy(true, true);
+  } catch {
+    // ignore cleanup errors
+  }
+  delete (container as unknown as { swiper?: unknown }).swiper;
+  container.removeAttribute("data-swiper-initialized");
+}
+
+function initAlbumSwiper(container: HTMLElement) {
+  const swiperContainer = container.querySelector<HTMLElement>(".album-swiper-container");
+  if (!swiperContainer) {
+    console.log("[InvitationHTMLViewer] album swiper container not found");
+    return;
+  }
+
+  destroyAlbumSwiper(swiperContainer);
+
+  const swiperWrapper = swiperContainer.querySelector<HTMLElement>(".swiper-wrapper");
+  if (!swiperWrapper) {
+    console.log("[InvitationHTMLViewer] album swiper wrapper not found");
+    return;
+  }
+
+  const slides = swiperWrapper.querySelectorAll<HTMLElement>(".swiper-slide");
+  if (!slides.length) {
+    console.log("[InvitationHTMLViewer] album swiper slides not found");
+    return;
+  }
+
+  swiperContainer.classList.remove("swiper-initialized");
+  swiperContainer.classList.add("swiper", "swiper-initialized");
+  const prevBtn = swiperContainer.querySelector<HTMLElement>(".swiper-button-prev");
+  const nextBtn = swiperContainer.querySelector<HTMLElement>(".swiper-button-next");
+  const pagination = swiperContainer.querySelector<HTMLElement>(".swiper-pagination");
+  if (prevBtn) prevBtn.classList.add("swiper-button-prev");
+  if (nextBtn) nextBtn.classList.add("swiper-button-next");
+  if (pagination) pagination.classList.add("swiper-pagination");
+
+  const attachClasses = () => {
+    slides.forEach((slide, idx) => {
+      slide.classList.add("swiper-slide");
+      if (idx === 0) slide.classList.add("swiper-slide-active");
+      if (idx === slides.length - 1) slide.classList.add("swiper-slide-last");
+    });
+  };
+
+  const tryInit = () => {
+    const SwiperLib = (window as unknown as { Swiper?: unknown }).Swiper;
+    if (!SwiperLib) {
+      setTimeout(tryInit, 50);
+      return;
+    }
+
+    attachClasses();
+
+    const instance = new (SwiperLib as new (el: HTMLElement, opts: unknown) => { update(): void; destroy(allowDestroyEl?: boolean, deleteInstance?: boolean): void })(
+      swiperContainer,
+      {
+        loop: true,
+        speed: 900,
+        spaceBetween: 10,
+        slidesPerView: 1.15,
+        centeredSlides: true,
+        navigation: {
+          nextEl: nextBtn ?? undefined,
+          prevEl: prevBtn ?? undefined,
+        },
+        pagination: {
+          el: pagination ?? undefined,
+          clickable: true,
+        },
+        autoplay: {
+          delay: 2000,
+          disableOnInteraction: false,
+          pauseOnMouseEnter: true,
+        },
+        keyboard: { enabled: true },
+      }
+    );
+
+    (swiperContainer as unknown as { swiper?: unknown }).swiper = instance;
+    swiperContainer.dataset.swiperInitialized = "true";
+    console.log("[InvitationHTMLViewer] album swiper initialized", {
+      slides: slides.length,
+      activeIndex: (instance as { activeIndex?: number }).activeIndex,
+      autoplay: (instance as { params?: { autoplay?: boolean } }).params?.autoplay,
+    });
+
+    setTimeout(() => instance.update(), 0);
+  };
+
+  tryInit();
+}
+
 export function InvitationHTMLViewer({ html }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [lightboxSrc, setLightboxSrc] = useState<string | null>(null);
@@ -59,16 +151,13 @@ export function InvitationHTMLViewer({ html }: Props) {
 
     const cleanups: (() => void)[] = [];
 
-    // ── 1. anim-hidden → fadeInUp when scrolled into view ─────────────────
     const animObserver = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (!entry.isIntersecting) return;
           const el = entry.target as HTMLElement;
-
           if (el.classList.contains("invitation-anim-shown")) return;
 
-          // Craft.js style via data-anim-entry
           const animEntry = el.dataset.animEntry;
           if (animEntry) {
             el.style.opacity = "1";
@@ -79,7 +168,6 @@ export function InvitationHTMLViewer({ html }: Props) {
             if (el.dataset.animLoop === "true") el.classList.add("animate__infinite");
           }
 
-          // MeHappy style via anim-hidden class
           if (el.classList.contains("anim-hidden")) {
             el.classList.remove("anim-hidden");
             el.classList.add("invitation-anim-shown", "animate__animated", "animate__fadeInUp");
@@ -96,7 +184,6 @@ export function InvitationHTMLViewer({ html }: Props) {
       animObserver.observe(el);
     });
 
-    // ── 2. Click/hover events via data-events ─────────────────────────────
     container.querySelectorAll<HTMLElement>("[data-events]").forEach((el) => {
       const raw = el.dataset.events;
       if (!raw) return;
@@ -113,17 +200,16 @@ export function InvitationHTMLViewer({ html }: Props) {
       });
     });
 
-    // ── 3. Hide "overlay-hidden-on-load" cover elements ──────────────────
     container.querySelectorAll<HTMLElement>(".overlay-hidden-on-load").forEach((el) => {
       el.style.display = "none";
     });
 
-    // ── 4. Hide sections that have display:none inline ────────────────────
-    // Already handled by the HTML itself
+    initAlbumSwiper(container);
 
     return () => {
       animObserver.disconnect();
       cleanups.forEach((fn) => fn());
+      destroyAlbumSwiper(container);
     };
   }, [html]);
 

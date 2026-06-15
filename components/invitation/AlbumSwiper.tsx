@@ -32,6 +32,7 @@ export function AlbumSwiper({ photos }: Props) {
         style={{ maxWidth: 720, margin: "0 auto", height: 520 }}
         observer
         observeParents
+        watchSlidesProgress
       >
         {photos.map((photo) => (
           <SwiperSlide key={photo.id} className="!flex items-center justify-center">
