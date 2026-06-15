@@ -8,6 +8,7 @@ import { formatWeddingDateVi } from "@/lib/format-wedding";
 import { CountdownTimer } from "@/components/ui/CountdownTimer";
 import { RsvpSection } from "@/components/invitation/RsvpSection";
 import { WishesSection } from "@/components/invitation/WishesSection";
+import { AlbumSwiper } from "@/components/invitation/AlbumSwiper";
 import { mapsUrlToEmbed, mapsUrlToDirections } from "@/lib/utils";
 
 export type TemplateProps = {
