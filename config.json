@@ -1,0 +1,7 @@
+{
+  "blacklist_url": "https://raw.githubusercontent.com/huynhroyalwedding/AIX-license-blacklist/main/blacklist.json",
+  "blacklist_url_secondary": "",
+  "update_interval_hours": 24,
+  "secret": "MagiMir2026",
+  "version": 3
+}

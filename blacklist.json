@@ -1,0 +1,14 @@
+{
+  "items": [
+    {
+      "hwid": "TEST-HWID-00000000000000000000000000000001",
+      "reason": "Test HWID - vi du thu hoi",
+      "type": "block",
+      "operator": "MagiMir-Admin",
+      "ts": "2026-08-27T10:30:00.000Z"
+    }
+  ],
+  "checksum": "a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2",
+  "updated": "2026-08-27T10:30:00.000Z",
+  "version": 1
+}
